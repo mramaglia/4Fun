@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "114916004832",
+    "project_id": "fansfun-840ae",
+    "storage_bucket": "fansfun-840ae.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:114916004832:android:caf5b2a623ad6928d99185",
+        "android_client_info": {
+          "package_name": "com.example.fansfun"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_cbtgR5xND__JxKURTJbQdMzqLxZkuuQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
