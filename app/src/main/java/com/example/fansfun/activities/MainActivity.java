@@ -7,14 +7,17 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.fansfun.R;
+import com.example.fansfun.adapters.UtenteAdapter;
 import com.example.fansfun.entities.Utente;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Firebase;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -26,40 +29,38 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private ListView listView;
+    private UtenteAdapter adapter;
+    private List<Utente> listaUtenti;
+    private FirebaseFirestore firestore;
+    private CollectionReference collectionReference;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
-        db.collection("utenti")
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+
+        listView = findViewById(R.id.tuaListView);
+        listaUtenti = new ArrayList<>();
+        adapter = new UtenteAdapter(this, listaUtenti);
+        listView.setAdapter(adapter);
+
+        // Inizializza Firestore
+        firestore = FirebaseFirestore.getInstance();
+        collectionReference = firestore.collection("utenti");
+
+        collectionReference.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-
-                        List<Utente> listaUtenti = new ArrayList<>();
-
-                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-
-                            Utente utente = documentSnapshot.toObject(Utente.class);
-                            listaUtenti.add(utente);
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+                            for (DocumentSnapshot d : list) {
+                                Utente utente = d.toObject(Utente.class);
+                                listaUtenti.add(utente);
+                            }
+                            adapter.notifyDataSetChanged();
                         }
-
-                        // Riferimento al TextView nel layout XML
-                        TextView textView = findViewById(R.id.textView);
-
-                        // Costruzione della stringa da visualizzare
-                        StringBuilder stringBuilder = new StringBuilder();
-                        for (Utente utente : listaUtenti) {
-                            stringBuilder.append(utente.toString()).append("\n\n");
-                        }
-
-                        // Impostazione del testo nel TextView
-                        textView.setText(stringBuilder.toString());
-
-
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -68,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
-
 
     }
 }
