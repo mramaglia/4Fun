@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                         // Impostazione del testo nel TextView
                         textView.setText(stringBuilder.toString());
 
-                        //ciao
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
