@@ -17,7 +17,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.2" />
+        app:layout_constraintVertical_bias="0.2"
+        tools:ignore="HardcodedText" />
 
     <EditText
         android:id="@+id/name"
@@ -83,7 +84,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:onClick="login"
-        android:text="Login"
+        android:text="@string/login_u"
         android:textColor="#E91E63"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.088"
