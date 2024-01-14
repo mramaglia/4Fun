@@ -39,7 +39,7 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     public void registrazione(View view){
-
+    //ricorda di aggiungere gli altri parmetri all'utente (surname,data,cell)
         String userName = name.getText().toString();
         String userEmail = email.getText().toString();
         String userPassword = password.getText().toString();
