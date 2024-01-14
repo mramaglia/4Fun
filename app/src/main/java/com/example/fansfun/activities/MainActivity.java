@@ -17,6 +17,8 @@ import com.example.fansfun.entities.Utente;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Firebase;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -34,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     private List<Utente> listaUtenti;
     private FirebaseFirestore firestore;
     private CollectionReference collectionReference;
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
 
 
     @Override
@@ -45,6 +49,14 @@ public class MainActivity extends AppCompatActivity {
         listaUtenti = new ArrayList<>();
         adapter = new UtenteAdapter(this, listaUtenti);
         listView.setAdapter(adapter);
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            String uid = currentUser.getUid();
+            TextView textId = findViewById(R.id.textId);
+            textId.setText(uid);
+        }
+
 
         // Inizializza Firestore
         firestore = FirebaseFirestore.getInstance();

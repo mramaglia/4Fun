@@ -40,6 +40,7 @@ public class UtenteAdapter extends ArrayAdapter<Utente> {
         tvLuogo.setText(utente.getLuogo());
         tvDataNascita.setText(utente.getDataNascita());
 
+
         return convertView;
     }
 
