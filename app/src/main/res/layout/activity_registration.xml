@@ -25,8 +25,8 @@ NOMI DEGLI ID
         android:layout_height="0dp"
         android:layout_weight="0.1"
         android:background="@drawable/mount"
-        app:layout_constraintVertical_bias="0.5"
-        app:layout_constraintHorizontal_bias="0.5">
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintVertical_bias="0.5">
 
         <TextView
             android:id="@+id/testoCentrato"
@@ -36,15 +36,56 @@ NOMI DEGLI ID
             android:textColor="@color/white"
             android:textSize="40sp"
             android:textStyle="bold"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5" />
 
         <!-- Contenuto del ConstraintLayout -->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="160dp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imageView2"
+            android:layout_width="144dp"
+            android:layout_height="144dp"
+            android:background="@color/principal"
+            android:padding="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5"
+            app:shapeAppearanceOverlay="@style/circular"
+            app:srcCompat="@drawable/person"
+            tools:ignore="MissingConstraints" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="100dp"
+            android:clickable="true"
+            app:srcCompat="@drawable/baseline_photo_camera_24"
+            tools:ignore="MissingConstraints,SpeakableTextPresentCheck"
+            tools:layout_editor_absoluteX="222dp"
+            tools:layout_editor_absoluteY="96dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="20dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <!-- Secondo figlio: LinearLayout (70% dello schermo, colore rosso) -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -52,10 +93,13 @@ NOMI DEGLI ID
         android:layout_weight="0.7"
         android:orientation="vertical"
         android:layout_gravity="center_horizontal"
-        android:paddingTop="150dp"
+        android:paddingTop="10dp"
         android:paddingStart="50dp"
         android:paddingEnd="50dp"
         android:paddingBottom="100dp">
+
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -69,25 +113,27 @@ NOMI DEGLI ID
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.4"
+                android:gravity="center"
                 android:hint="Name"
-                android:gravity="center"/>
+                tools:ignore="TouchTargetSizeCheck" />
 
             <EditText
                 android:id="@+id/surname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.4"
+                android:gravity="center"
                 android:hint="Surname"
-                android:gravity="center"/>
+                tools:ignore="TouchTargetSizeCheck" />
 
         </LinearLayout>
 
         <DatePicker
             android:id="@+id/date"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:datePickerMode="spinner"
+            android:layout_height="226dp"
             android:calendarViewShown="false"
+            android:datePickerMode="spinner"
             android:scaleX="0.9"
             android:scaleY="0.5" />
 
@@ -95,7 +141,8 @@ NOMI DEGLI ID
             android:id="@+id/cell"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Cell +0123" />
+            android:hint="Cell +0123"
+            android:minHeight="48dp" />
 
         <EditText
             android:id="@+id/email"
@@ -116,9 +163,9 @@ NOMI DEGLI ID
 
         <Button
             android:layout_width="134dp"
-            android:layout_height="wrap_content"
+            android:layout_height="74dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="50sp"
+
             android:padding="15dp"
             android:text="Register"
             android:textSize="20sp" />
@@ -126,11 +173,13 @@ NOMI DEGLI ID
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/login_u"
             android:layout_gravity="center_horizontal"
-            android:textColor="#3E3E3E"
             android:clickable="true"
-            android:onClick="login"/>
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:onClick="login"
+            android:text="@string/login_u"
+            android:textColor="#3E3E3E" />
 
     </LinearLayout>
 
