@@ -47,4 +47,7 @@ dependencies {
     //slider images
     implementation("com.github.denzcoskun:ImageSlideshow:0.1.2")
     implementation ("androidx.viewpager2:viewpager2:1.0.0")
+
+    //CardView
+    implementation ("androidx.cardview:cardview:1.0.0")
 }

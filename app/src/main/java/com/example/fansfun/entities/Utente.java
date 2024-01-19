@@ -1,17 +1,19 @@
 package com.example.fansfun.entities;
 
+import java.util.Date;
+
 public class Utente {
 
     private String nome;
     private String cognome;
     private String email;
-    private String dataNascita;
+    private Date dataNascita;
     private String luogo;
 
     public Utente() {
     }
 
-    public Utente(String nome, String cognome, String email, String dataNascita, String luogo) {
+    public Utente(String nome, String cognome, String email, Date dataNascita, String luogo) {
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
@@ -43,11 +45,11 @@ public class Utente {
         this.email = email;
     }
 
-    public String getDataNascita() {
+    public Date getDataNascita() {
         return dataNascita;
     }
 
-    public void setDataNascita(String dataNascita) {
+    public void setDataNascita(Date dataNascita) {
         this.dataNascita = dataNascita;
     }
 
