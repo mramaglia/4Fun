@@ -27,12 +27,17 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Objects;
 
 public class RegistrationActivity extends AppCompatActivity {
     ImageView imageView;
+    byte[] imageBytes;
     FloatingActionButton button;
-    EditText name, email, password;
+    EditText name, surname, email, password;
     private FirebaseAuth auth;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -42,7 +47,7 @@ public class RegistrationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
-        //Sistema per poter inserire imamgine profilo ed avere anteprima
+        //Sistema per poter inserire immagine profilo ed avere anteprima
         if (getSupportActionBar() != null) {
             getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getColor(R.color.principal)));
         }
@@ -64,6 +69,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
         auth= FirebaseAuth.getInstance();
         name = findViewById(R.id.name);
+        surname = findViewById(R.id.surname);
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
 
@@ -74,8 +80,26 @@ public class RegistrationActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Uri uri = data.getData();
-        imageView.setImageURI(uri);
+
+        if (resultCode == RESULT_OK && data != null) {
+            Uri uri = data.getData();
+
+            try {
+                imageBytes = getBytes(getContentResolver().openInputStream(uri)); //Immagine da salvare nel DB
+                imageView.setImageURI(uri);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    private byte[] getBytes(InputStream inputStream) throws IOException {  //serve per prelevare i byte
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int len;
+        while ((len = inputStream.read(buffer)) != -1) {
+            byteBuffer.write(buffer, 0, len);
+        }
+        return byteBuffer.toByteArray();
     }
 
     public void login(View view){
@@ -126,8 +150,8 @@ public class RegistrationActivity extends AppCompatActivity {
                     if (currentUser != null) {
                         String uid = currentUser.getUid();
                         db.collection("utenti").document(uid).set(newUtente);
-                    }
 
+                    }
                     Toast.makeText(RegistrationActivity.this, "Registrazione effettuata!", Toast.LENGTH_SHORT);
                     startActivity(new Intent(RegistrationActivity.this, MainActivity.class));
                 }else{
@@ -135,8 +159,6 @@ public class RegistrationActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-
     }
+
 }
