@@ -38,7 +38,7 @@ public class UtenteAdapter extends ArrayAdapter<Utente> {
         tvCognome.setText(utente.getCognome());
         tvEmail.setText(utente.getEmail());
         tvLuogo.setText(utente.getLuogo());
-        tvDataNascita.setText((CharSequence) utente.getDataNascita()); //RIVEDERE QUESTO
+        tvDataNascita.setText((CharSequence) utente.getDataNascita());
 
         return convertView;
     }
