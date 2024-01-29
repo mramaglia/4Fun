@@ -1,15 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-NOMI DEGLI ID
-    nome = name
-    surname = surname
-    numero telefonico = cell
-    email = email
-    password = password
-    bottone registati = button
-    textView3 = login
-
--->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -18,7 +7,7 @@ NOMI DEGLI ID
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activities.LoginActivity">
+    tools:context=".activities.PostRegistrationActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -38,8 +27,6 @@ NOMI DEGLI ID
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
-        <!-- Contenuto del ConstraintLayout -->
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -51,10 +38,11 @@ NOMI DEGLI ID
         android:padding="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        >
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/profile_pic"
             android:layout_width="144dp"
             android:layout_height="144dp"
             android:background="@color/principal"
@@ -72,85 +60,93 @@ NOMI DEGLI ID
             android:layout_marginEnd="4dp"
             android:layout_marginBottom="4dp"
             android:clickable="true"
-            app:layout_constraintBottom_toBottomOf="@id/imageView2"
-            app:layout_constraintEnd_toEndOf="@id/imageView2"
+            app:layout_constraintBottom_toBottomOf="@id/profile_pic"
+            app:layout_constraintEnd_toEndOf="@id/profile_pic"
             app:srcCompat="@drawable/baseline_photo_camera_24"
             tools:ignore="MissingConstraints,SpeakableTextPresentCheck" />
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/namelayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:hint="Name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView2">
+            app:layout_constraintTop_toBottomOf="@+id/profile_pic">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/name"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:inputType="text"
-                android:minHeight="48dp"
-                android:hint="Name"
-                tools:ignore="MissingConstraints" />
+                android:maxLength="15"
+                android:singleLine="true"
+                android:inputType="text"/>
 
-            <EditText
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/surnameLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:hint="Surname"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/namelayout">
+
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/surname"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:maxLength="15"
+                android:singleLine="true"
+                android:inputType="text"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/locationLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:hint="Surname"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/surnameLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:inputType="text"
-                android:minHeight="48dp"
-                android:hint="Surname"
-                tools:ignore="MissingConstraints" />
-        </LinearLayout>
+                android:maxLength="15"
+                android:singleLine="true"
+                android:pointerIcon="arrow"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
-            android:id="@+id/email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:hint="email"
-            android:inputType="textEmailAddress"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-
-        <EditText
-            android:id="@+id/password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:hint="password"
-            android:inputType="textPassword"
-            app:layout_constraintTop_toBottomOf="@+id/email" />
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/birthday"
+            app:layout_constraintBottom_toBottomOf="@+id/date"
+            app:layout_constraintEnd_toStartOf="@+id/date"
+            app:layout_constraintTop_toTopOf="@+id/date" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/date"
+            style="@android:style/Widget.Holo.Light.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="registrazione"
-            android:text="REGISTER"
-            android:textSize="30dp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="20dp"
+            android:elevation="10dp"
+            android:text="Add Birthday"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/password" />
-
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="89dp"
-            android:layout_height="35dp"
-            android:layout_marginTop="16dp"
-            android:onClick="login"
-            android:text="@string/login_u"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button"
-            android:gravity="center"/>
-
+            app:layout_constraintTop_toBottomOf="@+id/locationLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

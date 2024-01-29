@@ -47,57 +47,12 @@ public class RegistrationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        /*
-        //Sistema per poter inserire immagine profilo ed avere anteprima
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getColor(R.color.principal)));
-        }
-        imageView = findViewById(R.id.imageView2);
-        button = findViewById(R.id.floatingActionButton);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ImagePicker.with(RegistrationActivity.this)
-                        .crop(1f,1f)	    			//Crop image(Optional), Check Customization for more option
-                        .compress(1024)			//Final image size will be less than 1 MB(Optional)
-                        .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
-                        .start();
-            }
-        }); */
-
         auth= FirebaseAuth.getInstance();
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
 
-
-
     }
 
-        /*
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == RESULT_OK && data != null) {
-            Uri uri = data.getData();
-
-            try {
-                imageBytes = getBytes(getContentResolver().openInputStream(uri)); //Immagine da salvare nel DB
-                imageView.setImageURI(uri);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    private byte[] getBytes(InputStream inputStream) throws IOException {  //serve per prelevare i byte
-        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024];
-        int len;
-        while ((len = inputStream.read(buffer)) != -1) {
-            byteBuffer.write(buffer, 0, len);
-        }
-        return byteBuffer.toByteArray();
-    } */
 
     public void login(View view){
 
@@ -130,8 +85,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
                     if (currentUser != null) {
                         String uid = currentUser.getUid();
-                        db.collection("utenti").document(uid).set(newUtente);
-
+                        db.collection("utenti").document(uid).set(newUtente); //Inserimento nel DB
                     }
                     Toast.makeText(RegistrationActivity.this, "Registrazione effettuata!", Toast.LENGTH_SHORT);
                     startActivity(new Intent(RegistrationActivity.this, MainActivity.class));
