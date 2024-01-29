@@ -45,8 +45,9 @@ public class RegistrationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registrer);
+        setContentView(R.layout.activity_register);
 
+        /*
         //Sistema per poter inserire immagine profilo ed avere anteprima
         if (getSupportActionBar() != null) {
             getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getColor(R.color.principal)));
@@ -62,7 +63,7 @@ public class RegistrationActivity extends AppCompatActivity {
                         .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
                         .start();
             }
-        });
+        }); */
 
         auth= FirebaseAuth.getInstance();
         email = findViewById(R.id.email);
@@ -72,6 +73,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     }
 
+        /*
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -95,7 +97,7 @@ public class RegistrationActivity extends AppCompatActivity {
             byteBuffer.write(buffer, 0, len);
         }
         return byteBuffer.toByteArray();
-    }
+    } */
 
     public void login(View view){
 
