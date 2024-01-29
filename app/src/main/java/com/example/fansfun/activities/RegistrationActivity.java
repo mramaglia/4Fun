@@ -64,9 +64,6 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         });
 
-
-
-
         auth= FirebaseAuth.getInstance();
         name = findViewById(R.id.name);
         surname = findViewById(R.id.surname);
@@ -144,9 +141,9 @@ public class RegistrationActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
 
-                    Utente newUtente = new Utente(userName, null, userEmail, null, null);
-
+                    Utente newUtente = new Utente(userName, null, userEmail, null, null); //modificare costruttore
                     FirebaseUser currentUser = auth.getCurrentUser();
+
                     if (currentUser != null) {
                         String uid = currentUser.getUid();
                         db.collection("utenti").document(uid).set(newUtente);
