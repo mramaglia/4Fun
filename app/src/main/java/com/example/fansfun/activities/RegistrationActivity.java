@@ -45,7 +45,7 @@ public class RegistrationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registration);
+        setContentView(R.layout.activity_registrer);
 
         //Sistema per poter inserire immagine profilo ed avere anteprima
         if (getSupportActionBar() != null) {
@@ -65,8 +65,6 @@ public class RegistrationActivity extends AppCompatActivity {
         });
 
         auth= FirebaseAuth.getInstance();
-        name = findViewById(R.id.name);
-        surname = findViewById(R.id.surname);
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
 
@@ -107,15 +105,8 @@ public class RegistrationActivity extends AppCompatActivity {
 
     public void registrazione(View view){
 
-        String userName = name.getText().toString();
         String userEmail = email.getText().toString();
         String userPassword = password.getText().toString();
-
-        if(TextUtils.isEmpty(userName)){
-
-            Toast.makeText(this, "Compilare tutti i campi", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         if(TextUtils.isEmpty(userEmail)){
             Toast.makeText(this, "Compilare tutti i campi", Toast.LENGTH_SHORT).show();
