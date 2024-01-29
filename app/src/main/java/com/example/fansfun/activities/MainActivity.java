@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
             textId.setText(uid);
         }
 
-
         // Inizializza Firestore
         firestore = FirebaseFirestore.getInstance();
         collectionReference = firestore.collection("utenti");
