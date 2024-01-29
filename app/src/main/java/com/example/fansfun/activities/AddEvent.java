@@ -85,13 +85,6 @@ public class AddEvent extends AppCompatActivity {
         });
 
         ///INSERIRE DATI PER LA PERSISTENZA
-
-
-
-
-
-
-
     }
 
     @Override

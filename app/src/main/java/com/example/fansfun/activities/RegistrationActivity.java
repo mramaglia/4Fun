@@ -106,7 +106,7 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     public void registrazione(View view){
-    //ricorda di aggiungere gli altri parmetri all'utente (surname,data,cell)
+
         String userName = name.getText().toString();
         String userEmail = email.getText().toString();
         String userPassword = password.getText().toString();
@@ -114,34 +114,25 @@ public class RegistrationActivity extends AppCompatActivity {
         if(TextUtils.isEmpty(userName)){
 
             Toast.makeText(this, "Compilare tutti i campi", Toast.LENGTH_SHORT).show();
-
             return;
         }
 
         if(TextUtils.isEmpty(userEmail)){
-
             Toast.makeText(this, "Compilare tutti i campi", Toast.LENGTH_SHORT).show();
-
             return;
         }
 
         if(TextUtils.isEmpty(userPassword)){
-
             Toast.makeText(this, "Compilare tutti i campi", Toast.LENGTH_SHORT).show();
-
             return;
         }
-
-        //RICORDARE: inserire foto profilo e data nell'utente
-        //Per prelevare l'immagine si usa l'URI, da lì o si converte o si inserisce diretamente nel DB
-
-
         auth.createUserWithEmailAndPassword(userEmail, userPassword).addOnCompleteListener(RegistrationActivity.this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
 
-                    Utente newUtente = new Utente(userName, null, userEmail, null, null); //modificare costruttore
+                    Utente newUtente = new Utente();
+                    newUtente.setEmail(String.valueOf(email));
                     FirebaseUser currentUser = auth.getCurrentUser();
 
                     if (currentUser != null) {
