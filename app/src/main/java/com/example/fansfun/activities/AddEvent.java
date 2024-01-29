@@ -19,6 +19,7 @@ import android.widget.TimePicker;
 import com.example.fansfun.R;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -29,9 +30,10 @@ import java.util.Calendar;
 public class AddEvent extends AppCompatActivity {
     ImageView imageView;
     byte[] imageBytes;
-    TextView date_text , hour_text;
+    TextInputEditText name, description;
     Button date, hour;
     FloatingActionButton button;
+    String eventName, eventDescription;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +41,14 @@ public class AddEvent extends AppCompatActivity {
 
         date = findViewById(R.id.date);
         hour = findViewById(R.id.hour);
+
+        name = findViewById(R.id.EventName);
+        description = findViewById(R.id.EventDescription);
+
+        //Nome e Descrizione
+        eventName = name.getText().toString();
+        eventDescription = description.getText().toString();
+
 
         //sistema dialog per data, metodi aggiuntivi in basso
         date.setOnClickListener(new View.OnClickListener() {
@@ -77,7 +87,13 @@ public class AddEvent extends AppCompatActivity {
         ///INSERIRE DATI PER LA PERSISTENZA
 
 
+
+
+
+
+
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
