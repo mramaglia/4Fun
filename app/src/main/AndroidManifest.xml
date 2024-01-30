@@ -21,6 +21,9 @@
             android:name=".activities.PostRegistrationActivity"
             android:exported="true" />
         <activity
+            android:name=".activities.InserJSON"
+            android:exported="true" />
+        <activity
             android:name=".activities.AddEvent"
             android:exported="true" />
         <activity
