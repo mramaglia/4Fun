@@ -54,6 +54,7 @@ public class AddEvent extends AppCompatActivity {
     String eventName, eventDescription, imageUrl;
     Uri imageUri;
     int giorno, mese, anno, ora, minuto;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -234,7 +235,6 @@ public class AddEvent extends AppCompatActivity {
                         evento.setFoto(imageUrl);
                     }
                 });
-
             }
         });
 
