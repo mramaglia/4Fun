@@ -1,41 +1,23 @@
 package com.example.fansfun.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.arch.core.executor.ArchTaskExecutor;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.fansfun.R;
-import com.example.fansfun.adapters.UtenteAdapter;
-import com.example.fansfun.entities.Utente;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Firebase;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
+import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.example.fansfun.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private ListView listView;
-    private UtenteAdapter adapter;
-    private List<Utente> listaUtenti;
+    Button aggiungiEvento, profilo, eventi;
     private FirebaseFirestore firestore;
-    private CollectionReference collectionReference;
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
 
@@ -45,41 +27,52 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        listView = findViewById(R.id.tuaListView);
-        listaUtenti = new ArrayList<>();
-        adapter = new UtenteAdapter(this, listaUtenti);
-        listView.setAdapter(adapter);
+        aggiungiEvento=findViewById(R.id.aggiungiEvento);
+        profilo=findViewById(R.id.profilo);
+        eventi=findViewById(R.id.eventi);
 
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null) {
-            String uid = currentUser.getUid();
-            TextView textId = findViewById(R.id.textId);
-            textId.setText(uid);
-        }
+        aggiungiEvento.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                aggiungiEvento();
+            }
+        });
+        profilo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        // Inizializza Firestore
-        firestore = FirebaseFirestore.getInstance();
-        collectionReference = firestore.collection("utenti");
+                profilo();
+            }
+        });
+        eventi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        collectionReference.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        if (!queryDocumentSnapshots.isEmpty()) {
-                            List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
-                            for (DocumentSnapshot d : list) {
-                                Utente utente = d.toObject(Utente.class);
-                                listaUtenti.add(utente);
-                            }
-                            adapter.notifyDataSetChanged();
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
+                eventi();
+            }
+        });
 
-                    }
-                });
 
     }
+
+    private void aggiungiEvento(){
+
+        Intent intent = new Intent(MainActivity.this, AddEvent.class);
+        startActivity(intent);
+
+    }
+
+    private void eventi(){
+
+        Toast.makeText(this, "E fattell tu", Toast.LENGTH_SHORT).show();
+
+    }
+
+    private void profilo(){
+
+        Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+        startActivity(intent);
+
+    }
+
 }
