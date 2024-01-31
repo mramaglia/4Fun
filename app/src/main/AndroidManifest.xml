@@ -18,6 +18,9 @@
         tools:ignore="HardcodedDebugMode"
         tools:targetApi="31">
         <activity
+            android:name=".activities.ViewEvent"
+            android:exported="false" />
+        <activity
             android:name=".activities.InsertJSON"
             android:exported="true" />
         <activity

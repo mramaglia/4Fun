@@ -86,6 +86,8 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/EventDescriptionLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -104,6 +106,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="77dp"
                 android:maxLength="100" />
+
             <LinearLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
@@ -116,6 +119,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/surnameLayout"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp">
+
                 <ImageView
                     android:padding="5dp"
                     android:layout_width="50dp"
@@ -134,6 +138,7 @@
                     android:layout_gravity="center_vertical"
                     android:hint="Cerca il tuo comune"
                     android:required="true"/>
+
             </LinearLayout>
 
         </com.google.android.material.textfield.TextInputLayout>
