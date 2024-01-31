@@ -18,14 +18,14 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Register NOW"
+            android:text="Complete registration"
             android:textColor="@color/white"
-            android:textSize="40sp"
+            android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -44,7 +44,7 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/profile_pic"
             android:layout_width="115dp"
-            android:layout_height="102dp"
+            android:layout_height="115dp"
             android:background="@color/principal"
             android:padding="5dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -92,8 +92,8 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:hint="Surname"
+            android:layout_marginTop="40dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/namelayout">
@@ -107,47 +107,70 @@
                 android:inputType="text"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/locationLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:hint="Location"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/surnameLayout">
+            app:layout_constraintTop_toBottomOf="@+id/surnameLayout"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp">
+            <ImageView
+                android:padding="5dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/location"
+                app:layout_constraintBottom_toBottomOf="@+id/date"
+                app:layout_constraintEnd_toStartOf="@+id/date"
+                app:layout_constraintTop_toTopOf="@+id/date" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/location"
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                android:maxLength="15"
-                android:singleLine="true"
-                android:pointerIcon="arrow"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginStart="10dp"
+                android:completionThreshold="1"
+                android:hint="Cerca il tuo comune"
 
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/birthday"
-            app:layout_constraintBottom_toBottomOf="@+id/date"
-            app:layout_constraintEnd_toStartOf="@+id/date"
-            app:layout_constraintTop_toTopOf="@+id/date" />
+                android:minHeight="48dp"
+                tools:layout_editor_absoluteX="37dp" />
+        </LinearLayout>
 
-        <Button
-            android:id="@+id/date"
-            style="@android:style/Widget.Holo.Light.Button"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/linear_layout2"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:elevation="10dp"
-            android:text="Add Birthday"
-            android:textColor="@color/white"
+            android:layout_marginTop="40dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/locationLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/birthday"
+                app:layout_constraintBottom_toBottomOf="@+id/date"
+                app:layout_constraintEnd_toStartOf="@+id/date"
+                app:layout_constraintTop_toTopOf="@+id/date" />
+
+            <Button
+                android:id="@+id/date"
+                style="@android:style/Widget.Holo.Light.Button"
+                android:layout_width="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="Add Birthday"
+                android:textColor="@color/white"
+                app:layout_constraintTop_toBottomOf="@+id/autoCompleteTextView" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/registrationButton"

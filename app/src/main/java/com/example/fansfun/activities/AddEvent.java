@@ -67,7 +67,7 @@ public class AddEvent extends AppCompatActivity {
 
         date = findViewById(R.id.date);
         hour = findViewById(R.id.hour);
-        addEvent = findViewById(R.id.button2);
+        addEvent = findViewById(R.id.addEvent);
 
         name = findViewById(R.id.EventName);
         description = findViewById(R.id.EventDescription);
@@ -113,7 +113,6 @@ public class AddEvent extends AppCompatActivity {
             }
         });
 
-        ///INSERIRE DATI PER LA PERSISTENZA
     }
 
     @Override

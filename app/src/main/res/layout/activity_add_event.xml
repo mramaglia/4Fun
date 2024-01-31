@@ -81,7 +81,8 @@
                 android:id="@+id/EventName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLength="20" />
+                android:maxLength="20"
+                android:required="true"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -103,6 +104,37 @@
                 android:layout_width="match_parent"
                 android:layout_height="77dp"
                 android:maxLength="100" />
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:hint="Location"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/surnameLayout"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp">
+                <ImageView
+                    android:padding="5dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/location"
+                    app:layout_constraintBottom_toBottomOf="@+id/date"
+                    app:layout_constraintEnd_toStartOf="@+id/date"
+                    app:layout_constraintTop_toTopOf="@+id/date" />
+
+                <AutoCompleteTextView
+                    android:id="@+id/autoCompleteTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:completionThreshold="1"
+                    android:layout_gravity="center_vertical"
+                    android:hint="Cerca il tuo comune"
+                    android:required="true"/>
+            </LinearLayout>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -142,7 +174,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/addEvent"
         style="@style/Widget.Material3.Button.TonalButton"
         android:layout_width="295dp"
         android:layout_height="62dp"
