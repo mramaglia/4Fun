@@ -53,9 +53,9 @@ import java.util.List;
 
 public class PostRegistrationActivity extends AppCompatActivity {
 
-    ImageView imageView;
+    ImageView imageView, imageView3;
     byte[] imageBytes;
-    Button date, registrationButton;
+    Button date;
     FloatingActionButton button;
     TextInputEditText name, surname;
     AutoCompleteTextView location;
@@ -65,7 +65,6 @@ public class PostRegistrationActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private StorageReference storageReference;
-    //////////////
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +83,7 @@ public class PostRegistrationActivity extends AppCompatActivity {
         name=findViewById(R.id.name);
         surname=findViewById(R.id.surname);
         location=findViewById(R.id.autoCompleteTextView);
-        registrationButton=findViewById(R.id.registrationButton);
+        imageView3=findViewById(R.id.imageView3);
 
         Bundle extras = getIntent().getExtras();
         userEmail = extras.getString("email");
@@ -122,7 +121,7 @@ public class PostRegistrationActivity extends AppCompatActivity {
             }
         });
 
-        registrationButton.setOnClickListener(new View.OnClickListener() {
+        imageView3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 registrazione();
@@ -267,7 +266,7 @@ public class PostRegistrationActivity extends AppCompatActivity {
                                                 public void onSuccess(Void aVoid) {
                                                     // Documento aggiunto o aggiornato con successo
                                                     Log.d("Firestore", "Documento aggiunto o aggiornato con successo");
-                                                    startActivity(new Intent(PostRegistrationActivity.this, MainActivity.class));
+                                                    startActivity(new Intent(PostRegistrationActivity.this, ProfileActivity.class));
 
                                                 }
                                             })

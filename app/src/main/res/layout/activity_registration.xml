@@ -188,17 +188,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/autoCompleteTextView" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/registrationButton"
-            android:layout_width="128dp"
-            android:layout_height="57dp"
-            android:text="Registrati"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.952" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
