@@ -9,16 +9,18 @@ public class Utente {
     private String email;
     private Date dataNascita;
     private String luogo;
+    private String foto;
 
     public Utente() {
     }
 
-    public Utente(String nome, String cognome, String email, Date dataNascita, String luogo) {
+    public Utente(String nome, String cognome, String email, Date dataNascita, String luogo, String foto) {
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
         this.dataNascita = dataNascita;
         this.luogo = luogo;
+        this.foto = foto;
     }
 
     public String getNome() {
@@ -61,14 +63,11 @@ public class Utente {
         this.luogo = luogo;
     }
 
-    @Override
-    public String toString() {
-        return "Utente{" +
-                "nome='" + nome + '\'' +
-                ", cognome='" + cognome + '\'' +
-                ", email='" + email + '\'' +
-                ", dataNascita='" + dataNascita + '\'' +
-                ", luogo='" + luogo + '\'' +
-                '}';
+    public String getFoto() {
+        return foto;
+    }
+
+    public void setFoto(String foto) {
+        this.foto = foto;
     }
 }

@@ -43,15 +43,16 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/profile_pic"
-            android:layout_width="144dp"
-            android:layout_height="144dp"
+            android:layout_width="115dp"
+            android:layout_height="102dp"
             android:background="@color/principal"
             android:padding="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:shapeAppearanceOverlay="@style/circular"
             app:srcCompat="@drawable/person"
-            tools:ignore="MissingConstraints" />
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteY="6dp" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floatingActionButton"
@@ -112,7 +113,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:hint="Surname"
+            android:hint="Location"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/surnameLayout">
@@ -147,6 +148,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/locationLayout" />
+
+        <Button
+            android:id="@+id/registrationButton"
+            android:layout_width="128dp"
+            android:layout_height="57dp"
+            android:text="Registrati"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.952" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

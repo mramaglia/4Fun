@@ -72,11 +72,6 @@ public class AddEvent extends AppCompatActivity {
         name = findViewById(R.id.EventName);
         description = findViewById(R.id.EventDescription);
 
-        //Nome e Descrizione
-        //eventName = name.getText().toString();
-        //eventDescription = description.getText().toString();
-
-
         //sistema dialog per data, metodi aggiuntivi in basso
         date.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -199,18 +194,27 @@ public class AddEvent extends AppCompatActivity {
         eventName = name.getText().toString();
         eventDescription = description.getText().toString();
 
+        //creo l'evento
         Evento evento = new Evento();
 
+        //setto il nome
         evento.setNome(eventName);
+
+        //setto la descrizione
         evento.setDescrizione(eventDescription);
+
+        //aggiungi la data
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(anno, mese, giorno, ora, minuto);
+        Date specificDate = calendar.getTime();
+        evento.setData(specificDate);
 
 
         //prendo l'id dell'utente
-        //String userId = firebaseAuth.getCurrentUser().getUid();
+        String userId = firebaseAuth.getCurrentUser().getUid();
 
         //operazione d aggiunta dell'immagine
-
-        StorageReference imageRef = storageReference.child("images/profile.jpg");
+        StorageReference imageRef = storageReference.child("eventImages/"+ userId);
         UploadTask uploadTask = imageRef.putFile(imageUri);
 
         uploadTask.addOnFailureListener(new OnFailureListener() {
@@ -223,47 +227,42 @@ public class AddEvent extends AppCompatActivity {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // Il caricamento è stato completato con successo, ora ottieni l'URL
-                taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+
+                imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
-                    public void onSuccess(Uri uri) {
+                    public void onSuccess(Uri downloadUrl) {
+                        evento.setFoto(downloadUrl.toString());
 
-                        // Questo è l'URL del download dell'immagine
-                        imageUrl = uri.toString();
 
-                        // Stampa l'URL per debug
-                        Log.d("DownloadURL", imageUrl);
-                        evento.setFoto(imageUrl);
+                        // Aggiungi un nuovo documento con un ID generato automaticamente
+                        db.collection("eventi")
+                                .add(evento)
+                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    @Override
+                                    public void onSuccess(DocumentReference documentReference) {
+                                        // Documento aggiunto con successo
+                                        Log.d("Firestore", "Documento aggiunto con ID: " + documentReference.getId());
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        // Gestisci l'errore
+                                        Log.w("Firestore", "Errore nell'aggiungere il documento", e);
+                                    }
+                                });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Gestisci eventuali errori
                     }
                 });
+
             }
         });
 
 
-
-        //aggiungi la data
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(anno, mese, giorno, ora, minuto);
-        Date specificDate = calendar.getTime();
-        evento.setData(specificDate);
-
-
-        // Aggiungi un nuovo documento con un ID generato automaticamente
-        db.collection("eventi")
-                .add(evento)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        // Documento aggiunto con successo
-                        Log.d("Firestore", "Documento aggiunto con ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // Gestisci l'errore
-                        Log.w("Firestore", "Errore nell'aggiungere il documento", e);
-                    }
-                });
 
 
     }

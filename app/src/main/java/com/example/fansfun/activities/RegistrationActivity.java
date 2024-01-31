@@ -39,7 +39,6 @@ public class RegistrationActivity extends AppCompatActivity {
     FloatingActionButton button;
     EditText name, surname, email, password;
     private FirebaseAuth auth;
-
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
@@ -62,6 +61,8 @@ public class RegistrationActivity extends AppCompatActivity {
 
     public void registrazione(View view){
 
+        Intent intent=new Intent(RegistrationActivity.this, PostRegistrationActivity.class);
+
         String userEmail = email.getText().toString();
         String userPassword = password.getText().toString();
 
@@ -74,7 +75,13 @@ public class RegistrationActivity extends AppCompatActivity {
             Toast.makeText(this, "Compilare tutti i campi", Toast.LENGTH_SHORT).show();
             return;
         }
-        auth.createUserWithEmailAndPassword(userEmail, userPassword).addOnCompleteListener(RegistrationActivity.this, new OnCompleteListener<AuthResult>() {
+
+        intent.putExtra("email", userEmail);
+        intent.putExtra("password", userPassword);
+
+        startActivity(intent);
+
+      /*  auth.createUserWithEmailAndPassword(userEmail, userPassword).addOnCompleteListener(RegistrationActivity.this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
@@ -88,12 +95,12 @@ public class RegistrationActivity extends AppCompatActivity {
                         db.collection("utenti").document(uid).set(newUtente); //Inserimento nel DB
                     }
                     Toast.makeText(RegistrationActivity.this, "Registrazione effettuata!", Toast.LENGTH_SHORT);
-                    startActivity(new Intent(RegistrationActivity.this, MainActivity.class));
+
                 }else{
                     Toast.makeText(RegistrationActivity.this, "Registrazione fallita"+task.getException(), Toast.LENGTH_SHORT);
                 }
             }
-        });
+        });*/
     }
 
 }
