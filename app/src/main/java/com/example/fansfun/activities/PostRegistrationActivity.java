@@ -91,8 +91,6 @@ public class PostRegistrationActivity extends AppCompatActivity {
         userPassword = extras.getString("password");
 
 
-        //gestione location
-
         // Carica il file JSON
         String json = loadJSONFromAsset("comuni.json");
 

@@ -16,16 +16,29 @@
         android:background="@color/principal">
 
         <TextView
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Complete registration"
             android:textColor="@color/white"
-            android:textSize="30sp"
+            android:textSize="25sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:padding="5dp"
+            android:src="@drawable/check"
+            app:layout_constraintBottom_toBottomOf="@+id/textView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView"
+            app:layout_constraintTop_toTopOf="@+id/textView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -83,7 +96,8 @@
                 android:layout_height="wrap_content"
                 android:maxLength="15"
                 android:singleLine="true"
-                android:inputType="text"/>
+                android:inputType="text"
+                android:required="true"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -104,7 +118,9 @@
                 android:layout_height="wrap_content"
                 android:maxLength="15"
                 android:singleLine="true"
-                android:inputType="text"/>
+                android:inputType="text"
+                android:required="true"/>
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
