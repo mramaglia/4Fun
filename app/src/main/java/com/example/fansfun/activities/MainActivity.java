@@ -64,7 +64,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void eventi(){
 
-        Toast.makeText(this, "E fattell tu", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(MainActivity.this, ListaEventi.class);
+        startActivity(intent);
 
     }
 

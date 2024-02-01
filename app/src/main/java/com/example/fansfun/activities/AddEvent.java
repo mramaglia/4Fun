@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -49,9 +50,10 @@ public class AddEvent extends AppCompatActivity {
     ImageView imageView;
     byte[] imageBytes;
     TextInputEditText name, description;
+    AutoCompleteTextView location;
     Button date, hour, addEvent;
     FloatingActionButton button;
-    String eventName, eventDescription, imageUrl;
+    String eventName, eventDescription, imageUrl, luogo;
     Uri imageUri;
     int giorno, mese, anno, ora, minuto;
 
@@ -68,6 +70,7 @@ public class AddEvent extends AppCompatActivity {
         date = findViewById(R.id.date);
         hour = findViewById(R.id.hour);
         addEvent = findViewById(R.id.addEvent);
+        location=findViewById(R.id.autoCompleteTextView);
 
         name = findViewById(R.id.EventName);
         description = findViewById(R.id.EventDescription);
@@ -208,9 +211,19 @@ public class AddEvent extends AppCompatActivity {
         Date specificDate = calendar.getTime();
         evento.setData(specificDate);
 
+        //aggiungi luogo
+        luogo=location.getText().toString();
+        evento.setLuogo(luogo);
+
 
         //prendo l'id dell'utente
         String userId = firebaseAuth.getCurrentUser().getUid();
+
+        //aggiungo id utente
+        evento.setOrganizzatore(userId);
+
+        //aggiungo maxPartecipanti FARE BENE
+        evento.setMaxPartecipanti(100);
 
         //operazione d aggiunta dell'immagine
         StorageReference imageRef = storageReference.child("eventImages/"+ userId);

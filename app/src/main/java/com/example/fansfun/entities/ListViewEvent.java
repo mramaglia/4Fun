@@ -2,8 +2,9 @@ package com.example.fansfun.entities;
 
 import java.util.Date;
 
-public class Evento {
+public class ListViewEvent {
 
+    private String id;
     private String foto;
     private String nome;
     private String descrizione;
@@ -13,11 +14,11 @@ public class Evento {
     private int maxPartecipanti;
     private int numPartecipanti;
 
-    public Evento() {
-        numPartecipanti=0;
+    public ListViewEvent() {
     }
 
-    public Evento(String foto, String nome, String descrizione, Date data, String organizzatore, String luogo, int maxPartecipanti) {
+    public ListViewEvent(String id, String foto, String nome, String descrizione, Date data, String organizzatore, String luogo, int maxPartecipanti, int numPartecipanti) {
+        this.id = id;
         this.foto = foto;
         this.nome = nome;
         this.descrizione = descrizione;
@@ -25,7 +26,15 @@ public class Evento {
         this.organizzatore = organizzatore;
         this.luogo = luogo;
         this.maxPartecipanti = maxPartecipanti;
-        this.numPartecipanti=0;
+        this.numPartecipanti = numPartecipanti;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getFoto() {
