@@ -1,5 +1,6 @@
 package com.example.fansfun.adapters;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,12 @@ import com.example.fansfun.activities.ListaEventi;
 import com.example.fansfun.activities.ViewEvent;
 import com.example.fansfun.entities.Evento;
 import com.example.fansfun.entities.ListViewEvent;
+import com.example.fansfun.entities.Utente;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,6 +32,8 @@ public class EventoAdapter extends ArrayAdapter<ListViewEvent> {
 
     private Context context;
     private List<ListViewEvent> eventi;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    CollectionReference utentiCollection = db.collection("utenti");
 
     public EventoAdapter(@NonNull Context context, int resource, @NonNull List<ListViewEvent> eventi) {
         super(context, resource, eventi);
@@ -55,9 +64,35 @@ public class EventoAdapter extends ArrayAdapter<ListViewEvent> {
         dataTextView.setText(formatData(evento.getData()));
         luogoTextView.setText(evento.getLuogo());
         numPartecipanti.setText(String.valueOf(evento.getNumPartecipanti()));
-        organizzatore.setText(evento.getOrganizzatore());
+
+        utentiCollection.document(evento.getOrganizzatore())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                // Il documento esiste, puoi ottenere i dati
+                                Utente utente = document.toObject(Utente.class);
+
+                                // Ora hai l'oggetto Utente con i dati del documento
+                                if (utente != null) {
+                                    organizzatore.setText(utente.getNome());
+
+                                }
+                            } else {
+                                Log.d("Firestore", "Nessun documento trovato con ID: " + evento.getOrganizzatore());
+                            }
+                        } else {
+                            Log.e("Firestore", "Errore durante la ricerca del documento", task.getException());
+                        }
+                    }
+                });
 
         return convertView;
+
+
     }
 
     private String formatData(Date data) {
