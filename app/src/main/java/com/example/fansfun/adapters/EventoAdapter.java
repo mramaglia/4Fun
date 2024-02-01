@@ -55,7 +55,7 @@ public class EventoAdapter extends ArrayAdapter<ListViewEvent> {
         dataTextView.setText(formatData(evento.getData()));
         luogoTextView.setText(evento.getLuogo());
         numPartecipanti.setText(String.valueOf(evento.getNumPartecipanti()));
-        organizzatore.setText(evento.getId());
+        organizzatore.setText(evento.getOrganizzatore());
 
         return convertView;
     }
