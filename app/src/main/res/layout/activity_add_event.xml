@@ -134,10 +134,11 @@
                     android:id="@+id/autoCompleteTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:completionThreshold="1"
                     android:layout_gravity="center_vertical"
+                    android:completionThreshold="1"
                     android:hint="Cerca il tuo comune"
-                    android:required="true"/>
+                    android:minHeight="48dp"
+                    android:required="true" />
 
             </LinearLayout>
 

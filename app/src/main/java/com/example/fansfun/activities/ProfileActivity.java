@@ -35,9 +35,9 @@ public class ProfileActivity extends AppCompatActivity {
         storageReference = FirebaseStorage.getInstance().getReference();
         db = FirebaseFirestore.getInstance();
 
-        profileImage=findViewById(R.id.imageView);
-        textNome=findViewById(R.id.textView6);
-        textLuogo=findViewById(R.id.textView7);
+        profileImage=findViewById(R.id.profile_pic);
+        textNome=findViewById(R.id.nome);
+        textLuogo=findViewById(R.id.location);
 
         String userId = auth.getCurrentUser().getUid(); // Sostituisci con l'ID dell'utente
         FirebaseFirestore db = FirebaseFirestore.getInstance();
