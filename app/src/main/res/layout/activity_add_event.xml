@@ -21,23 +21,24 @@
             android:layout_height="wrap_content"
             android:text="Add Event"
             android:textColor="@color/white"
-            android:textSize="50sp"
+            android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.5" />
 
         <!-- Contenuto del ConstraintLayout -->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
-        android:layout_marginTop="64dp"
         android:layout_marginEnd="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -63,17 +64,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
-            app:layout_constraintBottom_toBottomOf="@id/EventPhoto"
-            app:layout_constraintEnd_toEndOf="@id/EventPhoto"
+            app:layout_constraintBottom_toBottomOf="@+id/EventPhoto"
+            app:layout_constraintEnd_toEndOf="@+id/EventPhoto"
+            app:layout_constraintStart_toEndOf="@+id/EventPhoto"
+            app:layout_constraintTop_toTopOf="@+id/EventPhoto"
+            app:layout_constraintVertical_bias="1.0"
             app:srcCompat="@drawable/baseline_photo_camera_24" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/EventNameLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="172dp"
+            android:layout_height="59dp"
             android:layout_marginTop="32dp"
             android:hint="Name"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/EventPhoto">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -81,11 +86,30 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLength="20"
-                android:required="true"/>
+                android:required="true" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/EventNumberLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="110dp"
+            android:layout_height="59dp"
+            android:layout_marginTop="32dp"
+            android:hint="num"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/EventPhoto">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/EventNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLength="20"
+                android:inputType="numberSigned"
+                android:required="false" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/EventDescriptionLayout"
@@ -110,20 +134,20 @@
                 android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
                 android:layout_marginBottom="20dp"
                 android:hint="Location"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/surnameLayout"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp">
+                app:layout_constraintTop_toBottomOf="@+id/surnameLayout">
 
                 <ImageView
-                    android:padding="5dp"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center_vertical"
+                    android:padding="5dp"
                     android:src="@drawable/location"
                     app:layout_constraintBottom_toBottomOf="@+id/date"
                     app:layout_constraintEnd_toStartOf="@+id/date"
@@ -180,7 +204,7 @@
 
     <Button
         android:id="@+id/addEvent"
-        style="@style/Widget.Material3.Button.TonalButton"
+        style="@style/Widget.Material3.Button.ElevatedButton"
         android:layout_width="295dp"
         android:layout_height="62dp"
         android:layout_marginBottom="60dp"
@@ -189,7 +213,8 @@
         android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout4" />
 
 
 

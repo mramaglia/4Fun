@@ -90,18 +90,18 @@ public class PostRegistrationActivity extends AppCompatActivity {
         userPassword = extras.getString("password");
 
 
-        // Carica il file JSON
-        String json = loadJSONFromAsset("comuni.json");
+            // Carica il file JSON
+            String json = loadJSONFromAsset("comuni.json");
 
-        // Ottieni la lista di opzioni dal JSON
-        List<String> options = parseJSON(json);
+            // Ottieni la lista di opzioni dal JSON
+            List<String> options = parseJSON(json);
 
-        // Inizializza l'AutoCompleteTextView
-        AutoCompleteTextView autoCompleteTextView = findViewById(R.id.autoCompleteTextView);
+            // Inizializza l'AutoCompleteTextView
+            AutoCompleteTextView autoCompleteTextView = findViewById(R.id.autoCompleteTextView);
 
-        // Crea e imposta l'adattatore per l'autocompletamento
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, options);
-        autoCompleteTextView.setAdapter(adapter);
+            // Crea e imposta l'adattatore per l'autocompletamento
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, options);
+            autoCompleteTextView.setAdapter(adapter);
 
 
         date.setOnClickListener(new View.OnClickListener() {

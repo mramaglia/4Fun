@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -35,12 +36,19 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class AddEvent extends AppCompatActivity {
 
@@ -74,6 +82,22 @@ public class AddEvent extends AppCompatActivity {
 
         name = findViewById(R.id.EventName);
         description = findViewById(R.id.EventDescription);
+
+
+        // Carica il file JSON
+        String json = loadJSONFromAsset("comuni.json");
+
+        // Ottieni la lista di opzioni dal JSON
+        List<String> options = parseJSON(json);
+
+        // Inizializza l'AutoCompleteTextView
+        AutoCompleteTextView autoCompleteTextView = findViewById(R.id.autoCompleteTextView);
+
+        // Crea e imposta l'adattatore per l'autocompletamento
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, options);
+        autoCompleteTextView.setAdapter(adapter);
+
+
 
         //sistema dialog per data, metodi aggiuntivi in basso
         date.setOnClickListener(new View.OnClickListener() {
@@ -190,6 +214,38 @@ public class AddEvent extends AppCompatActivity {
         },currentTime.get(Calendar.HOUR_OF_DAY), currentTime.get(Calendar.MINUTE), true);
         dialog.show();
     }
+    private String loadJSONFromAsset(String filename) {
+        String json;
+        try {
+            InputStream is = getAssets().open(filename);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return json;
+    }
+
+    private List<String> parseJSON(String json) {
+        List<String> options = new ArrayList<>();
+        try {
+            JSONArray jsonArray = new JSONArray(json);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonElement = jsonArray.getJSONObject(i);
+                String nome = jsonElement.getString("nome");
+                String provinciaNome = jsonElement.getJSONObject("provincia").getString("nome");
+                String formattedData = nome + ", " + provinciaNome;
+                options.add(formattedData);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return options;
+    }
 
     private void aggiungiEvento(){
 
@@ -273,6 +329,7 @@ public class AddEvent extends AppCompatActivity {
 
             }
         });
+
 
 
 
