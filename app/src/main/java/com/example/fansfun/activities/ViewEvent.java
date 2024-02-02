@@ -13,17 +13,22 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.fansfun.R;
 import com.example.fansfun.entities.Evento;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -33,14 +38,16 @@ import com.google.firebase.storage.StorageReference;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ViewEvent extends AppCompatActivity{
 
     private FirebaseAuth auth;
     private FirebaseFirestore db;
     private StorageReference storageReference;
-    private ImageView imageView;
+    private ImageView imageView, iscriviti;
     private TextView nome, descrizione, partecipanti, luogo, data, ora;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +65,7 @@ public class ViewEvent extends AppCompatActivity{
         luogo=findViewById(R.id.textView14);
         data=findViewById(R.id.eventDate);
         ora=findViewById(R.id.eventHour);
+        iscriviti=findViewById(R.id.imageView6);
 
         auth=FirebaseAuth.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
@@ -66,6 +74,13 @@ public class ViewEvent extends AppCompatActivity{
         Geocoder geocoder = new Geocoder(this);
 
         String idEvento= getIntent().getStringExtra("idEvento");
+
+        iscriviti.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                iscriviti(idEvento, auth);
+            }
+        });
 
         eventiCollection.document(idEvento)
                 .get()
@@ -151,5 +166,87 @@ public class ViewEvent extends AppCompatActivity{
         return sdf.format(data);
     }
 
+    private void iscriviti(String idEvento, FirebaseAuth auth){
+
+        Map<String, Object> datiDocumento = new HashMap<>();
+
+        //prendo l'id dell'utente
+        String idUtente=auth.getCurrentUser().getUid();
+
+        // Aggiungi i campi desiderati al documento
+        datiDocumento.put("idUtente", idUtente);
+        datiDocumento.put("idEvento", idEvento);
+
+        String idDocumento=idUtente+idEvento;
+
+        DocumentReference documentReference = db.collection("partecipaEvento").document(idDocumento);
+
+        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        // Il documento esiste, quindi lo elimino
+                        documentReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d("Firestore", "Documento eliminato con successo");
+                                Toast.makeText(ViewEvent.this, "Hai annullato la tua partecipazione all'evento", Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.e("Firestore", "Errore durante l'eliminazione del documento: " + e.getMessage());
+                            }
+                        });
+                    } else {
+                        // Il documento non esiste, quindi lo aggiungo
+                        documentReference.set(datiDocumento)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d("Firestore", "Documento aggiunto con successo");
+                                        Toast.makeText(ViewEvent.this, "Ora partecipi all'evento!", Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.e("Firestore", "Errore durante l'aggiunta del documento: " + e.getMessage());
+                                    }
+                                });
+                    }
+                } else {
+                    // Gestisci eventuali errori durante la query
+                    Log.e("Firestore", "Errore durante la query: " + task.getException());
+                }
+            }
+        });
+
+    }
 
 }
+
+/*
+ Crea un nuovo oggetto Map per contenere i dati del documento
+        Map<String, Object> datiDocumento = new HashMap<>();
+
+        //prendo l'id dell'utente
+        String idUtente=auth.getCurrentUser().getUid();
+
+        // Aggiungi i campi desiderati al documento
+        datiDocumento.put("idUtente", idUtente);
+        datiDocumento.put("idEvento", idEvento);
+
+        // Aggiungi il documento alla collezione con ID autogenerato
+        collectionReference.document(idUtente+idEvento).set(datiDocumento)
+                .addOnSuccessListener(documentReference -> {
+                    // L'aggiunta del documento è avvenuta con successo
+                    System.out.println("Documento aggiunto con ID: " + idUtente+idEvento);
+                })
+                .addOnFailureListener(e -> {
+                    // Si è verificato un errore durante l'aggiunta del documento
+                    System.err.println("Errore durante l'aggiunta del documento: " + e.getMessage());
+                });
+*/
