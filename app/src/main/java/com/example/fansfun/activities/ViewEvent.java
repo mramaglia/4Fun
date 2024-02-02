@@ -3,7 +3,15 @@ package com.example.fansfun.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
+import org.osmdroid.config.Configuration;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.Marker;
+
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,33 +19,38 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.fansfun.R;
 import com.example.fansfun.entities.Evento;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
-public class ViewEvent extends AppCompatActivity {
+public class ViewEvent extends AppCompatActivity{
 
     private FirebaseAuth auth;
     private FirebaseFirestore db;
     private StorageReference storageReference;
-    ImageView imageView;
-
-    TextView nome, descrizione, partecipanti, luogo, data, ora;
-
+    private ImageView imageView;
+    private TextView nome, descrizione, partecipanti, luogo, data, ora;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_event);
 
+        Configuration.getInstance().load(this, getPreferences(MODE_PRIVATE));
+
+        // Ottieni il riferimento al MapView dal layout
+        MapView mapView = findViewById(R.id.mapView);
         imageView=findViewById(R.id.imageView);
         nome=findViewById(R.id.textView9);
         descrizione=findViewById(R.id.textView10);
@@ -50,6 +63,7 @@ public class ViewEvent extends AppCompatActivity {
         storageReference = FirebaseStorage.getInstance().getReference();
         db = FirebaseFirestore.getInstance();
         CollectionReference eventiCollection = db.collection("eventi");
+        Geocoder geocoder = new Geocoder(this);
 
         String idEvento= getIntent().getStringExtra("idEvento");
 
@@ -74,6 +88,41 @@ public class ViewEvent extends AppCompatActivity {
                                 luogo.setText(evento.getLuogo());
                                 data.setText(formatData(evento.getData()));
                                 ora.setText(formatOra(evento.getData()));
+
+                                // Imposta il livello di zoom iniziale
+                                mapView.getController().setZoom(15.0);
+
+                                String locationName = evento.getLuogo(); // Sostituisci con il tuo indirizzo o comune
+                                try {
+                                    List<Address> addresses = geocoder.getFromLocationName(locationName, 1);
+
+                                    if (!addresses.isEmpty()) {
+                                        // Ottieni la prima corrispondenza di indirizzo
+                                        Address address = addresses.get(0);
+
+                                        // Ottieni le coordinate geografiche
+                                        double latitude = address.getLatitude();
+                                        double longitude = address.getLongitude();
+
+                                        // Crea un oggetto GeoPoint con le coordinate
+                                        GeoPoint location = new GeoPoint(latitude, longitude);
+
+                                        // Imposta il centro della mappa sul GeoPoint appena creato
+                                        mapView.getController().setCenter(location);
+
+                                        Marker marker = new Marker(mapView);
+                                        marker.setPosition(location);
+                                        marker.setTitle(evento.getLuogo());
+                                        //marker.setSnippet("Descrizione del luogo");
+                                        mapView.getOverlays().add(marker);
+
+                                        // Abilita il multitouch (zoom e pan)
+                                        mapView.setMultiTouchControls(true);
+                                    }
+                                }catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+
 
 
                             } else {
@@ -101,4 +150,6 @@ public class ViewEvent extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         return sdf.format(data);
     }
+
+
 }

@@ -266,7 +266,7 @@ public class PostRegistrationActivity extends AppCompatActivity {
                                                 public void onSuccess(Void aVoid) {
                                                     // Documento aggiunto o aggiornato con successo
                                                     Log.d("Firestore", "Documento aggiunto o aggiornato con successo");
-                                                    startActivity(new Intent(PostRegistrationActivity.this, ProfileActivity.class));
+                                                    startActivity(new Intent(PostRegistrationActivity.this, PrincipalActivity.class));
 
                                                 }
                                             })
