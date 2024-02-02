@@ -57,13 +57,13 @@ public class AddEvent extends AppCompatActivity {
     private FirebaseFirestore db;
     ImageView imageView;
     byte[] imageBytes;
-    TextInputEditText name, description;
+    TextInputEditText name, description, eventNum;
     AutoCompleteTextView location;
     Button date, hour, addEvent;
     FloatingActionButton button;
     String eventName, eventDescription, imageUrl, luogo;
     Uri imageUri;
-    int giorno, mese, anno, ora, minuto;
+    int giorno, mese, anno, ora, minuto, maxPartecipanti;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +79,7 @@ public class AddEvent extends AppCompatActivity {
         hour = findViewById(R.id.hour);
         addEvent = findViewById(R.id.addEvent);
         location=findViewById(R.id.autoCompleteTextView);
+        eventNum=findViewById(R.id.EventNumber);
 
         name = findViewById(R.id.EventName);
         description = findViewById(R.id.EventDescription);
@@ -251,6 +252,8 @@ public class AddEvent extends AppCompatActivity {
 
         eventName = name.getText().toString();
         eventDescription = description.getText().toString();
+        String inputText = eventNum.getText().toString();
+        maxPartecipanti = Integer.parseInt(inputText);;
 
         //creo l'evento
         Evento evento = new Evento();
@@ -279,7 +282,7 @@ public class AddEvent extends AppCompatActivity {
         evento.setOrganizzatore(userId);
 
         //aggiungo maxPartecipanti FARE BENE
-        evento.setMaxPartecipanti(100);
+        evento.setMaxPartecipanti(maxPartecipanti);
 
         //operazione d aggiunta dell'immagine
         StorageReference imageRef = storageReference.child("eventImages/"+ userId);

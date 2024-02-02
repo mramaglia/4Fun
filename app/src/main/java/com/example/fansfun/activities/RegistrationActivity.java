@@ -81,26 +81,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
         startActivity(intent);
 
-      /*  auth.createUserWithEmailAndPassword(userEmail, userPassword).addOnCompleteListener(RegistrationActivity.this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
 
-                    Utente newUtente = new Utente();
-                    newUtente.setEmail(String.valueOf(email));
-                    FirebaseUser currentUser = auth.getCurrentUser();
-
-                    if (currentUser != null) {
-                        String uid = currentUser.getUid();
-                        db.collection("utenti").document(uid).set(newUtente); //Inserimento nel DB
-                    }
-                    Toast.makeText(RegistrationActivity.this, "Registrazione effettuata!", Toast.LENGTH_SHORT);
-
-                }else{
-                    Toast.makeText(RegistrationActivity.this, "Registrazione fallita"+task.getException(), Toast.LENGTH_SHORT);
-                }
-            }
-        });*/
     }
 
 }

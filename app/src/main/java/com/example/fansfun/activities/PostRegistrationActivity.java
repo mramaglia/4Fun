@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -66,6 +67,8 @@ public class PostRegistrationActivity extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private StorageReference storageReference;
 
+    boolean isData=false, isFoto=false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,12 +110,14 @@ public class PostRegistrationActivity extends AppCompatActivity {
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isData=true;
                 openDialog_date();
             }
         });
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isFoto=true;
                 ImagePicker.with(PostRegistrationActivity.this)
                         .crop(1f,1f)
                         .compress(1024)
@@ -213,20 +218,57 @@ public class PostRegistrationActivity extends AppCompatActivity {
 
     private void registrazione(){
 
+
         nome=name.getText().toString();
         cognome=surname.getText().toString();
         luogo=location.getText().toString();
+
+        if(TextUtils.isEmpty(nome)){
+
+            Toast.makeText(this, "Compilare tutti i campi", Toast.LENGTH_SHORT).show();
+
+            return;
+        }
+
+        if(TextUtils.isEmpty(cognome)){
+
+            Toast.makeText(this, "Compilare tutti i campi", Toast.LENGTH_SHORT).show();
+
+            return;
+        }
+
+        if(TextUtils.isEmpty(luogo)){
+
+            Toast.makeText(this, "Compilare tutti i campi", Toast.LENGTH_SHORT).show();
+
+            return;
+        }
+
+        if(!isData){
+
+            Toast.makeText(this, "Compilare tutti i campi", Toast.LENGTH_SHORT).show();
+
+            return;
+        }
+
+        if(!isFoto){
+
+            Toast.makeText(this, "Compilare tutti i campi", Toast.LENGTH_SHORT).show();
+
+            return;
+        }
+
 
         //aggiungi la data
         Calendar calendar = Calendar.getInstance();
         calendar.set(anno, mese, giorno);
         Date specificDate = calendar.getTime();
 
-
         auth.createUserWithEmailAndPassword(userEmail, userPassword).addOnCompleteListener(PostRegistrationActivity.this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
+                    Toast.makeText(PostRegistrationActivity.this, "Registrazione andata a buon fine!\n Attendi che la tua regitrazione venga elaborata", Toast.LENGTH_SHORT).show();
 
                     Utente newUtente = new Utente();
                     newUtente.setNome(nome);
