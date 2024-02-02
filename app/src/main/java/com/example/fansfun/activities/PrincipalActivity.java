@@ -2,7 +2,9 @@ package com.example.fansfun.activities;
 
 import static androidx.databinding.DataBindingUtil.setContentView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -14,12 +16,15 @@ import com.example.fansfun.fragment.FavouriteFragment;
 import com.example.fansfun.fragment.HomeFragment;
 import com.example.fansfun.fragment.ProfileFragment;
 import com.example.fansfun.fragment.WalletFragment;
+import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class PrincipalActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
+    FloatingActionButton addEventButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +32,7 @@ public class PrincipalActivity extends AppCompatActivity {
         setContentView(R.layout.activity_principal);
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        addEventButton=findViewById(R.id.addEventButton);
 
         replaceFragment(new HomeFragment());
 
@@ -44,6 +50,13 @@ public class PrincipalActivity extends AppCompatActivity {
             }
 
             return true;
+        });
+
+        addEventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(PrincipalActivity.this, AddEvent.class));
+            }
         });
 
     }
