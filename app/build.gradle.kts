@@ -29,6 +29,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        dataBinding = true;
     }
 }
 
@@ -40,6 +41,8 @@ dependencies {
     implementation("com.google.firebase:firebase-auth:22.3.0")
     implementation("com.google.firebase:firebase-firestore:24.10.1")
     implementation("com.google.firebase:firebase-storage:20.3.0")
+
+    implementation ("androidx.databinding:databinding-runtime:7.0.3")
 
     //google palcesAPI
     implementation("com.google.android.libraries.places:places:3.3.0")

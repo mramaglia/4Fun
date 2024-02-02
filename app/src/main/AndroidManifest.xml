@@ -21,6 +21,9 @@
             android:name=".activities.ListaEventi"
             android:exported="true" />
         <activity
+            android:name=".activities.PrincipalActivity"
+            android:exported="true" />
+        <activity
             android:name=".activities.ViewEvent"
             android:exported="true" />
         <activity
