@@ -151,6 +151,11 @@ public class PrincipalActivity extends AppCompatActivity {
         });
     }
 
+    private void retrieveFavouriteFromDatabase() {
+        //Preleva dal database e componi la lista List<Eventi> eventList
+        //favourite.replaceFavouriteList(eventList)
+    }
+
 
 
     private void saveUserToSharedPreferences(Utente utente) {
