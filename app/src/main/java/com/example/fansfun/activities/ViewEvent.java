@@ -134,6 +134,7 @@ public class ViewEvent extends AppCompatActivity{
 
                                         // Abilita il multitouch (zoom e pan)
                                         mapView.setMultiTouchControls(true);
+
                                     }
                                 }catch (IOException e) {
                                     throw new RuntimeException(e);

@@ -10,25 +10,38 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.fansfun.R;
+import com.example.fansfun.adapters.EventoAdapter;
+import com.example.fansfun.entities.ListViewEvent;
 import com.example.fansfun.entities.Utente;
 import com.example.fansfun.fragment.FavouriteFragment;
 import com.example.fansfun.fragment.HomeFragment;
 import com.example.fansfun.fragment.ProfileFragment;
 import com.example.fansfun.fragment.WalletFragment;
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class PrincipalActivity extends AppCompatActivity {
 
@@ -60,8 +73,10 @@ public class PrincipalActivity extends AppCompatActivity {
                 replaceFragment(home);
             } else if (itemId == R.id.favourite) {
                 //aggiungere metodo per query preferiti
+                //retrieveFavouriteFromDatabase();
                 replaceFragment(favourite);
             } else if (itemId == R.id.wallet) {
+                retrieveWalletFromDatabase();
                 replaceFragment(wallet);
             } else if (itemId == R.id.profile) {
                 replaceFragment(profile);
@@ -73,7 +88,7 @@ public class PrincipalActivity extends AppCompatActivity {
         addEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(PrincipalActivity.this, AddEvent.class));
+                startActivity(new Intent(PrincipalActivity.this, ListaEventi.class));
             }
         });
     }
@@ -156,6 +171,69 @@ public class PrincipalActivity extends AppCompatActivity {
         //favourite.replaceFavouriteList(eventList)
     }
 
+    private void retrieveWalletFromDatabase(){
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        Query query = db.collection("partecipaEvento").whereEqualTo("idUtente", userId);
+
+        // Esecuzione della query
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    List<ListViewEvent> listaEventi = new ArrayList<>();
+
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        // Converti il documento Firestore in un oggetto Evento
+
+                        String idEvento = document.getString("idEvento");
+
+                        DocumentReference docRef = FirebaseFirestore.getInstance().collection("eventi").document(idEvento);
+
+                        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot document = task.getResult();
+                                    if (document.exists()) {
+                                        // Il documento esiste, puoi accedere ai suoi dati
+                                        ListViewEvent evento = document.toObject(ListViewEvent.class);
+                                        evento.setId(document.getId());
+                                        listaEventi.add(evento);
+
+                                        //ordino gli eventi per data
+                                        Collections.sort(listaEventi, new DateComparator());
+
+                                        wallet.updateWallet(listaEventi);
+                                    } else {
+                                        // Il documento non esiste
+                                    }
+                                } else {
+                                    // Errore durante l'accesso al documento
+                                    Log.e("Firestore", "Errore: " + task.getException());
+                                }
+                            }
+                        });
+
+
+                    }
+
+                    // Ora listaEventi contiene tutti gli eventi con la categoria desiderata
+                    // Puoi fare ciò che vuoi con la lista
+
+
+                } else {
+                    // Gestisci eventuali errori
+                    Log.d("Firestore", "Error getting documents: ", task.getException());
+                }
+            }
+        });
+
+    }
+
 
 
     private void saveUserToSharedPreferences(Utente utente) {
@@ -168,4 +246,5 @@ public class PrincipalActivity extends AppCompatActivity {
             sharedPreferences.edit().putString(MainActivity.KEY_USER, utenteJson).apply();
         }
     }
+
 }

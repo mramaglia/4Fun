@@ -1,6 +1,7 @@
 package com.example.fansfun.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.fansfun.R;
 import com.example.fansfun.activities.MainActivity;
+import com.example.fansfun.activities.ProfileActivity;
 import com.example.fansfun.activities.ViewEvent;
 import com.example.fansfun.entities.Utente;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,9 +38,6 @@ public class ProfileFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
-       // View view = inflater.inflate(R.layout.fragment_profile, container, false);
-
 
     }
     @Override
@@ -71,6 +70,13 @@ public class ProfileFragment extends Fragment {
         nome.setText(utente.getNome()+" "+utente.getCognome());
         luogo.setText(utente.getLuogo());
 
+        eyesImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewProfile();
+            }
+        });
+
         return view;
     }
 
@@ -83,5 +89,11 @@ public class ProfileFragment extends Fragment {
 
         nome.setText(utente.getNome() + " " + utente.getCognome());
         luogo.setText(utente.getLuogo());
+    }
+
+    private void viewProfile(){
+
+        startActivity(new Intent(getContext(), ProfileActivity.class));
+
     }
 }
