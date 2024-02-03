@@ -30,6 +30,7 @@ public class ProfileFragment extends Fragment {
     private TextView nome, luogo;
     private FirebaseAuth auth;
     private FirebaseFirestore db;
+    //ciao
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
