@@ -1,8 +1,9 @@
 package com.example.fansfun.entities;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Utente {
+public class Utente implements Serializable {
 
     private String nome;
     private String cognome;

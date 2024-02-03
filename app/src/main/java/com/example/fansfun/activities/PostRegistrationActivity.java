@@ -1,5 +1,8 @@
 package com.example.fansfun.activities;
 
+import static com.example.fansfun.activities.MainActivity.KEY_IS_AUTHENTICATED;
+import static com.example.fansfun.activities.MainActivity.SHARED_PREF_NAME;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,9 +16,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -36,6 +41,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -66,6 +72,8 @@ public class PostRegistrationActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private StorageReference storageReference;
+    private SharedPreferences sharedPreferences;
+
 
     boolean isData=false, isFoto=false;
 
@@ -73,6 +81,8 @@ public class PostRegistrationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
+        sharedPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
+
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getColor(R.color.principal)));
@@ -277,6 +287,8 @@ public class PostRegistrationActivity extends AppCompatActivity {
                     newUtente.setEmail(userEmail);
                     newUtente.setDataNascita(specificDate);
 
+
+
                     //prendo l'id dell'utente
                     FirebaseUser currentUser = auth.getCurrentUser();
                     String userId = currentUser.getUid();
@@ -301,13 +313,16 @@ public class PostRegistrationActivity extends AppCompatActivity {
                                 public void onSuccess(Uri downloadUrl) {
                                     newUtente.setFoto(downloadUrl.toString());
 
+
                                     //aggiungo documento con id=userId
                                     db.collection("utenti").document(userId).set(newUtente) //Inserimento nel DB
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
                                                     // Documento aggiunto o aggiornato con successo
-                                                    Log.d("Firestore", "Documento aggiunto o aggiornato con successo");
+                                                    Log.d("Firestore", "Documento aggiunto o aggiornato con successo + utente aggiunto a shared");
+                                                    //salviamo lo user nella shared
+                                                    saveUserToSharedPreferences(newUtente);
                                                     startActivity(new Intent(PostRegistrationActivity.this, PrincipalActivity.class));
 
                                                 }
@@ -333,6 +348,15 @@ public class PostRegistrationActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void saveUserToSharedPreferences(Utente utente) {
+
+        Gson gson = new Gson();
+        String utenteJson = gson.toJson(utente);
+
+        // Salva la stringa JSON nelle SharedPreferences
+        sharedPreferences.edit().putString(MainActivity.KEY_USER, utenteJson).putBoolean(KEY_IS_AUTHENTICATED, true).apply();
     }
 
 }

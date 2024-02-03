@@ -1,79 +1,60 @@
 package com.example.fansfun.activities;
 
-
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
-
+import android.os.Handler;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
-
+import androidx.lifecycle.ViewModelProvider;
 import com.example.fansfun.R;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.example.fansfun.viewmodels.AuthViewModel;
 
 public class MainActivity extends AppCompatActivity {
+    public static final String KEY_USER = "user_data";
+    static final String KEY_IS_AUTHENTICATED = "is_authenticated";
+    static final String SHARED_PREF_NAME = "my_shared_pref";
 
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    Button aggiungiEvento, profilo, eventi;
-    private FirebaseFirestore firestore;
-    FirebaseAuth mAuth = FirebaseAuth.getInstance();
-
-
+    private AuthViewModel viewModel;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        aggiungiEvento=findViewById(R.id.aggiungiEvento);
-        profilo=findViewById(R.id.profilo);
-        eventi=findViewById(R.id.eventi);
+        // Inizializza l'istanza di SharedPreferences
+        sharedPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
 
-        aggiungiEvento.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                aggiungiEvento();
-            }
-        });
-        profilo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                profilo();
-            }
-        });
-        eventi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                eventi();
-            }
-        });
-
-
+        // Inizializzazione ViewModel
+        viewModel = new ViewModelProvider(this).get(AuthViewModel.class);
     }
 
-    private void aggiungiEvento(){
+    @Override
+    protected void onStart() {
+        super.onStart();
 
-        Intent intent = new Intent(MainActivity.this, AddEvent.class);
-        startActivity(intent);
+        // Delay di 5 secondi prima di passare all'altra attività
+        new Handler().postDelayed(() -> {
+            // Ottenere stato dell'istanza del ViewModel
+            viewModel.getIsAuthenticated().observe(this, isAuthenticated -> {
+                Log.d("MainActivity", "Valore di KEY_IS_AUTHENTICATED: " + isUserAuthenticated());
 
+                if (isUserAuthenticated()) {
+                    // Utente autenticato, passa alla schermata principale
+                    startActivity(new Intent(MainActivity.this, PrincipalActivity.class));
+                    finish();
+                } else {
+                    // Utente non autenticato, passa alla schermata di login
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    finish();
+                }
+            });
+        }, 1500); // Ritardo di 5 secondi
     }
 
-    private void eventi(){
-
-        Intent intent = new Intent(MainActivity.this, ListaEventi.class);
-        startActivity(intent);
-
+    private boolean isUserAuthenticated(){
+        return sharedPreferences.getBoolean(KEY_IS_AUTHENTICATED, false);
     }
-
-    private void profilo(){
-
-        Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
-        startActivity(intent);
-
-    }
-
 }

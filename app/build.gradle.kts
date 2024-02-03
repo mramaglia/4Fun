@@ -53,6 +53,10 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
 
+    //viewmodel
+    implementation ("androidx.lifecycle:lifecycle-viewmodel:2.3.1")
+
+
     //mappe
     implementation ("org.osmdroid:osmdroid-android:6.1.10")
 
