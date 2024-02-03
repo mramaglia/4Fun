@@ -47,7 +47,7 @@ public class PrincipalActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         addEventButton = findViewById(R.id.addEventButton);
 
-        // Recupera l'utente dal database e aggiorna le SharedPreferences
+        // Recupera l'utente dal database e aggiorna le SharedPreferencess
         retrieveUserFromDatabase();
 
         replaceFragment(new HomeFragment());
