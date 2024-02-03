@@ -59,6 +59,7 @@ public class PrincipalActivity extends AppCompatActivity {
             if (itemId == R.id.home) {
                 replaceFragment(home);
             } else if (itemId == R.id.favourite) {
+                //aggiungere metodo per query preferiti
                 replaceFragment(favourite);
             } else if (itemId == R.id.wallet) {
                 replaceFragment(wallet);
@@ -118,6 +119,8 @@ public class PrincipalActivity extends AppCompatActivity {
         return R.id.home;
     }
 
+
+
     private void retrieveUserFromDatabase() {
         // Ottieni l'ID dell'utente corrente
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -147,6 +150,8 @@ public class PrincipalActivity extends AppCompatActivity {
             Log.e("PrincipalActivity", "Errore nel recupero dell'utente dal Firestore", e);
         });
     }
+
+
 
     private void saveUserToSharedPreferences(Utente utente) {
         if (utente != null) {
