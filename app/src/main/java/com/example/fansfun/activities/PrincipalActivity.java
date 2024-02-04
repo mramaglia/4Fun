@@ -2,6 +2,7 @@ package com.example.fansfun.activities;
 
 import static androidx.databinding.DataBindingUtil.setContentView;
 
+import static com.example.fansfun.activities.MainActivity.KEY_IS_AUTHENTICATED;
 import static com.example.fansfun.activities.MainActivity.SHARED_PREF_NAME;
 
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -51,6 +53,7 @@ public class PrincipalActivity extends AppCompatActivity {
     WalletFragment wallet = new WalletFragment();
     FavouriteFragment favourite = new FavouriteFragment();
     ProfileFragment profile = new ProfileFragment();
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +112,7 @@ public class PrincipalActivity extends AppCompatActivity {
             fragmentTransaction.add(R.id.frame_layout, fragment);
         }
 
-        fragmentTransaction.addToBackStack(null);
+        //fragmentTransaction.addToBackStack(null);   //non gestiamo il backstack
         fragmentTransaction.commit();
 
         // Seleziona l'elemento del BottomNavigationView solo se non è già selezionato
@@ -117,6 +120,18 @@ public class PrincipalActivity extends AppCompatActivity {
         if (bottomNavigationView.getSelectedItemId() != menuItemId) {
             bottomNavigationView.getMenu().findItem(menuItemId).setChecked(true);
         }
+    }
+
+    @Override
+    public void onBackPressed(){
+        if(bottomNavigationView.getSelectedItemId()==R.id.home) {
+            super.onBackPressed();
+            finish(); //exit app
+        }
+        else{
+            bottomNavigationView.setSelectedItemId(R.id.home);
+        }
+
     }
 
     private int getMenuItemIdByFragment(Fragment fragment) {
@@ -164,11 +179,6 @@ public class PrincipalActivity extends AppCompatActivity {
             // Gestisci eventuali errori durante il recupero dei dati dell'utente
             Log.e("PrincipalActivity", "Errore nel recupero dell'utente dal Firestore", e);
         });
-    }
-
-    private void retrieveFavouriteFromDatabase() {
-        //Preleva dal database e componi la lista List<Eventi> eventList
-        //favourite.replaceFavouriteList(eventList)
     }
 
     private void retrieveWalletFromDatabase(){
@@ -238,7 +248,7 @@ public class PrincipalActivity extends AppCompatActivity {
 
     private void saveUserToSharedPreferences(Utente utente) {
         if (utente != null) {
-            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
+            sharedPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
             Gson gson = new Gson();
             String utenteJson = gson.toJson(utente);
 

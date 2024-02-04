@@ -81,6 +81,8 @@ public class RegistrationActivity extends AppCompatActivity {
 
         startActivity(intent);
 
+
+
     }
 
 }
