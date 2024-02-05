@@ -55,6 +55,7 @@ public class ViewEvent extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_event);
 
+
         Configuration.getInstance().load(this, getPreferences(MODE_PRIVATE));
 
         // Ottieni il riferimento al MapView dal layout
@@ -150,6 +151,7 @@ public class ViewEvent extends AppCompatActivity{
                         }
                     }
                 });
+
 
     }
 

@@ -91,7 +91,7 @@ public class PrincipalActivity extends AppCompatActivity {
         addEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(PrincipalActivity.this, ListaEventi.class));
+                startActivity(new Intent(PrincipalActivity.this, AddEvent.class));
             }
         });
     }
