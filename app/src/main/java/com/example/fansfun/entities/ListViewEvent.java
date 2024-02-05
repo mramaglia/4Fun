@@ -13,11 +13,13 @@ public class ListViewEvent {
     private String luogo;
     private int maxPartecipanti;
     private int numPartecipanti;
+    private String categoria;
+    private String indirizzo;
 
     public ListViewEvent() {
     }
 
-    public ListViewEvent(String id, String foto, String nome, String descrizione, Date data, String organizzatore, String luogo, int maxPartecipanti, int numPartecipanti) {
+    public ListViewEvent(String id, String foto, String nome, String descrizione, Date data, String organizzatore, String luogo, int maxPartecipanti, int numPartecipanti, String categoria, String indirizzo) {
         this.id = id;
         this.foto = foto;
         this.nome = nome;
@@ -27,6 +29,8 @@ public class ListViewEvent {
         this.luogo = luogo;
         this.maxPartecipanti = maxPartecipanti;
         this.numPartecipanti = numPartecipanti;
+        this.categoria = categoria;
+        this.indirizzo = indirizzo;
     }
 
     public String getId() {
@@ -99,5 +103,21 @@ public class ListViewEvent {
 
     public void setNumPartecipanti(int numPartecipanti) {
         this.numPartecipanti = numPartecipanti;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
+    public String getIndirizzo() {
+        return indirizzo;
+    }
+
+    public void setIndirizzo(String indirizzo) {
+        this.indirizzo = indirizzo;
     }
 }

@@ -209,7 +209,7 @@
                     android:id="@+id/EventAddress"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLength="20"
+                    android:maxLength="40"
                     android:required="true" />
 
             </com.google.android.material.textfield.TextInputLayout>

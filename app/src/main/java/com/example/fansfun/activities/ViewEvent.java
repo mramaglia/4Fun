@@ -102,14 +102,14 @@ public class ViewEvent extends AppCompatActivity{
                                 nome.setText(evento.getNome());
                                 descrizione.setText(evento.getDescrizione());;
                                 partecipanti.setText(String.valueOf(evento.getNumPartecipanti()));
-                                luogo.setText(evento.getLuogo());
+                                luogo.setText(evento.getIndirizzo() + ", " + evento.getLuogo());
                                 data.setText(formatData(evento.getData()));
                                 ora.setText(formatOra(evento.getData()));
 
                                 // Imposta il livello di zoom iniziale
                                 mapView.getController().setZoom(15.0);
 
-                                String locationName = evento.getLuogo(); // Sostituisci con il tuo indirizzo o comune
+                                String locationName = evento.getIndirizzo() + evento.getLuogo(); // Sostituisci con il tuo indirizzo o comune
                                 try {
                                     List<Address> addresses = geocoder.getFromLocationName(locationName, 1);
 

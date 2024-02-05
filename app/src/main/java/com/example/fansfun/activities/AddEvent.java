@@ -57,16 +57,17 @@ public class AddEvent extends AppCompatActivity {
     private StorageReference storageReference;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore db;
-    ImageView imageView;
+    ImageView imageView, addEvent;
     byte[] imageBytes;
-    TextInputEditText name, description, eventNum;
+    TextInputEditText name, description, eventNum, address;
     AutoCompleteTextView location;
-    Button date, hour, addEvent;
+    Button date, hour;
     FloatingActionButton button;
-    String eventName, eventDescription, imageUrl, luogo;
+    String eventName, eventDescription, imageUrl, luogo, categoria, indirizzo;
     Uri imageUri;
     Spinner categoryView;
     int giorno, mese, anno, ora, minuto, maxPartecipanti;
+    Spinner category;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,10 +88,10 @@ public class AddEvent extends AppCompatActivity {
 
         date = findViewById(R.id.date);
         hour = findViewById(R.id.hour);
-        addEvent = findViewById(R.id.addEvent);
+        addEvent=findViewById(R.id.imageView6);
+        address=findViewById(R.id.EventAddress);
         location=findViewById(R.id.autoCompleteTextView);
         eventNum=findViewById(R.id.EventNumber);
-
         name = findViewById(R.id.EventName);
         description = findViewById(R.id.EventDescription);
 
@@ -164,7 +165,7 @@ public class AddEvent extends AppCompatActivity {
         categoryView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String category_selected = (String) parent.getItemAtPosition(position);
+                categoria = (String) parent.getItemAtPosition(position);
             }
 
             @Override
@@ -286,6 +287,7 @@ public class AddEvent extends AppCompatActivity {
         eventDescription = description.getText().toString();
         String inputText = eventNum.getText().toString();
         maxPartecipanti = Integer.parseInt(inputText);;
+        indirizzo=address.getText().toString();
 
         //creo l'evento
         Evento evento = new Evento();
@@ -306,6 +308,11 @@ public class AddEvent extends AppCompatActivity {
         luogo=location.getText().toString();
         evento.setLuogo(luogo);
 
+        //aggiungi indirizzo
+        evento.setIndirizzo(indirizzo);
+
+        //aggiungi categoria
+        evento.setCategoria(categoria);
 
         //prendo l'id dell'utente
         String userId = firebaseAuth.getCurrentUser().getUid();
@@ -366,8 +373,9 @@ public class AddEvent extends AppCompatActivity {
         });
 
 
-
-
+        Intent intent = new Intent(AddEvent.this, MyEvents.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivity(intent);
 
     }
 

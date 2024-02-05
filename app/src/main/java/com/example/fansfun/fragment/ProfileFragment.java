@@ -16,9 +16,11 @@ import com.bumptech.glide.Glide;
 import com.example.fansfun.R;
 import com.example.fansfun.activities.LoginActivity;
 import com.example.fansfun.activities.MainActivity;
+import com.example.fansfun.activities.MyEvents;
 import com.example.fansfun.activities.PrincipalActivity;
 import com.example.fansfun.activities.ProfileActivity;
 import com.example.fansfun.entities.Utente;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -26,7 +28,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class ProfileFragment extends Fragment {
 
     private ImageView profileImg, eyesImg;
-    private TextView nome, luogo, textViewLogout;
+    private TextView nome, luogo, textViewLogout, myEvents;
     private SharedPreferences sharedPreferences;
 
     @Override
@@ -47,6 +49,7 @@ public class ProfileFragment extends Fragment {
         eyesImg = view.findViewById(R.id.viewProfileEyes);
         nome = view.findViewById(R.id.textView4);
         luogo = view.findViewById(R.id.textView3);
+        myEvents=view.findViewById(R.id.myEventsTextView);
 
         textViewLogout = view.findViewById(R.id.logout);
 
@@ -75,6 +78,16 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        myEvents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                myEvents();
+
+            }
+        });
+
+
         return view;
     }
 
@@ -90,6 +103,17 @@ public class ProfileFragment extends Fragment {
     }
 
     private void viewProfile() {
-        startActivity(new Intent(getContext(), ProfileActivity.class));
+        Intent intent = new Intent(getContext(), ProfileActivity.class);
+        intent.putExtra("user_id", FirebaseAuth.getInstance().getCurrentUser().getUid());
+        startActivity(intent);
     }
+
+    private void myEvents(){
+
+        Intent intent = new Intent(getContext(), MyEvents.class);
+        intent.putExtra("user_id", FirebaseAuth.getInstance().getCurrentUser().getUid());
+        startActivity(intent);
+
+    }
+
 }

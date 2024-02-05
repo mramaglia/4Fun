@@ -8,83 +8,35 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.example.fansfun.R;
 import com.example.fansfun.adapters.EventoAdapter;
 import com.example.fansfun.entities.ListViewEvent;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-public class ProfileActivity extends AppCompatActivity {
+public class MyEvents extends AppCompatActivity {
 
-    private FirebaseAuth auth;
-    private FirebaseFirestore db;
-    private StorageReference storageReference;
-    private ImageView profileImage;
-    private TextView textNome, textLuogo;
     private ListView listView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_my_events);
 
-        auth=FirebaseAuth.getInstance();
-        storageReference = FirebaseStorage.getInstance().getReference();
-        db = FirebaseFirestore.getInstance();
+        listView=findViewById(R.id.myEventsListView);
 
-        profileImage=findViewById(R.id.imageView);
-        textNome=findViewById(R.id.textView6);
-        textLuogo=findViewById(R.id.textView7);
-        listView=findViewById(R.id.profileListView);
+        FirebaseFirestore db= FirebaseFirestore.getInstance();
 
-        String userId = getIntent().getStringExtra("user_id");
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-
-        DocumentReference docRef = db.collection("utenti").document(userId);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        String nome = document.getString("nome");
-                        textNome.setText(nome);
-                        String luogo = document.getString("luogo");
-                        textLuogo.setText(luogo);
-                        String imageUrl=document.getString("foto");
-                        Glide.with(ProfileActivity.this)
-                                .load(imageUrl)
-                                .into(profileImage);
-
-                        // Puoi utilizzare i dati qui
-                    } else {
-                        Log.d("Firestore", "Nessun documento trovato con questo ID");
-                    }
-                } else {
-                    Log.d("Firestore", "Errore nel recupero del documento", task.getException());
-                }
-            }
-        });
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         Query query = db.collection("eventi").whereEqualTo("organizzatore", userId);
 
@@ -102,7 +54,7 @@ public class ProfileActivity extends AppCompatActivity {
                         evento.setId(document.getId());
                         listaEventi.add(evento);
 
-                        EventoAdapter adapter = new EventoAdapter(ProfileActivity.this, R.layout.item_evento, listaEventi);
+                        EventoAdapter adapter = new EventoAdapter(MyEvents.this, R.layout.item_evento, listaEventi);
 
                         // Impostare l'adattatore sulla ListView
                         listView.setAdapter(adapter);
@@ -128,7 +80,7 @@ public class ProfileActivity extends AppCompatActivity {
                 ListViewEvent eventoSelezionato = (ListViewEvent) parent.getItemAtPosition(position);
 
                 // Creo un Intent per avviare la nuova Activity
-                Intent intent = new Intent(ProfileActivity.this, ViewEvent.class);
+                Intent intent = new Intent(MyEvents.this, ViewEvent.class);
 
                 // Aggiungo id agli extra
                 intent.putExtra("idEvento", eventoSelezionato.getId());

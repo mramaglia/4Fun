@@ -12,12 +12,14 @@ public class Evento {
     private String luogo;
     private int maxPartecipanti;
     private int numPartecipanti;
+    private String categoria;
+    private String indirizzo;
 
     public Evento() {
         numPartecipanti=0;
     }
 
-    public Evento(String foto, String nome, String descrizione, Date data, String organizzatore, String luogo, int maxPartecipanti) {
+    public Evento(String foto, String nome, String descrizione, Date data, String organizzatore, String luogo, int maxPartecipanti, int numPartecipanti, String categoria, String indirizzo) {
         this.foto = foto;
         this.nome = nome;
         this.descrizione = descrizione;
@@ -25,7 +27,9 @@ public class Evento {
         this.organizzatore = organizzatore;
         this.luogo = luogo;
         this.maxPartecipanti = maxPartecipanti;
-        this.numPartecipanti=0;
+        this.numPartecipanti = numPartecipanti;
+        this.categoria = categoria;
+        this.indirizzo = indirizzo;
     }
 
     public String getFoto() {
@@ -90,5 +94,21 @@ public class Evento {
 
     public void setNumPartecipanti(int numPartecipanti) {
         this.numPartecipanti = numPartecipanti;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
+    public String getIndirizzo() {
+        return indirizzo;
+    }
+
+    public void setIndirizzo(String indirizzo) {
+        this.indirizzo = indirizzo;
     }
 }
