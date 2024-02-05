@@ -18,13 +18,12 @@ import com.example.fansfun.activities.SearchEventList;
 
 
 public class HomeFragment extends Fragment {
+
     private SearchView searchView;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

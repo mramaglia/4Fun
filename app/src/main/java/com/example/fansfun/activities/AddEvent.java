@@ -1,9 +1,7 @@
 package com.example.fansfun.activities;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -23,7 +21,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
 import com.example.fansfun.R;
 import com.example.fansfun.entities.Evento;
 import com.github.dhaval2404.imagepicker.ImagePicker;
@@ -37,11 +34,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,35 +46,32 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
 public class AddEvent extends AppCompatActivity {
-
     private StorageReference storageReference;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore db;
-    ImageView imageView;
+    ImageView imageView, addEvent;
     byte[] imageBytes;
-    TextInputEditText name, description, eventNum;
+    TextInputEditText name, description, eventNum, address;
     AutoCompleteTextView location;
-    Button date, hour, addEvent;
+    Button date, hour;
     FloatingActionButton button;
-    String eventName, eventDescription, imageUrl, luogo;
+    String eventName, eventDescription, imageUrl, luogo, categoria, indirizzo;
     Uri imageUri;
     Spinner categoryView;
     int giorno, mese, anno, ora, minuto, maxPartecipanti;
+    Spinner category;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
-
         /*
             --------------------------NOTE----------------------------
             implementare categorie
             implementare gli errori su ogni textEditText con setError
             Ricordarsi di implementare metodi per numero massimo persone in un evento (se n = 0 llora "evento pieno")
          */
-
         // Inizializza Firebase Storage e Auth
         storageReference = FirebaseStorage.getInstance().getReference();
         firebaseAuth = FirebaseAuth.getInstance();
@@ -87,7 +79,8 @@ public class AddEvent extends AppCompatActivity {
 
         date = findViewById(R.id.date);
         hour = findViewById(R.id.hour);
-        addEvent = findViewById(R.id.addEvent);
+        addEvent=findViewById(R.id.imageView6);
+        address=findViewById(R.id.EventAddress);
         location=findViewById(R.id.autoCompleteTextView);
         eventNum=findViewById(R.id.EventNumber);
 
@@ -96,22 +89,15 @@ public class AddEvent extends AppCompatActivity {
 
         categoryView = findViewById(R.id.cateogry);   //Michele so che è sbagliato, se cambio, però devo cambiare tutto il layout <3 :)
         String[] categorie = {"Concerti", "Party", "Food&Beverage", "Raduni", "Natura", "Cultura", "Altro"};
-
         // Carica il file JSON
         String json = loadJSONFromAsset("comuni.json");
-
         // Ottieni la lista di opzioni dal JSON
         List<String> options = parseJSON(json);
-
         // Inizializza l'AutoCompleteTextView
         AutoCompleteTextView autoCompleteTextView = findViewById(R.id.autoCompleteTextView);
-
         // Crea e imposta l'adattatore per l'autocompletamento
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, options);
         autoCompleteTextView.setAdapter(adapter);
-
-
-
         //sistema dialog per data, metodi aggiuntivi in basso
         date.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,23 +105,18 @@ public class AddEvent extends AppCompatActivity {
                 openDialog_date();
             }
         });
-
         hour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openDialog_hour();
             }
         });
-
         addEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 aggiungiEvento();
             }
         });
-
-
-
         //Sistema per poter inserire immagine profilo ed avere anteprima
         if (getSupportActionBar() != null) {
             getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getColor(R.color.principal)));
@@ -152,19 +133,14 @@ public class AddEvent extends AppCompatActivity {
                         .start();
             }
         });
-
-
-
-
         //GESTIONE CATEGORIA
         ArrayAdapter<String> adapter_category = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categorie);
         adapter_category.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categoryView.setAdapter(adapter_category);
-
         categoryView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String category_selected = (String) parent.getItemAtPosition(position);
+                categoria = (String) parent.getItemAtPosition(position);
             }
 
             @Override
@@ -172,16 +148,12 @@ public class AddEvent extends AppCompatActivity {
                 //Quando non viene selezionato nulla
             }
         });
-
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (resultCode == RESULT_OK && data != null) {
             imageUri = data.getData();
-
             try {
                 imageBytes = getBytes(getContentResolver().openInputStream(imageUri)); //Immagine da salvare nel DB
                 imageView.setImageURI(imageUri);
@@ -190,7 +162,6 @@ public class AddEvent extends AppCompatActivity {
             }
         }
     }
-
     private byte[] getBytes(InputStream inputStream) throws IOException {  //serve per prelevare i byte
         ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024];
@@ -200,8 +171,6 @@ public class AddEvent extends AppCompatActivity {
         }
         return byteBuffer.toByteArray();
     }
-
-
     //Dialog per selezione data e ora
     private void openDialog_date() {
         // Ottieni la data corrente
@@ -212,36 +181,27 @@ public class AddEvent extends AppCompatActivity {
             public void onDateSet(DatePicker view, int year_x, int month_x, int dayOfMonth_x) {
                 // Aggiungi 1 al mese perché il DatePickerDialog rappresenta i mesi da 0 a 11
                 month_x += 1;
-
                 //salvo giorno mese e anno nelle variabili globali per la creazione dell'evento alla pressione del button "addEvento"
                 giorno=dayOfMonth_x;
                 mese=month_x;
                 anno=year_x;
-
                 // Utilizza la data selezionata
                 date.setText(String.valueOf(dayOfMonth_x) + "/" + String.valueOf(month_x) + "/" + String.valueOf(year_x));
             }
         }, currentDate.getYear(), currentDate.getMonthValue() -1, currentDate.getDayOfMonth());
-
         dialog.getDatePicker().setMinDate(currentDate.toEpochDay() * 24 * 60 * 60 * 1000);
-
         dialog.show();
-
     }
-
     private void openDialog_hour() {
         Calendar currentTime = Calendar.getInstance();
         // Aggiungi un'ora all'orario corrente
         currentTime.add(Calendar.HOUR_OF_DAY, 1);
-
         TimePickerDialog dialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-
                 //salvo ora e minuti nelle variabili globali per la creazione dell'evento alla pressione del button "addEvento"
                 ora=hourOfDay;
                 minuto=minute;
-
                 hour.setText(String.valueOf(hourOfDay)+":"+String.valueOf(minute));
             }
         },currentTime.get(Calendar.HOUR_OF_DAY), currentTime.get(Calendar.MINUTE), true);
@@ -262,7 +222,6 @@ public class AddEvent extends AppCompatActivity {
         }
         return json;
     }
-
     private List<String> parseJSON(String json) {
         List<String> options = new ArrayList<>();
         try {
@@ -279,47 +238,43 @@ public class AddEvent extends AppCompatActivity {
         }
         return options;
     }
-
     private void aggiungiEvento(){
-
         eventName = name.getText().toString();
         eventDescription = description.getText().toString();
         String inputText = eventNum.getText().toString();
         maxPartecipanti = Integer.parseInt(inputText);;
+        indirizzo=address.getText().toString();
 
         //creo l'evento
         Evento evento = new Evento();
-
         //setto il nome
         evento.setNome(eventName);
-
         //setto la descrizione
         evento.setDescrizione(eventDescription);
-
         //aggiungi la data
         Calendar calendar = Calendar.getInstance();
         calendar.set(anno, mese, giorno, ora, minuto);
         Date specificDate = calendar.getTime();
         evento.setData(specificDate);
-
         //aggiungi luogo
         luogo=location.getText().toString();
         evento.setLuogo(luogo);
 
+        //aggiungi indirizzo
+        evento.setIndirizzo(indirizzo);
+
+        //aggiungi categoria
+        evento.setCategoria(categoria);
 
         //prendo l'id dell'utente
         String userId = firebaseAuth.getCurrentUser().getUid();
-
         //aggiungo id utente
         evento.setOrganizzatore(userId);
-
         //aggiungo maxPartecipanti FARE BENE
         evento.setMaxPartecipanti(maxPartecipanti);
-
         //operazione d aggiunta dell'immagine
         StorageReference imageRef = storageReference.child("eventImages/"+ userId);
         UploadTask uploadTask = imageRef.putFile(imageUri);
-
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
@@ -330,13 +285,10 @@ public class AddEvent extends AppCompatActivity {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // Il caricamento è stato completato con successo, ora ottieni l'URL
-
                 imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri downloadUrl) {
                         evento.setFoto(downloadUrl.toString());
-
-
                         // Aggiungi un nuovo documento con un ID generato automaticamente
                         db.collection("eventi")
                                 .add(evento)
@@ -361,16 +313,16 @@ public class AddEvent extends AppCompatActivity {
                         // Gestisci eventuali errori
                     }
                 });
-
             }
         });
 
 
 
 
+        Intent intent = new Intent(AddEvent.this, MyEvents.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivity(intent);
 
     }
 
-
 }
-

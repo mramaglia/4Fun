@@ -110,7 +110,7 @@ public class ViewEvent extends AppCompatActivity {
                                 // Imposta il livello di zoom iniziale
                                 mapView.getController().setZoom(15.0);
 
-                                String locationName = evento.getIndirizzo() + evento.getLuogo(); // Sostituisci con il tuo indirizzo o comune
+                                String locationName = evento.getIndirizzo()+ ", " + evento.getLuogo(); // Sostituisci con il tuo indirizzo o comune
                                 try {
                                     List<Address> addresses = geocoder.getFromLocationName(locationName, 1);
 
@@ -198,7 +198,127 @@ public class ViewEvent extends AppCompatActivity {
     }
 
     private void iscriviti(String idEvento, FirebaseAuth auth) {
-        // Il resto del tuo codice per la gestione degli eventi
-        // ...
+        Map<String, Object> datiDocumento = new HashMap<>();
+        //prendo l'id dell'utente
+        String idUtente=auth.getCurrentUser().getUid();
+        // Aggiungi i campi desiderati al documento
+        datiDocumento.put("idUtente", idUtente);
+        datiDocumento.put("idEvento", idEvento);
+        String idDocumento=idUtente+idEvento;
+        DocumentReference documentReference = db.collection("partecipaEvento").document(idDocumento);
+        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        // Il documento esiste
+                        documentReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d("Firestore", "Documento eliminato con successo");
+                                DocumentReference documentRef = db.collection("eventi").document(idEvento);
+                                // Esegui l'aggiornamento del campo
+                                documentRef.update("numPartecipanti", FieldValue.increment(-1))
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.d("Firestore", "Campo del documento modificato con successo");
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.e("Firestore", "Errore durante la modifica del campo: " + e.getMessage());
+                                            }
+                                        });
+                                Toast.makeText(ViewEvent.this, "Hai annullato la tua partecipazione all'evento", Toast.LENGTH_SHORT).show();
+                                CollectionReference eventiCollection = db.collection("eventi");
+                                partecipanti=findViewById(R.id.numPartecipanti);
+                                eventiCollection.document(idEvento)
+                                        .get()
+                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    DocumentSnapshot document = task.getResult();
+                                                    if (document.exists()) {
+                                                        // Il documento esiste, puoi ottenere i dati
+                                                        Evento evento = document.toObject(Evento.class);
+                                                        partecipanti.setText(String.valueOf(evento.getNumPartecipanti()));
+                                                    } else {
+                                                        Log.d("Firestore", "Nessun documento trovato con ID: " + idEvento);
+                                                    }
+                                                } else {
+                                                    Log.e("Firestore", "Errore durante la ricerca del documento", task.getException());
+                                                }
+                                            }
+                                        });
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.e("Firestore", "Errore durante l'eliminazione del documento: " + e.getMessage());
+                            }
+                        });
+                    } else {
+                        // Il documento non esiste
+                        documentReference.set(datiDocumento)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d("Firestore", "Documento aggiunto con successo");
+                                        DocumentReference documentRef = db.collection("eventi").document(idEvento);
+                                        // Esegui l'aggiornamento del campo
+                                        documentRef.update("numPartecipanti", FieldValue.increment(1))
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        Log.d("Firestore", "Campo del documento modificato con successo");
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Log.e("Firestore", "Errore durante la modifica del campo: " + e.getMessage());
+                                                    }
+                                                });
+                                        Toast.makeText(ViewEvent.this, "Ora partecipi all'evento!", Toast.LENGTH_SHORT).show();
+                                        CollectionReference eventiCollection = db.collection("eventi");
+                                        partecipanti=findViewById(R.id.numPartecipanti);
+                                        eventiCollection.document(idEvento)
+                                                .get()
+                                                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                        if (task.isSuccessful()) {
+                                                            DocumentSnapshot document = task.getResult();
+                                                            if (document.exists()) {
+                                                                // Il documento esiste, puoi ottenere i dati
+                                                                Evento evento = document.toObject(Evento.class);
+                                                                partecipanti.setText(String.valueOf(evento.getNumPartecipanti()));
+                                                            } else {
+                                                                Log.d("Firestore", "Nessun documento trovato con ID: " + idEvento);
+                                                            }
+                                                        } else {
+                                                            Log.e("Firestore", "Errore durante la ricerca del documento", task.getException());
+                                                        }
+                                                    }
+                                                });
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.e("Firestore", "Errore durante l'aggiunta del documento: " + e.getMessage());
+                                    }
+                                });
+                    }
+                } else {
+                    // Gestisci eventuali errori durante la query
+                    Log.e("Firestore", "Errore durante la query: " + task.getException());
+                }
+            }
+        });
     }
 }
