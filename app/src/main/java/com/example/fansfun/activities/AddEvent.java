@@ -13,11 +13,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -63,12 +65,20 @@ public class AddEvent extends AppCompatActivity {
     FloatingActionButton button;
     String eventName, eventDescription, imageUrl, luogo;
     Uri imageUri;
+    Spinner categoryView;
     int giorno, mese, anno, ora, minuto, maxPartecipanti;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
+
+        /*
+            --------------------------NOTE----------------------------
+            implementare categorie
+            implementare gli errori su ogni textEditText con setError
+            Ricordarsi di implementare metodi per numero massimo persone in un evento (se n = 0 llora "evento pieno")
+         */
 
         // Inizializza Firebase Storage e Auth
         storageReference = FirebaseStorage.getInstance().getReference();
@@ -84,6 +94,8 @@ public class AddEvent extends AppCompatActivity {
         name = findViewById(R.id.EventName);
         description = findViewById(R.id.EventDescription);
 
+        categoryView = findViewById(R.id.cateogry);   //Michele so che è sbagliato, se cambio, però devo cambiare tutto il layout <3 :)
+        String[] categorie = {"Concerti", "Party", "Food&Beverage", "Raduni", "Natura", "Cultura", "Altro"};
 
         // Carica il file JSON
         String json = loadJSONFromAsset("comuni.json");
@@ -138,6 +150,26 @@ public class AddEvent extends AppCompatActivity {
                         .compress(1024)            //Final image size will be less than 1 MB(Optional)
                         .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
                         .start();
+            }
+        });
+
+
+
+
+        //GESTIONE CATEGORIA
+        ArrayAdapter<String> adapter_category = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categorie);
+        adapter_category.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categoryView.setAdapter(adapter_category);
+
+        categoryView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String category_selected = (String) parent.getItemAtPosition(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                //Quando non viene selezionato nulla
             }
         });
 

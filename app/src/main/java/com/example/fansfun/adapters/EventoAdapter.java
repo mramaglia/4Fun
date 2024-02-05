@@ -49,14 +49,17 @@ public class EventoAdapter extends ArrayAdapter<ListViewEvent> {
 
         ImageView imageView = convertView.findViewById(R.id.fotoImageView);
         TextView nomeTextView = convertView.findViewById(R.id.nomeTextView);
+        TextView descrizioneTextView = convertView.findViewById(R.id.descrizioneTextView);
         TextView dataTextView = convertView.findViewById(R.id.dataTextView);
         TextView luogoTextView = convertView.findViewById(R.id.luogoTextView);
 
-        /*String imageUrl=evento.getFoto();
+        String imageUrl= eventoList.getFoto();
         Glide.with(context)
                 .load(imageUrl)
-                .into(imageView);*/
+                .into(imageView);
+
         nomeTextView.setText(eventoList.getNome());
+        descrizioneTextView.setText(eventoList.getDescrizione());
         dataTextView.setText(formatData(eventoList.getData()));
         luogoTextView.setText(eventoList.getLuogo());
 
@@ -67,7 +70,7 @@ public class EventoAdapter extends ArrayAdapter<ListViewEvent> {
 
     private String formatData(Date data) {
         // Formattare la data come desiderato
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         return sdf.format(data);
     }
 }

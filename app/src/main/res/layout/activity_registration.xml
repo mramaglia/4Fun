@@ -139,7 +139,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/location"
+                android:src="@drawable/location_event"
                 app:layout_constraintBottom_toBottomOf="@+id/date"
                 app:layout_constraintEnd_toStartOf="@+id/date"
                 app:layout_constraintTop_toTopOf="@+id/date" />

@@ -71,15 +71,24 @@
             app:layout_constraintVertical_bias="1.0"
             app:srcCompat="@drawable/baseline_photo_camera_24" />
 
+        <Spinner
+            android:id="@+id/cateogry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/EventPhoto" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/EventNameLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="172dp"
             android:layout_height="59dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="10dp"
             android:hint="Name"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/EventPhoto">
+            app:layout_constraintTop_toBottomOf="@id/cateogry">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/EventName"
@@ -96,17 +105,17 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="110dp"
             android:layout_height="59dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="10dp"
             android:hint="num"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/EventPhoto">
+            app:layout_constraintTop_toBottomOf="@+id/cateogry">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/EventNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLength="20"
                 android:inputType="numberSigned"
+                android:maxLength="20"
                 android:required="false" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -116,7 +125,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="11dp"
+            android:layout_marginTop="10dp"
             android:hint="Description"
             app:counterEnabled="true"
             app:counterMaxLength="100"
@@ -148,7 +157,7 @@
                     android:layout_height="50dp"
                     android:layout_gravity="center_vertical"
                     android:padding="5dp"
-                    android:src="@drawable/location"
+                    android:src="@drawable/location_event"
                     app:layout_constraintBottom_toBottomOf="@+id/date"
                     app:layout_constraintEnd_toStartOf="@+id/date"
                     app:layout_constraintTop_toTopOf="@+id/date" />
@@ -165,40 +174,52 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/EventDescriptionLayout">
+
+                <Button
+                    android:id="@+id/date"
+                    style="@android:style/Widget.Holo.Button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:layout_marginStart="72dp"
+                    android:layout_marginTop="68dp"
+                    android:layout_weight="1"
+                    android:text="date"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/EventDescriptionLayout" />
+
+                <Button
+                    android:id="@+id/hour"
+                    style="@android:style/Widget.Holo.Button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:layout_marginTop="48dp"
+                    android:layout_marginEnd="44dp"
+                    android:layout_weight="1"
+                    android:text="hour"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/EventDescriptionLayout" />
+
+            </LinearLayout>
+
+
         </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
-            android:id="@+id/linearLayout2"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/EventDescriptionLayout">
+            android:text="Categoria"
+            app:layout_constraintBottom_toTopOf="@+id/cateogry"
+            android:textColor="@color/principal"
+            app:layout_constraintStart_toStartOf="parent" />
 
-            <Button
-                android:id="@+id/date"
-                style="@android:style/Widget.Holo.Button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="2dp"
-                android:layout_marginStart="72dp"
-                android:layout_marginTop="68dp"
-                android:layout_weight="1"
-                android:text="date"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/EventDescriptionLayout" />
-
-            <Button
-                android:id="@+id/hour"
-                style="@android:style/Widget.Holo.Button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="2dp"
-                android:layout_marginTop="48dp"
-                android:layout_marginEnd="44dp"
-                android:layout_weight="1"
-                android:text="hour"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/EventDescriptionLayout" />
-        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

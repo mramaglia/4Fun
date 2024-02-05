@@ -53,6 +53,7 @@ public class ProfileFragment extends Fragment {
         String imageUrl = utente.getFoto();
         Glide.with(this)
                 .load(imageUrl)
+                .transform()
                 .into(profileImg);
 
         nome.setText(utente.getNome() + " " + utente.getCognome());
