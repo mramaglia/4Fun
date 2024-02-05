@@ -87,7 +87,7 @@ public class AddEvent extends AppCompatActivity {
 
         date = findViewById(R.id.date);
         hour = findViewById(R.id.hour);
-        addEvent = findViewById(R.id.addEvent);
+        //addEvent = findViewById(R.id.addEvent);
         location=findViewById(R.id.autoCompleteTextView);
         eventNum=findViewById(R.id.EventNumber);
 

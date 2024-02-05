@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,7 +24,7 @@ public class ProfileActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private FirebaseFirestore db;
     private StorageReference storageReference;
-    private ImageView profileImage;
+    private ImageView profileImage, back;
     private TextView textNome, textLuogo;
 
     @Override
@@ -65,6 +66,15 @@ public class ProfileActivity extends AppCompatActivity {
                 } else {
                     Log.d("Firestore", "Errore nel recupero del documento", task.getException());
                 }
+            }
+        });
+
+        //back pressed
+        back = findViewById(R.id.arrow);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
             }
         });
 
