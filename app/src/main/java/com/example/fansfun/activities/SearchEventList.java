@@ -60,6 +60,7 @@ public class SearchEventList extends AppCompatActivity {
         searchView=findViewById(R.id.searchView2);
         autoCompleteTextView = findViewById(R.id.filtro_luogo);
 
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -77,7 +78,7 @@ public class SearchEventList extends AppCompatActivity {
             }
         });
 
-       updateList();
+        updateList();
 
         searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
             @Override
@@ -147,6 +148,14 @@ public class SearchEventList extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, options);
         autoCompleteTextView.setAdapter(adapter);
 
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(SearchEventList.this, PrincipalActivity.class);
+        startActivity(intent);
 
     }
 

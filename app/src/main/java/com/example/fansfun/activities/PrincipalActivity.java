@@ -2,7 +2,6 @@ package com.example.fansfun.activities;
 
 import static androidx.databinding.DataBindingUtil.setContentView;
 
-import static com.example.fansfun.activities.MainActivity.KEY_IS_AUTHENTICATED;
 import static com.example.fansfun.activities.MainActivity.SHARED_PREF_NAME;
 
 import android.content.Intent;
@@ -10,7 +9,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,18 +17,15 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.fansfun.R;
-import com.example.fansfun.adapters.EventoAdapter;
 import com.example.fansfun.entities.ListViewEvent;
 import com.example.fansfun.entities.Utente;
 import com.example.fansfun.fragment.FavouriteFragment;
 import com.example.fansfun.fragment.HomeFragment;
 import com.example.fansfun.fragment.ProfileFragment;
 import com.example.fansfun.fragment.WalletFragment;
-import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;

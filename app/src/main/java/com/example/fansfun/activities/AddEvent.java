@@ -60,6 +60,7 @@ public class AddEvent extends AppCompatActivity {
     Uri imageUri;
     Spinner categoryView;
     int giorno, mese, anno, ora, minuto, maxPartecipanti;
+    ImageView arrow;
     Spinner category;
 
     @Override
@@ -76,6 +77,8 @@ public class AddEvent extends AppCompatActivity {
         storageReference = FirebaseStorage.getInstance().getReference();
         firebaseAuth = FirebaseAuth.getInstance();
         db=FirebaseFirestore.getInstance();
+
+        arrow = findViewById(R.id.arrow2);
 
         date = findViewById(R.id.date);
         hour = findViewById(R.id.hour);
@@ -146,6 +149,13 @@ public class AddEvent extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 //Quando non viene selezionato nulla
+            }
+        });
+
+        arrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
             }
         });
     }

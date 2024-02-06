@@ -2,6 +2,15 @@
     <string name="app_name">FansFun</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="categorie">
+        <item>Concerti</item>
+        <item>Party</item>
+        <item>Food&amp;Beverage</item>
+        <item>Raduni</item>
+        <item>Natura</item>
+        <item>Cultura</item>
+        <item>Altro</item>
+    </string-array>
 
     <string name="registrati">
         <u>Registrati</u>

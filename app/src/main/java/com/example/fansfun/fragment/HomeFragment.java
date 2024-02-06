@@ -29,7 +29,7 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        Button button = view.findViewById(R.id.button);
+        //Button button = view.findViewById(R.id.button);
 
         //IMPLEMENTAZIONE RICERCA
 
@@ -51,12 +51,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getContext(), ListaEventi.class));
-            }
-        });
+
         return view;
     }
 }
