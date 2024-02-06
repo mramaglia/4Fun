@@ -2,7 +2,11 @@ package com.example.fansfun.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 
+import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
@@ -49,6 +53,8 @@ public class ViewEvent extends AppCompatActivity {
     private FirebaseFirestore db;
     private ImageView imageView, iscriviti, heart, back;
     private TextView nome, descrizione, partecipanti, luogo, data, ora;
+    private ConstraintLayout tastoIscrizione;
+    private Drawable drawable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +73,13 @@ public class ViewEvent extends AppCompatActivity {
         data = findViewById(R.id.eventDate);
         ora = findViewById(R.id.eventHour);
         iscriviti = findViewById(R.id.imageView6);
+        tastoIscrizione=findViewById(R.id.layoutTastoIscrizione);
+
+        // Ottieni il drawable dalla risorsa
+        drawable = ContextCompat.getDrawable(ViewEvent.this, R.drawable.uncheck);
+
+        // Modifica il colore del drawable
+        DrawableCompat.setTint(drawable, Color.WHITE);
 
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -76,7 +89,7 @@ public class ViewEvent extends AppCompatActivity {
         String idEvento = getIntent().getStringExtra("idEvento");
 
 
-
+        existIscritto(idEvento, auth);
 
         iscriviti.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -220,6 +233,8 @@ public class ViewEvent extends AppCompatActivity {
                                                 Log.e("Firestore", "Errore durante la modifica del campo: " + e.getMessage());
                                             }
                                         });
+                                tastoIscrizione.setBackgroundColor(Color.parseColor("#2DCA7E"));
+                                iscriviti.setImageResource(R.drawable.check);
                                 Toast.makeText(ViewEvent.this, "Hai annullato la tua partecipazione all'evento", Toast.LENGTH_SHORT).show();
                                 CollectionReference eventiCollection = db.collection("eventi");
                                 partecipanti=findViewById(R.id.numPartecipanti);
@@ -271,6 +286,8 @@ public class ViewEvent extends AppCompatActivity {
                                                         Log.e("Firestore", "Errore durante la modifica del campo: " + e.getMessage());
                                                     }
                                                 });
+                                        tastoIscrizione.setBackgroundColor(Color.RED);
+                                        iscriviti.setImageDrawable(drawable);
                                         Toast.makeText(ViewEvent.this, "Ora partecipi all'evento!", Toast.LENGTH_SHORT).show();
                                         CollectionReference eventiCollection = db.collection("eventi");
                                         partecipanti=findViewById(R.id.numPartecipanti);
@@ -380,6 +397,38 @@ public class ViewEvent extends AppCompatActivity {
                         } else {
                             // Il documento non esiste
                             heart.setImageResource(R.drawable.heart_empy);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Gestisci eventuali errori durante il recupero del documento
+                    }
+                });
+
+
+    }
+
+    private void existIscritto(String idEvento, FirebaseAuth auth){
+
+        String idDocumento = auth.getCurrentUser().getUid()+idEvento;
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("partecipaEvento").document(idDocumento);
+
+        docRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            // Il documento esiste
+                            tastoIscrizione.setBackgroundColor(Color.RED);
+                            iscriviti.setImageDrawable(drawable);
+
+                        } else {
+                            // Il documento non esiste
+                            tastoIscrizione.setBackgroundColor(Color.parseColor("#2DCA7E"));
+                            iscriviti.setImageResource(R.drawable.check);
                         }
                     }
                 })
