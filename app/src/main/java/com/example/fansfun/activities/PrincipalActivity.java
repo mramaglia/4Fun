@@ -75,8 +75,7 @@ public class PrincipalActivity extends AppCompatActivity {
             if (itemId == R.id.home) {
                 replaceFragment(home);
             } else if (itemId == R.id.favourite) {
-                //aggiungere metodo per query preferiti
-                //retrieveFavouriteFromDatabase();
+                retrieveFavouritesFromDatabase();
                 replaceFragment(favourite);
             } else if (itemId == R.id.wallet) {
                 retrieveWalletFromDatabase();
@@ -256,5 +255,69 @@ public class PrincipalActivity extends AppCompatActivity {
             sharedPreferences.edit().putString(MainActivity.KEY_USER, utenteJson).apply();
         }
     }
+
+    private void retrieveFavouritesFromDatabase(){
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        Query query = db.collection("preferiti").whereEqualTo("idUtente", userId);
+
+        // Esecuzione della query
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    List<ListViewEvent> listaEventi = new ArrayList<>();
+
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        // Converti il documento Firestore in un oggetto Evento
+
+                        String idEvento = document.getString("idEvento");
+
+                        DocumentReference docRef = FirebaseFirestore.getInstance().collection("eventi").document(idEvento);
+
+                        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot document = task.getResult();
+                                    if (document.exists()) {
+                                        // Il documento esiste, puoi accedere ai suoi dati
+                                        ListViewEvent evento = document.toObject(ListViewEvent.class);
+                                        evento.setId(document.getId());
+                                        listaEventi.add(evento);
+
+                                        //ordino gli eventi per data
+                                        Collections.sort(listaEventi, new DateComparator());
+
+                                        favourite.updatePreferiti(listaEventi);
+                                    } else {
+                                        // Il documento non esiste
+                                    }
+                                } else {
+                                    // Errore durante l'accesso al documento
+                                    Log.e("Firestore", "Errore: " + task.getException());
+                                }
+                            }
+                        });
+
+
+                    }
+
+                    // Ora listaEventi contiene tutti gli eventi con la categoria desiderata
+                    // Puoi fare ciò che vuoi con la lista
+
+
+                } else {
+                    // Gestisci eventuali errori
+                    Log.d("Firestore", "Error getting documents: ", task.getException());
+                }
+            }
+        });
+
+    }
+
 
 }

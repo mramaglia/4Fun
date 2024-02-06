@@ -49,7 +49,6 @@ public class ViewEvent extends AppCompatActivity {
     private FirebaseFirestore db;
     private ImageView imageView, iscriviti, heart, back;
     private TextView nome, descrizione, partecipanti, luogo, data, ora;
-    Boolean isEventFavourite = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +74,7 @@ public class ViewEvent extends AppCompatActivity {
         Geocoder geocoder = new Geocoder(this);
 
         String idEvento = getIntent().getStringExtra("idEvento");
+
 
 
 
@@ -153,24 +153,12 @@ public class ViewEvent extends AppCompatActivity {
 
         // Gestione Preferiti / GIF
         heart = findViewById(R.id.heart);
-        if(isEventFavourite)
-            heart.setImageResource(R.drawable.heart_full);
-        else
-            heart.setImageResource(R.drawable.heart_empy);
+
+        existPreferiti(idEvento, auth);
         heart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Azioni da eseguire per aggiungere (o togliere) dai preferiti
-                if(isEventFavourite) {
-                    heart.setImageResource(R.drawable.heart_empy);
-                    isEventFavourite = false;
-                    //Inserire metodi per togliere dai preferiti
-                }
-                else{
-                    heart.setImageResource(R.drawable.heart_full);
-                    isEventFavourite = true;
-                    //Inserire metodi per inserire tra i preferiti
-                }
+                preferiti(idEvento, auth);
             }
         });
 
@@ -320,5 +308,88 @@ public class ViewEvent extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void preferiti(String idEvento, FirebaseAuth auth) {
+        Map<String, Object> datiDocumento = new HashMap<>();
+        //prendo l'id dell'utente
+        String idUtente=auth.getCurrentUser().getUid();
+        // Aggiungi i campi desiderati al documento
+        datiDocumento.put("idUtente", idUtente);
+        datiDocumento.put("idEvento", idEvento);
+        String idDocumento=idUtente+idEvento;
+        DocumentReference documentReference = db.collection("preferiti").document(idDocumento);
+        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        // Il documento esiste
+                        documentReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                //documento eliminato: rimosso dai preferiti
+                                heart.setImageResource(R.drawable.heart_empy);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.e("Firestore", "Errore durante l'eliminazione del documento: " + e.getMessage());
+                            }
+                        });
+                    } else {
+                        // Il documento non esiste
+                        documentReference.set(datiDocumento)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        //documento aggiunto: evento aggiunto ai preferiti
+                                        heart.setImageResource(R.drawable.heart_full);
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.e("Firestore", "Errore durante l'aggiunta del documento: " + e.getMessage());
+                                    }
+                                });
+                    }
+                } else {
+                    // Gestisci eventuali errori durante la query
+                    Log.e("Firestore", "Errore durante la query: " + task.getException());
+                }
+            }
+        });
+    }
+
+    private void existPreferiti(String idEvento, FirebaseAuth auth){
+
+        String idDocumento = auth.getCurrentUser().getUid()+idEvento;
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("preferiti").document(idDocumento);
+
+        docRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            // Il documento esiste
+                            heart.setImageResource(R.drawable.heart_full);
+
+                        } else {
+                            // Il documento non esiste
+                            heart.setImageResource(R.drawable.heart_empy);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Gestisci eventuali errori durante il recupero del documento
+                    }
+                });
+
+
     }
 }

@@ -41,6 +41,7 @@
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout5">
 
             <ListView
+                android:id="@+id/listaPreferiti"
                 android:layout_width="407dp"
                 android:layout_height="819dp"
                 android:layout_marginTop="10dp"
