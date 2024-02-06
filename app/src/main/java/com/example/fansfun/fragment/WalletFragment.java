@@ -1,8 +1,10 @@
 package com.example.fansfun.fragment;
 
-import android.content.Context;
+import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
+
+import android.graphics.Bitmap;
+import android.media.Image;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,37 +15,64 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.fansfun.R;
-import com.example.fansfun.activities.ListaEventi;
-import com.example.fansfun.activities.MainActivity;
 import com.example.fansfun.activities.ViewEvent;
 import com.example.fansfun.adapters.EventoAdapter;
 import com.example.fansfun.entities.ListViewEvent;
-import com.example.fansfun.entities.Utente;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.gson.Gson;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 
 public class WalletFragment extends Fragment {
-
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
     ListView listaWallet;
+    String userName;
+    FirebaseAuth auth = FirebaseAuth.getInstance();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Ottieni un riferimento al documento utente con l'ID desiderato
+        DocumentReference userRef = FirebaseFirestore.getInstance().collection("utenti").document(auth.getCurrentUser().getUid());
+
+        // Esegui la query per ottenere il documento utente
+        userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    // Il documento utente esiste, puoi ottenere il nome
+                    userName = documentSnapshot.getString("nome")+ " " +documentSnapshot.getString("cognome");
+
+                    // Ora puoi utilizzare il nome
+                    Log.d("TAG", "Nome utente: " + userName);
+                } else {
+                    // Il documento utente non esiste
+                    Log.d("TAG", "Documento utente non trovato");
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                // Gestisci eventuali errori durante l'accesso al documento
+                Log.e("TAG", "Errore durante l'accesso al documento utente", e);
+            }
+        });
     }
 
     @Override
@@ -74,6 +103,16 @@ public class WalletFragment extends Fragment {
             }
         });
 
+        listaWallet.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                ListViewEvent eventoSelezionato = (ListViewEvent) parent.getItemAtPosition(position);
+
+                return showCustomDialog(eventoSelezionato.getNome(), formatData(eventoSelezionato.getData()), eventoSelezionato.getId()+auth.getCurrentUser().getUid(), userName);
+            }
+        });
+
         return view;
 
     }
@@ -85,6 +124,52 @@ public class WalletFragment extends Fragment {
         // Impostare l'adattatore sulla ListView
         listaWallet.setAdapter(adapter);
 
+    }
+
+    private boolean showCustomDialog(String evName, String evDate, String evCode, String userName){
+
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogLayout = inflater.inflate(R.layout.prenotation_dialog, null);
+
+        // Ottenere un riferimento ai TextView nel layout del dialog
+        TextView eventName = dialogLayout.findViewById(R.id.textView11);
+        TextView nome = dialogLayout.findViewById(R.id.textView12);
+        TextView data = dialogLayout.findViewById(R.id.textView13);
+        ImageView id = dialogLayout.findViewById(R.id.textView14);
+
+        // Modifica dei testi dei TextView
+        eventName.setText("Evento: " + evName);
+        nome.setText("Nome: " + userName);
+        data.setText("Data: " + evDate);
+        try {
+            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+            // Crea una matrice di bit contenente il codice QR
+            BitMatrix bitMatrix = barcodeEncoder.encode(evName+"\n"+userName+"\n"+evDate+"\n"+evCode, BarcodeFormat.QR_CODE, 512, 512);
+            // Converti la matrice di bit in un'immagine Bitmap
+            Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
+            // Visualizza l'immagine Bitmap nell'ImageView
+            id.setImageBitmap(bitmap);
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
+
+        // Creazione del dialog utilizzando il layout inflato
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setView(dialogLayout);
+
+        // Aggiunta di pulsanti, titolo, etc. al dialog se necessario
+
+        // Mostra il dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        return true;
+    }
+
+    private String formatData(Date data) {
+        // Formattare la data come desiderato
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(data);
     }
 
 }
