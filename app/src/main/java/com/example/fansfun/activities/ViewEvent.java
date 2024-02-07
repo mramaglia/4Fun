@@ -69,7 +69,7 @@ public class ViewEvent extends AppCompatActivity {
 
         delete = findViewById(R.id.delete);
 
-        if(isAuthor(evento.getId()))
+        if(isAuthor(evento.getOrganizzatore()))
             delete.setVisibility(View.VISIBLE);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
