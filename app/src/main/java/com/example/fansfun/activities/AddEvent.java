@@ -343,7 +343,8 @@ public class AddEvent extends AppCompatActivity {
 
 
 
-        Intent intent = new Intent(AddEvent.this, MyEvents.class);
+        Intent intent = new Intent(AddEvent.this, PrincipalActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
 
     }
