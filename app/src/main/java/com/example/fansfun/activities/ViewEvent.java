@@ -51,7 +51,7 @@ public class ViewEvent extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private FirebaseFirestore db;
-    private ImageView imageView, iscriviti, iscrivitiExpired, heart, back;
+    private ImageView imageView, iscriviti, iscrivitiExpired, heart, back, delete;
     private TextView nome, descrizione, partecipanti, luogo, data, ora;
     private ConstraintLayout tastoIscrizione, tastoIscrizioneExpired;
     private Drawable drawable;
@@ -64,12 +64,28 @@ public class ViewEvent extends AppCompatActivity {
 
         Configuration.getInstance().load(this, getPreferences(MODE_PRIVATE));
 
+
+
+
+        delete = findViewById(R.id.delete);
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //INSERIRE LOGICA PER ELIMINARE l'evento con conferma tramite dialog
+            }
+        });
+
+
+
+
+
+
         // Ottieni il riferimento al MapView dal layout
         MapView mapView = findViewById(R.id.mapView);
         imageView = findViewById(R.id.imageView);
         nome = findViewById(R.id.textView9);
         descrizione = findViewById(R.id.textView10);
-        partecipanti = findViewById(R.id.numPartecipanti);
+        //partecipanti = findViewById(R.id.numPartecipanti);
         luogo = findViewById(R.id.textView14);
         data = findViewById(R.id.eventDate);
         ora = findViewById(R.id.eventHour);

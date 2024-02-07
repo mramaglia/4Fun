@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".activities.ViewEvent">
 
+
     <androidx.cardview.widget.CardView
         android:layout_width="360dp"
         android:layout_height="545dp"
@@ -21,6 +22,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="30dp">
+
+
 
             <LinearLayout
                 android:id="@+id/linearLayout3"
@@ -43,20 +46,13 @@
                     android:textStyle="bold" />
 
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/p_1" />
-
-                <TextView
-                    android:id="@+id/numPartecipanti"
+                    android:id="@+id/delete"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_delete_forever_24"
                     android:layout_gravity="center_vertical"
-                    android:text="(15)"
-                    android:textColor="@color/grey"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    app:tint="@color/red" />
+
             </LinearLayout>
 
             <TextView
@@ -66,6 +62,9 @@
                 android:text="Vieni anche tu alla festa bella bella figa"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+
+
+
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView"
@@ -217,25 +216,46 @@
             android:layout_height="0dp"
             android:layout_weight="0.4">
 
+            <ImageView
+                android:id="@+id/heart"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:elevation="20dp"
+                android:padding="5dp"
+                app:layout_constraintEnd_toEndOf="@+id/imageView2"
+                app:layout_constraintStart_toStartOf="@+id/imageView2"
+                app:layout_constraintTop_toBottomOf="@+id/imageView2"
+                app:srcCompat="@drawable/heart_animation" />
+
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/p_1"
-                android:elevation="20dp"/>
-
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/p_1"
+                    android:elevation="20dp"/>
 
             </androidx.cardview.widget.CardView>
 
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imageView2"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/principal"
+                android:elevation="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/circular"
+                app:srcCompat="@drawable/person" />
 
             <ImageView
                 android:id="@+id/arrow"
@@ -247,18 +267,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/arrow"
                 android:elevation="20dp"/>
-
-            <ImageView
-                android:id="@+id/heart"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginEnd="10dp"
-                android:elevation="20dp"
-                android:padding="5dp"
-                app:layout_constraintBottom_toBottomOf="@+id/arrow"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/arrow"
-                app:srcCompat="@drawable/heart_animation" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

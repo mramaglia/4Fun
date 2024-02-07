@@ -50,7 +50,7 @@ public class AddEvent extends AppCompatActivity {
     private StorageReference storageReference;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore db;
-    ImageView imageView, addEvent;
+    ImageView imageView, addEvent, arrow;
     byte[] imageBytes;
     TextInputEditText name, description, eventNum, address;
     AutoCompleteTextView location;
@@ -60,7 +60,6 @@ public class AddEvent extends AppCompatActivity {
     Uri imageUri;
     Spinner categoryView;
     int giorno, mese, anno, ora, minuto, maxPartecipanti;
-    ImageView arrow;
     Spinner category;
 
     @Override
@@ -79,6 +78,8 @@ public class AddEvent extends AppCompatActivity {
         db=FirebaseFirestore.getInstance();
 
         arrow = findViewById(R.id.arrow2);
+
+
 
         date = findViewById(R.id.date);
         hour = findViewById(R.id.hour);
@@ -190,7 +191,7 @@ public class AddEvent extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year_x, int month_x, int dayOfMonth_x) {
                 // Aggiungi 1 al mese perché il DatePickerDialog rappresenta i mesi da 0 a 11
-                //month_x += 1;
+                    //month_x += 1;
                 //salvo giorno mese e anno nelle variabili globali per la creazione dell'evento alla pressione del button "addEvento"
                 giorno=dayOfMonth_x;
                 mese=month_x;

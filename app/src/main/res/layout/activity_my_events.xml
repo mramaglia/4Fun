@@ -7,19 +7,32 @@
     android:orientation="vertical"
     tools:context=".activities.MyEvents">
 
-    <TextView
-        android:id="@+id/textViewMyEvents"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout5"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="I miei eventi"
-        android:textSize="30dp"
-        android:gravity="center"
-        />
+        android:layout_height="99dp"
+        android:background="@color/principal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roadrage"
+            android:padding="5dp"
+            android:text="I miei eventi"
+            android:textColor="@color/white"
+            android:textSize="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ListView
         android:id="@+id/myEventsListView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>
