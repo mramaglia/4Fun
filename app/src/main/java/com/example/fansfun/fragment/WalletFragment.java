@@ -129,16 +129,8 @@ public class WalletFragment extends Fragment {
         LayoutInflater inflater = getLayoutInflater();
         View dialogLayout = inflater.inflate(R.layout.prenotation_dialog, null);
 
-        // Ottenere un riferimento ai TextView nel layout del dialog
-        TextView eventName = dialogLayout.findViewById(R.id.textView11);
-        TextView nome = dialogLayout.findViewById(R.id.textView12);
-        TextView data = dialogLayout.findViewById(R.id.textView13);
         ImageView id = dialogLayout.findViewById(R.id.textView14);
 
-        // Modifica dei testi dei TextView
-        eventName.setText("Evento: " + evName);
-        nome.setText("Nome: " + userName);
-        data.setText("Data: " + evDate);
         try {
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
             // Crea una matrice di bit contenente il codice QR
