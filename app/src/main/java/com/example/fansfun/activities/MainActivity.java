@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        //INSERIRE CODICE PER JSON
+
         // Delay di 5 secondi prima di passare all'altra attività
         new Handler().postDelayed(() -> {
             // Ottenere stato dell'istanza del ViewModel
