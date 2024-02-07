@@ -1,16 +1,14 @@
 package com.example.fansfun.activities;
 
-import com.example.fansfun.entities.ListViewEvent;
+import com.example.fansfun.entities.Evento;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.List;
 
-public class DateComparator implements Comparator<ListViewEvent> {
+public class DateComparator implements Comparator<Evento> {
 
     @Override
-    public int compare(ListViewEvent event1, ListViewEvent event2) {
+    public int compare(Evento event1, Evento event2) {
         Date date1 = event1.getData();
         Date date2 = event2.getData();
 

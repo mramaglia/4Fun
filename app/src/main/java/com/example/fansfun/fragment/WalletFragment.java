@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Intent;
 
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,7 +21,7 @@ import android.widget.TextView;
 import com.example.fansfun.R;
 import com.example.fansfun.activities.ViewEvent;
 import com.example.fansfun.adapters.EventoAdapter;
-import com.example.fansfun.entities.ListViewEvent;
+import com.example.fansfun.entities.Evento;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -90,13 +89,12 @@ public class WalletFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Ottengo l'evento selezionato dalla posizione
-                ListViewEvent eventoSelezionato = (ListViewEvent) parent.getItemAtPosition(position);
+                Evento eventoSelezionato = (Evento) parent.getItemAtPosition(position);
 
                 // Creo un Intent per avviare la nuova Activity
                 Intent intent = new Intent(getContext(), ViewEvent.class);
 
-                // Aggiungo id agli extra
-                intent.putExtra("idEvento", eventoSelezionato.getId());
+                intent.putExtra("evento", eventoSelezionato);
 
                 // Avvia la nuova Activity
                 startActivity(intent);
@@ -107,7 +105,7 @@ public class WalletFragment extends Fragment {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-                ListViewEvent eventoSelezionato = (ListViewEvent) parent.getItemAtPosition(position);
+                Evento eventoSelezionato = (Evento) parent.getItemAtPosition(position);
 
                 return showCustomDialog(eventoSelezionato.getNome(), formatData(eventoSelezionato.getData()), eventoSelezionato.getId()+auth.getCurrentUser().getUid(), userName);
             }
@@ -117,7 +115,7 @@ public class WalletFragment extends Fragment {
 
     }
 
-    public void updateWallet(List<ListViewEvent> listaEventi) {
+    public void updateWallet(List<Evento> listaEventi) {
 
         EventoAdapter adapter = new EventoAdapter(getContext(), R.layout.item_evento, listaEventi);
 

@@ -17,7 +17,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.fansfun.R;
-import com.example.fansfun.entities.ListViewEvent;
+import com.example.fansfun.entities.Evento;
 import com.example.fansfun.entities.Utente;
 import com.example.fansfun.fragment.FavouriteFragment;
 import com.example.fansfun.fragment.HomeFragment;
@@ -188,7 +188,7 @@ public class PrincipalActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    List<ListViewEvent> listaEventi = new ArrayList<>();
+                    List<Evento> listaEventi = new ArrayList<>();
 
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         // Converti il documento Firestore in un oggetto Evento
@@ -204,7 +204,7 @@ public class PrincipalActivity extends AppCompatActivity {
                                     DocumentSnapshot document = task.getResult();
                                     if (document.exists()) {
                                         // Il documento esiste, puoi accedere ai suoi dati
-                                        ListViewEvent evento = document.toObject(ListViewEvent.class);
+                                        Evento evento = document.toObject(Evento.class);
                                         evento.setId(document.getId());
                                         listaEventi.add(evento);
 
@@ -264,7 +264,7 @@ public class PrincipalActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    List<ListViewEvent> listaEventi = new ArrayList<>();
+                    List<Evento> listaEventi = new ArrayList<>();
 
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         // Converti il documento Firestore in un oggetto Evento
@@ -280,7 +280,7 @@ public class PrincipalActivity extends AppCompatActivity {
                                     DocumentSnapshot document = task.getResult();
                                     if (document.exists()) {
                                         // Il documento esiste, puoi accedere ai suoi dati
-                                        ListViewEvent evento = document.toObject(ListViewEvent.class);
+                                        Evento evento = document.toObject(Evento.class);
                                         evento.setId(document.getId());
                                         listaEventi.add(evento);
 

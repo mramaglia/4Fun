@@ -17,7 +17,7 @@ import android.widget.Spinner;
 
 import com.example.fansfun.R;
 import com.example.fansfun.adapters.EventoAdapter;
-import com.example.fansfun.entities.ListViewEvent;
+import com.example.fansfun.entities.Evento;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -65,7 +65,7 @@ public class SearchEventList extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Ottengo l'evento selezionato dalla posizione
-                ListViewEvent eventoSelezionato = (ListViewEvent) parent.getItemAtPosition(position);
+                Evento eventoSelezionato = (Evento) parent.getItemAtPosition(position);
 
                 // Creo un Intent per avviare la nuova Activity
                 Intent intent = new Intent(SearchEventList.this, ViewEvent.class);
@@ -203,7 +203,7 @@ public class SearchEventList extends AppCompatActivity {
 
         CollectionReference eventiRef = db.collection("eventi");
 
-        List<ListViewEvent> listaEventi = new ArrayList<>();
+        List<Evento> listaEventi = new ArrayList<>();
 
         // Esegui la query per trovare eventi il cui campo "nome" contiene la sottostringa searchQuery
         eventiRef.whereEqualTo("categoria", categoria).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -213,7 +213,7 @@ public class SearchEventList extends AppCompatActivity {
                     // Elabora i documenti restituiti
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         // Ottieni l'oggetto Evento dal documento
-                        ListViewEvent evento = document.toObject(ListViewEvent.class);
+                        Evento evento = document.toObject(Evento.class);
                         evento.setId(document.getId());
                         if(searchQuery==null) {
 
@@ -258,7 +258,7 @@ public class SearchEventList extends AppCompatActivity {
 
         CollectionReference eventiRef = db.collection("eventi");
 
-        List<ListViewEvent> listaEventi = new ArrayList<>();
+        List<Evento> listaEventi = new ArrayList<>();
 
         // Esegui la query per trovare eventi il cui campo "nome" contiene la sottostringa searchQuery
         eventiRef.whereEqualTo("luogo", luogo).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -268,7 +268,7 @@ public class SearchEventList extends AppCompatActivity {
                     // Elabora i documenti restituiti
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         // Ottieni l'oggetto Evento dal documento
-                        ListViewEvent evento = document.toObject(ListViewEvent.class);
+                        Evento evento = document.toObject(Evento.class);
                         evento.setId(document.getId());
 
                         if(searchQuery==null) {
@@ -313,7 +313,7 @@ public class SearchEventList extends AppCompatActivity {
 
         searchQuery = getIntent().getStringExtra("search_query");
 
-        List<ListViewEvent> listaEventi = new ArrayList<>();
+        List<Evento> listaEventi = new ArrayList<>();
 
         // Esempio: supponiamo che tu abbia una raccolta "eventi" con documenti che contengono il campo "nome"
         CollectionReference eventiRef = db.collection("eventi");
@@ -326,7 +326,7 @@ public class SearchEventList extends AppCompatActivity {
                     // Elabora i documenti restituiti
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         // Ottieni l'oggetto Evento dal documento
-                        ListViewEvent evento = document.toObject(ListViewEvent.class);
+                        Evento evento = document.toObject(Evento.class);
                         evento.setId(document.getId());
 
                         if (evento.getNome().toLowerCase().contains(searchQuery.toLowerCase())) {
@@ -358,7 +358,7 @@ public class SearchEventList extends AppCompatActivity {
     private void updateListCategoriaLuogo(){
         CollectionReference eventiRef = db.collection("eventi");
 
-        List<ListViewEvent> listaEventi = new ArrayList<>();
+        List<Evento> listaEventi = new ArrayList<>();
 
         // Esegui la query per trovare eventi il cui campo "nome" contiene la sottostringa searchQuery
         eventiRef.whereEqualTo("luogo", luogo).whereEqualTo("categoria", categoria).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -368,7 +368,7 @@ public class SearchEventList extends AppCompatActivity {
                     // Elabora i documenti restituiti
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         // Ottieni l'oggetto Evento dal documento
-                        ListViewEvent evento = document.toObject(ListViewEvent.class);
+                        Evento evento = document.toObject(Evento.class);
                         evento.setId(document.getId());
 
                         if(searchQuery==null) {

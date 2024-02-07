@@ -51,9 +51,9 @@ public class ViewEvent extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private FirebaseFirestore db;
-    private ImageView imageView, iscriviti, iscrivitiExpired, heart, back, delete;
-    private TextView nome, descrizione, partecipanti, luogo, data, ora;
-    private ConstraintLayout tastoIscrizione, tastoIscrizioneExpired;
+    private ImageView imageView, iscriviti, heart, back, delete;
+    private TextView nome, descrizione, luogo, data, ora;
+    private ConstraintLayout tastoIscrizione;
     private Drawable drawable;
     private boolean isExpired;
 
@@ -64,11 +64,8 @@ public class ViewEvent extends AppCompatActivity {
 
         Configuration.getInstance().load(this, getPreferences(MODE_PRIVATE));
 
-
-
-
         delete = findViewById(R.id.delete);
-        if(isAuthor)
+        if(isAuthor())
             delete.setVisibility(View.VISIBLE);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,16 +75,10 @@ public class ViewEvent extends AppCompatActivity {
         });
 
 
-
-
-
-
-        // Ottieni il riferimento al MapView dal layout
         MapView mapView = findViewById(R.id.mapView);
         imageView = findViewById(R.id.imageView);
         nome = findViewById(R.id.textView9);
         descrizione = findViewById(R.id.textView10);
-        //partecipanti = findViewById(R.id.numPartecipanti);
         luogo = findViewById(R.id.textView14);
         data = findViewById(R.id.eventDate);
         ora = findViewById(R.id.eventHour);
@@ -104,22 +95,59 @@ public class ViewEvent extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         CollectionReference eventiCollection = db.collection("eventi");
+
         Geocoder geocoder = new Geocoder(this);
 
         String idEvento = getIntent().getStringExtra("idEvento");
 
-        if(isExpired(idEvento)){
-            iscrivitiExpired=findViewById(R.id.imageView6);
-            tastoIscrizioneExpired=findViewById(R.id.layoutTastoIscrizione);
-            tastoIscrizioneExpired.setBackgroundColor(Color.WHITE);
-            iscrivitiExpired.setImageResource(R.drawable.expired);
-        }
-        else {
-            iscriviti = findViewById(R.id.imageView6);
-            tastoIscrizione=findViewById(R.id.layoutTastoIscrizione);
-        }
-
         existIscritto(idEvento, auth);
+
+        Evento evento = (Evento) getIntent().getSerializableExtra("evento");
+        String imageUrl = evento.getFoto();
+        Glide.with(ViewEvent.this)
+                .load(imageUrl)
+                .into(imageView);
+
+        nome.setText(evento.getNome());
+        descrizione.setText(evento.getDescrizione());
+        luogo.setText(evento.getIndirizzo() + ", " + evento.getLuogo());
+        data.setText(formatData(evento.getData()));
+        ora.setText(formatOra(evento.getData()));
+
+        // Imposta il livello di zoom iniziale
+        mapView.getController().setZoom(15.0);
+
+        String locationName = evento.getIndirizzo()+ ", " + evento.getLuogo(); // Sostituisci con il tuo indirizzo o comune
+        try {
+            List<Address> addresses = geocoder.getFromLocationName(locationName, 1);
+
+            if (!addresses.isEmpty()) {
+                // Ottieni la prima corrispondenza di indirizzo
+                Address address = addresses.get(0);
+
+                // Ottieni le coordinate geografiche
+                double latitude = address.getLatitude();
+                double longitude = address.getLongitude();
+
+                // Crea un oggetto GeoPoint con le coordinate
+                GeoPoint location = new GeoPoint(latitude, longitude);
+
+                // Imposta il centro della mappa sul GeoPoint appena creato
+                mapView.getController().setCenter(location);
+
+                Marker marker = new Marker(mapView);
+                marker.setPosition(location);
+                marker.setTitle(evento.getLuogo());
+                //marker.setSnippet("Descrizione del luogo");
+                mapView.getOverlays().add(marker);
+
+                // Abilita il multitouch (zoom e pan)
+                mapView.setMultiTouchControls(true);
+
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         iscriviti.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,72 +155,6 @@ public class ViewEvent extends AppCompatActivity {
                 iscriviti(idEvento, auth);
             }
         });
-
-        eventiCollection.document(idEvento)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                // Il documento esiste, puoi ottenere i dati
-                                Evento evento = document.toObject(Evento.class);
-                                String imageUrl = evento.getFoto();
-                                Glide.with(ViewEvent.this)
-                                        .load(imageUrl)
-                                        .into(imageView);
-
-                                nome.setText(evento.getNome());
-                                descrizione.setText(evento.getDescrizione());
-                                partecipanti.setText(String.valueOf(evento.getNumPartecipanti()));
-                                luogo.setText(evento.getIndirizzo() + ", " + evento.getLuogo());
-                                data.setText(formatData(evento.getData()));
-                                ora.setText(formatOra(evento.getData()));
-
-                                // Imposta il livello di zoom iniziale
-                                mapView.getController().setZoom(15.0);
-
-                                String locationName = evento.getIndirizzo()+ ", " + evento.getLuogo(); // Sostituisci con il tuo indirizzo o comune
-                                try {
-                                    List<Address> addresses = geocoder.getFromLocationName(locationName, 1);
-
-                                    if (!addresses.isEmpty()) {
-                                        // Ottieni la prima corrispondenza di indirizzo
-                                        Address address = addresses.get(0);
-
-                                        // Ottieni le coordinate geografiche
-                                        double latitude = address.getLatitude();
-                                        double longitude = address.getLongitude();
-
-                                        // Crea un oggetto GeoPoint con le coordinate
-                                        GeoPoint location = new GeoPoint(latitude, longitude);
-
-                                        // Imposta il centro della mappa sul GeoPoint appena creato
-                                        mapView.getController().setCenter(location);
-
-                                        Marker marker = new Marker(mapView);
-                                        marker.setPosition(location);
-                                        marker.setTitle(evento.getLuogo());
-                                        //marker.setSnippet("Descrizione del luogo");
-                                        mapView.getOverlays().add(marker);
-
-                                        // Abilita il multitouch (zoom e pan)
-                                        mapView.setMultiTouchControls(true);
-
-                                    }
-                                } catch (IOException e) {
-                                    throw new RuntimeException(e);
-                                }
-
-                            } else {
-                                Log.d("Firestore", "Nessun documento trovato con ID: " + idEvento);
-                            }
-                        } else {
-                            Log.e("Firestore", "Errore durante la ricerca del documento", task.getException());
-                        }
-                    }
-                });
 
         // Gestione Preferiti / GIF
         heart = findViewById(R.id.heart);
@@ -250,43 +212,10 @@ public class ViewEvent extends AppCompatActivity {
                                 Log.d("Firestore", "Documento eliminato con successo");
                                 DocumentReference documentRef = db.collection("eventi").document(idEvento);
                                 // Esegui l'aggiornamento del campo
-                                documentRef.update("numPartecipanti", FieldValue.increment(-1))
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                Log.d("Firestore", "Campo del documento modificato con successo");
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Log.e("Firestore", "Errore durante la modifica del campo: " + e.getMessage());
-                                            }
-                                        });
                                 tastoIscrizione.setBackgroundColor(Color.parseColor("#2DCA7E"));
                                 iscriviti.setImageResource(R.drawable.check);
                                 Toast.makeText(ViewEvent.this, "Hai annullato la tua partecipazione all'evento", Toast.LENGTH_SHORT).show();
-                                CollectionReference eventiCollection = db.collection("eventi");
-                                partecipanti=findViewById(R.id.numPartecipanti);
-                                eventiCollection.document(idEvento)
-                                        .get()
-                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                if (task.isSuccessful()) {
-                                                    DocumentSnapshot document = task.getResult();
-                                                    if (document.exists()) {
-                                                        // Il documento esiste, puoi ottenere i dati
-                                                        Evento evento = document.toObject(Evento.class);
-                                                        partecipanti.setText(String.valueOf(evento.getNumPartecipanti()));
-                                                    } else {
-                                                        Log.d("Firestore", "Nessun documento trovato con ID: " + idEvento);
-                                                    }
-                                                } else {
-                                                    Log.e("Firestore", "Errore durante la ricerca del documento", task.getException());
-                                                }
-                                            }
-                                        });
+
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -301,45 +230,10 @@ public class ViewEvent extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         Log.d("Firestore", "Documento aggiunto con successo");
-                                        DocumentReference documentRef = db.collection("eventi").document(idEvento);
-                                        // Esegui l'aggiornamento del campo
-                                        documentRef.update("numPartecipanti", FieldValue.increment(1))
-                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                    @Override
-                                                    public void onSuccess(Void aVoid) {
-                                                        Log.d("Firestore", "Campo del documento modificato con successo");
-                                                    }
-                                                })
-                                                .addOnFailureListener(new OnFailureListener() {
-                                                    @Override
-                                                    public void onFailure(@NonNull Exception e) {
-                                                        Log.e("Firestore", "Errore durante la modifica del campo: " + e.getMessage());
-                                                    }
-                                                });
                                         tastoIscrizione.setBackgroundColor(Color.RED);
                                         iscriviti.setImageDrawable(drawable);
                                         Toast.makeText(ViewEvent.this, "Ora partecipi all'evento!", Toast.LENGTH_SHORT).show();
-                                        CollectionReference eventiCollection = db.collection("eventi");
-                                        partecipanti=findViewById(R.id.numPartecipanti);
-                                        eventiCollection.document(idEvento)
-                                                .get()
-                                                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                        if (task.isSuccessful()) {
-                                                            DocumentSnapshot document = task.getResult();
-                                                            if (document.exists()) {
-                                                                // Il documento esiste, puoi ottenere i dati
-                                                                Evento evento = document.toObject(Evento.class);
-                                                                partecipanti.setText(String.valueOf(evento.getNumPartecipanti()));
-                                                            } else {
-                                                                Log.d("Firestore", "Nessun documento trovato con ID: " + idEvento);
-                                                            }
-                                                        } else {
-                                                            Log.e("Firestore", "Errore durante la ricerca del documento", task.getException());
-                                                        }
-                                                    }
-                                                });
+
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
@@ -470,42 +364,6 @@ public class ViewEvent extends AppCompatActivity {
                 });
 
 
-    }
-
-    private boolean isExpired(String idEvento){
-
-        db.getInstance().collection("eventi").document(idEvento)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                // Il documento esiste, puoi ottenere i dati
-                                Evento evento = document.toObject(Evento.class);
-                                // Ottieni la data attuale
-                                Date now = new Date();
-
-                                // Ottieni il timestamp dal tuo documento Firestore
-                                Date timestamp = evento.getData();
-
-                                // Confronta le due date
-                                if (now.after(timestamp)) {
-                                    isExpired=false;
-                                } else {
-                                    isExpired=true;
-                                }
-
-                            } else {
-                                Log.d("Firestore", "Nessun documento trovato con ID: " + idEvento);
-                            }
-                        } else {
-                            Log.e("Firestore", "Errore durante la ricerca del documento", task.getException());
-                        }
-                    }
-                });
-        return isExpired;
     }
 
     public boolean isAuthor(){

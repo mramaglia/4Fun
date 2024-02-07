@@ -12,7 +12,7 @@ import android.widget.ListView;
 
 import com.example.fansfun.R;
 import com.example.fansfun.adapters.EventoAdapter;
-import com.example.fansfun.entities.ListViewEvent;
+import com.example.fansfun.entities.Evento;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,12 +45,12 @@ public class MyEvents extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    List<ListViewEvent> listaEventi = new ArrayList<>();
+                    List<Evento> listaEventi = new ArrayList<>();
 
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         // Converti il documento Firestore in un oggetto Evento
 
-                        ListViewEvent evento = document.toObject(ListViewEvent.class);
+                        Evento evento = document.toObject(Evento.class);
                         evento.setId(document.getId());
                         listaEventi.add(evento);
 
@@ -77,7 +77,7 @@ public class MyEvents extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Ottengo l'evento selezionato dalla posizione
-                ListViewEvent eventoSelezionato = (ListViewEvent) parent.getItemAtPosition(position);
+                Evento eventoSelezionato = (Evento) parent.getItemAtPosition(position);
 
                 // Creo un Intent per avviare la nuova Activity
                 Intent intent = new Intent(MyEvents.this, ViewEvent.class);

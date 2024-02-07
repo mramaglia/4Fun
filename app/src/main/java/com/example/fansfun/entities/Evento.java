@@ -1,8 +1,9 @@
 package com.example.fansfun.entities;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Evento {
+public class Evento implements Serializable {
 
     private String foto;
     private String nome;
@@ -10,24 +11,20 @@ public class Evento {
     private Date data;
     private String organizzatore;
     private String luogo;
-    private int maxPartecipanti;
-    private int numPartecipanti;
     private String categoria;
     private String indirizzo;
+    private String id;
 
     public Evento() {
-        numPartecipanti=0;
     }
 
-    public Evento(String foto, String nome, String descrizione, Date data, String organizzatore, String luogo, int maxPartecipanti, int numPartecipanti, String categoria, String indirizzo) {
+    public Evento(String foto, String nome, String descrizione, Date data, String organizzatore, String luogo, String categoria, String indirizzo) {
         this.foto = foto;
         this.nome = nome;
         this.descrizione = descrizione;
         this.data = data;
         this.organizzatore = organizzatore;
         this.luogo = luogo;
-        this.maxPartecipanti = maxPartecipanti;
-        this.numPartecipanti = numPartecipanti;
         this.categoria = categoria;
         this.indirizzo = indirizzo;
     }
@@ -80,22 +77,6 @@ public class Evento {
         this.luogo = luogo;
     }
 
-    public int getMaxPartecipanti() {
-        return maxPartecipanti;
-    }
-
-    public void setMaxPartecipanti(int maxPartecipanti) {
-        this.maxPartecipanti = maxPartecipanti;
-    }
-
-    public int getNumPartecipanti() {
-        return numPartecipanti;
-    }
-
-    public void setNumPartecipanti(int numPartecipanti) {
-        this.numPartecipanti = numPartecipanti;
-    }
-
     public String getCategoria() {
         return categoria;
     }
@@ -110,5 +91,13 @@ public class Evento {
 
     public void setIndirizzo(String indirizzo) {
         this.indirizzo = indirizzo;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

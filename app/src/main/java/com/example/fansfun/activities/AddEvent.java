@@ -52,14 +52,14 @@ public class AddEvent extends AppCompatActivity {
     private FirebaseFirestore db;
     ImageView imageView, addEvent, arrow;
     byte[] imageBytes;
-    TextInputEditText name, description, eventNum, address;
+    TextInputEditText name, description, address;
     AutoCompleteTextView location;
     Button date, hour;
     FloatingActionButton button;
-    String eventName, eventDescription, imageUrl, luogo, categoria, indirizzo;
+    String eventName, eventDescription, luogo, categoria, indirizzo;
     Uri imageUri;
     Spinner categoryView;
-    int giorno, mese, anno, ora, minuto, maxPartecipanti;
+    int giorno, mese, anno, ora, minuto;
     Spinner category;
 
     @Override
@@ -77,6 +77,8 @@ public class AddEvent extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         db=FirebaseFirestore.getInstance();
 
+
+
         arrow = findViewById(R.id.arrow2);
 
 
@@ -86,8 +88,6 @@ public class AddEvent extends AppCompatActivity {
         addEvent=findViewById(R.id.imageView6);
         address=findViewById(R.id.EventAddress);
         location=findViewById(R.id.autoCompleteTextView);
-        eventNum=findViewById(R.id.EventNumber);
-
         name = findViewById(R.id.EventName);
         description = findViewById(R.id.EventDescription);
 
@@ -252,8 +252,6 @@ public class AddEvent extends AppCompatActivity {
     private void aggiungiEvento(){
         eventName = name.getText().toString();
         eventDescription = description.getText().toString();
-        String inputText = eventNum.getText().toString();
-        maxPartecipanti = Integer.parseInt(inputText);;
         indirizzo=address.getText().toString();
 
         //creo l'evento
@@ -281,8 +279,7 @@ public class AddEvent extends AppCompatActivity {
         String userId = firebaseAuth.getCurrentUser().getUid();
         //aggiungo id utente
         evento.setOrganizzatore(userId);
-        //aggiungo maxPartecipanti FARE BENE
-        evento.setMaxPartecipanti(maxPartecipanti);
+
         //operazione d aggiunta dell'immagine
         StorageReference imageRef = storageReference.child("eventImages/"+ userId);
         UploadTask uploadTask = imageRef.putFile(imageUri);
@@ -308,6 +305,22 @@ public class AddEvent extends AppCompatActivity {
                                     public void onSuccess(DocumentReference documentReference) {
                                         // Documento aggiunto con successo
                                         Log.d("Firestore", "Documento aggiunto con ID: " + documentReference.getId());
+
+                                        documentReference.update("id", documentReference.getId())
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        // ID aggiunto con successo al documento
+                                                        Log.d("Firestore", "ID aggiunto con successo al documento " + documentReference.getId());
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        // Gestisci eventuali errori
+                                                    }
+                                                });
+
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
@@ -331,7 +344,6 @@ public class AddEvent extends AppCompatActivity {
 
 
         Intent intent = new Intent(AddEvent.this, MyEvents.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(intent);
 
     }

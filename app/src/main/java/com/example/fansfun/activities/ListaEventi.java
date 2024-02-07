@@ -13,7 +13,6 @@ import android.widget.ListView;
 import com.example.fansfun.R;
 import com.example.fansfun.adapters.EventoAdapter;
 import com.example.fansfun.entities.Evento;
-import com.example.fansfun.entities.ListViewEvent;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -34,7 +33,7 @@ public class ListaEventi extends AppCompatActivity {
         setContentView(R.layout.activity_lista_eventi);
 
         // Dichiarazione della lista per gli eventi
-        List<ListViewEvent> listaEventi = new ArrayList<>();
+        List<Evento> listaEventi = new ArrayList<>();
 
         // Riferimento alla ListView nel layout
         ListView listView = findViewById(R.id.eventListView);
@@ -43,7 +42,7 @@ public class ListaEventi extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Ottengo l'evento selezionato dalla posizione
-                ListViewEvent eventoSelezionato = (ListViewEvent) parent.getItemAtPosition(position);
+                Evento eventoSelezionato = (Evento) parent.getItemAtPosition(position);
 
                 // Creo un Intent per avviare la nuova Activity
                 Intent intent = new Intent(ListaEventi.this, ViewEvent.class);
@@ -64,7 +63,7 @@ public class ListaEventi extends AppCompatActivity {
                     // Elabora i documenti restituiti
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         // Ottieni l'oggetto Evento dal documento
-                        ListViewEvent evento = document.toObject(ListViewEvent.class);
+                        Evento evento = document.toObject(Evento.class);
                         evento.setId(document.getId());
 
                         // Aggiungi l'evento alla lista
