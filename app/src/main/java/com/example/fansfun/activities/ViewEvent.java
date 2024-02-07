@@ -64,8 +64,12 @@ public class ViewEvent extends AppCompatActivity {
 
         Configuration.getInstance().load(this, getPreferences(MODE_PRIVATE));
 
+        Evento evento = (Evento) getIntent().getSerializableExtra("evento");
+        auth = FirebaseAuth.getInstance();
+
         delete = findViewById(R.id.delete);
-        if(isAuthor())
+
+        if(isAuthor(evento.getId()))
             delete.setVisibility(View.VISIBLE);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,7 +96,6 @@ public class ViewEvent extends AppCompatActivity {
         // Modifica il colore del drawable
         DrawableCompat.setTint(drawable, Color.WHITE);
 
-        auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         CollectionReference eventiCollection = db.collection("eventi");
 
@@ -102,7 +105,6 @@ public class ViewEvent extends AppCompatActivity {
 
         existIscritto(idEvento, auth);
 
-        Evento evento = (Evento) getIntent().getSerializableExtra("evento");
         String imageUrl = evento.getFoto();
         Glide.with(ViewEvent.this)
                 .load(imageUrl)
@@ -366,9 +368,13 @@ public class ViewEvent extends AppCompatActivity {
 
     }
 
-    public boolean isAuthor(){
-        //INSERIRE LOGICA PER VALUTARE SE E' l'AUTORE
-        return true;
+    public boolean isAuthor(String idOrganizzatore){
 
+        if(idOrganizzatore.equals(auth.getCurrentUser().getUid())){
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }
