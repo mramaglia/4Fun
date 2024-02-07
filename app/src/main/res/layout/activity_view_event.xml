@@ -51,7 +51,8 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/baseline_delete_forever_24"
                     android:layout_gravity="center_vertical"
-                    app:tint="@color/red" />
+                    app:tint="@color/red"
+                    android:visibility="gone"/>
 
             </LinearLayout>
 
@@ -238,6 +239,7 @@
                     android:scaleType="centerCrop"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    android:padding="5dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/p_1"

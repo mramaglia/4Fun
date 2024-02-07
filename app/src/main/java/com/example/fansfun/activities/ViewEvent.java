@@ -68,10 +68,12 @@ public class ViewEvent extends AppCompatActivity {
 
 
         delete = findViewById(R.id.delete);
+        if(isAuthor)
+            delete.setVisibility(View.VISIBLE);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //INSERIRE LOGICA PER ELIMINARE l'evento con conferma tramite dialog
+                delete.setVisibility(View.VISIBLE);
             }
         });
 
@@ -504,5 +506,11 @@ public class ViewEvent extends AppCompatActivity {
                     }
                 });
         return isExpired;
+    }
+
+    public boolean isAuthor(){
+        //INSERIRE LOGICA PER VALUTARE SE E' l'AUTORE
+        return true;
+
     }
 }
