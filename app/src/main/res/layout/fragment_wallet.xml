@@ -7,17 +7,27 @@
     android:orientation="vertical"
     tools:context=".fragment.WalletFragment">
 
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Wallet"
-        android:textSize="30dp"
-        android:padding="5dp"
-        />
+        android:layout_height="99dp"
+        android:background="@color/principal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:fontFamily="@font/roadrage"
+            android:padding="5dp"
+            android:text="Wallet"
+            android:textSize="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textColor="@color/white"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ListView
         android:id="@+id/listaWallet"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-         />
+        android:layout_height="865dp" />
 </LinearLayout>
