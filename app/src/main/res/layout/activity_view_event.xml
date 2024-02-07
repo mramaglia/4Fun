@@ -223,9 +223,9 @@
                 android:layout_height="50dp"
                 android:elevation="20dp"
                 android:padding="5dp"
-                app:layout_constraintEnd_toEndOf="@+id/imageView2"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/imageView2"
-                app:layout_constraintTop_toBottomOf="@+id/imageView2"
+                app:layout_constraintTop_toBottomOf="@+id/imageProfileOrganizzatore"
                 app:srcCompat="@drawable/heart_animation" />
 
             <androidx.cardview.widget.CardView
