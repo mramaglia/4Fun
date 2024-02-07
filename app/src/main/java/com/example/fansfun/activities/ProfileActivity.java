@@ -128,7 +128,7 @@ public class ProfileActivity extends AppCompatActivity {
                 Intent intent = new Intent(ProfileActivity.this, ViewEvent.class);
 
                 // Aggiungo id agli extra
-                intent.putExtra("idEvento", eventoSelezionato.getId());
+                intent.putExtra("evento", eventoSelezionato);
 
                 // Avvia la nuova Activity
                 startActivity(intent);

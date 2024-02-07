@@ -83,7 +83,7 @@ public class MyEvents extends AppCompatActivity {
                 Intent intent = new Intent(MyEvents.this, ViewEvent.class);
 
                 // Aggiungo id agli extra
-                intent.putExtra("idEvento", eventoSelezionato.getId());
+                intent.putExtra("evento", eventoSelezionato);
 
                 // Avvia la nuova Activity
                 startActivity(intent);

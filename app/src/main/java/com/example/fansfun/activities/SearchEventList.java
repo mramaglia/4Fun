@@ -71,7 +71,7 @@ public class SearchEventList extends AppCompatActivity {
                 Intent intent = new Intent(SearchEventList.this, ViewEvent.class);
 
                 // Aggiungo id agli extra
-                intent.putExtra("idEvento", eventoSelezionato.getId());
+                intent.putExtra("evento", eventoSelezionato);
 
                 // Avvia la nuova Activity
                 startActivity(intent);
