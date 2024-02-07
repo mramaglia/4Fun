@@ -190,7 +190,7 @@ public class AddEvent extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year_x, int month_x, int dayOfMonth_x) {
                 // Aggiungi 1 al mese perché il DatePickerDialog rappresenta i mesi da 0 a 11
-                month_x += 1;
+                //month_x += 1;
                 //salvo giorno mese e anno nelle variabili globali per la creazione dell'evento alla pressione del button "addEvento"
                 giorno=dayOfMonth_x;
                 mese=month_x;

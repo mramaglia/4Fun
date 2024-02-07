@@ -51,10 +51,11 @@ public class ViewEvent extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private FirebaseFirestore db;
-    private ImageView imageView, iscriviti, heart, back;
+    private ImageView imageView, iscriviti, iscrivitiExpired, heart, back;
     private TextView nome, descrizione, partecipanti, luogo, data, ora;
-    private ConstraintLayout tastoIscrizione;
+    private ConstraintLayout tastoIscrizione, tastoIscrizioneExpired;
     private Drawable drawable;
+    private boolean isExpired;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +76,7 @@ public class ViewEvent extends AppCompatActivity {
         iscriviti = findViewById(R.id.imageView6);
         tastoIscrizione=findViewById(R.id.layoutTastoIscrizione);
 
+
         // Ottieni il drawable dalla risorsa
         drawable = ContextCompat.getDrawable(ViewEvent.this, R.drawable.uncheck);
 
@@ -88,6 +90,16 @@ public class ViewEvent extends AppCompatActivity {
 
         String idEvento = getIntent().getStringExtra("idEvento");
 
+        if(isExpired(idEvento)){
+            iscrivitiExpired=findViewById(R.id.imageView6);
+            tastoIscrizioneExpired=findViewById(R.id.layoutTastoIscrizione);
+            tastoIscrizioneExpired.setBackgroundColor(Color.WHITE);
+            iscrivitiExpired.setImageResource(R.drawable.expired);
+        }
+        else {
+            iscriviti = findViewById(R.id.imageView6);
+            tastoIscrizione=findViewById(R.id.layoutTastoIscrizione);
+        }
 
         existIscritto(idEvento, auth);
 
@@ -440,5 +452,41 @@ public class ViewEvent extends AppCompatActivity {
                 });
 
 
+    }
+
+    private boolean isExpired(String idEvento){
+
+        db.getInstance().collection("eventi").document(idEvento)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                // Il documento esiste, puoi ottenere i dati
+                                Evento evento = document.toObject(Evento.class);
+                                // Ottieni la data attuale
+                                Date now = new Date();
+
+                                // Ottieni il timestamp dal tuo documento Firestore
+                                Date timestamp = evento.getData();
+
+                                // Confronta le due date
+                                if (now.after(timestamp)) {
+                                    isExpired=false;
+                                } else {
+                                    isExpired=true;
+                                }
+
+                            } else {
+                                Log.d("Firestore", "Nessun documento trovato con ID: " + idEvento);
+                            }
+                        } else {
+                            Log.e("Firestore", "Errore durante la ricerca del documento", task.getException());
+                        }
+                    }
+                });
+        return isExpired;
     }
 }

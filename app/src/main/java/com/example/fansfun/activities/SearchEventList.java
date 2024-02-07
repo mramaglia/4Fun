@@ -78,7 +78,6 @@ public class SearchEventList extends AppCompatActivity {
             }
         });
 
-        updateList();
 
         searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
             @Override
@@ -96,6 +95,14 @@ public class SearchEventList extends AppCompatActivity {
             }
         });
 
+        String type=getIntent().getStringExtra("type");
+        if(type.equals("text")){
+            updateList();
+        }
+        else if(type.equals("category")){
+            categoria= getIntent().getStringExtra("category");
+            updateListCategoria();
+        }
 
         //GESTIONE CATEGORIA
         ArrayAdapter<String> adapter_category = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categorie);
@@ -208,18 +215,31 @@ public class SearchEventList extends AppCompatActivity {
                         // Ottieni l'oggetto Evento dal documento
                         ListViewEvent evento = document.toObject(ListViewEvent.class);
                         evento.setId(document.getId());
+                        if(searchQuery==null) {
 
-                        if (evento.getNome().toLowerCase().contains(searchQuery.toLowerCase())) {
+                                // Aggiungi l'evento alla lista
+                                listaEventi.add(evento);
 
-                            // Aggiungi l'evento alla lista
-                            listaEventi.add(evento);
+                                // Creazione dell'adattatore
+                                EventoAdapter adapter = new EventoAdapter(SearchEventList.this, R.layout.item_evento, listaEventi);
 
-                            // Creazione dell'adattatore
-                            EventoAdapter adapter = new EventoAdapter(SearchEventList.this, R.layout.item_evento, listaEventi);
+                                // Impostare l'adattatore sulla ListView
+                                listView.setAdapter(adapter);
 
-                            // Impostare l'adattatore sulla ListView
-                            listView.setAdapter(adapter);
+                        }
+                        else{
+                            if (evento.getNome().toLowerCase().contains(searchQuery.toLowerCase())) {
 
+                                // Aggiungi l'evento alla lista
+                                listaEventi.add(evento);
+
+                                // Creazione dell'adattatore
+                                EventoAdapter adapter = new EventoAdapter(SearchEventList.this, R.layout.item_evento, listaEventi);
+
+                                // Impostare l'adattatore sulla ListView
+                                listView.setAdapter(adapter);
+
+                            }
                         }
                     }
 
@@ -251,17 +271,30 @@ public class SearchEventList extends AppCompatActivity {
                         ListViewEvent evento = document.toObject(ListViewEvent.class);
                         evento.setId(document.getId());
 
-                        if (evento.getNome().toLowerCase().contains(searchQuery.toLowerCase())) {
+                        if(searchQuery==null) {
 
-                            // Aggiungi l'evento alla lista
-                            listaEventi.add(evento);
+                                // Aggiungi l'evento alla lista
+                                listaEventi.add(evento);
 
-                            // Creazione dell'adattatore
-                            EventoAdapter adapter = new EventoAdapter(SearchEventList.this, R.layout.item_evento, listaEventi);
+                                // Creazione dell'adattatore
+                                EventoAdapter adapter = new EventoAdapter(SearchEventList.this, R.layout.item_evento, listaEventi);
 
-                            // Impostare l'adattatore sulla ListView
-                            listView.setAdapter(adapter);
+                                // Impostare l'adattatore sulla ListView
+                                listView.setAdapter(adapter);
+                        }
+                        else{
+                            if (evento.getNome().toLowerCase().contains(searchQuery.toLowerCase())) {
 
+                                // Aggiungi l'evento alla lista
+                                listaEventi.add(evento);
+
+                                // Creazione dell'adattatore
+                                EventoAdapter adapter = new EventoAdapter(SearchEventList.this, R.layout.item_evento, listaEventi);
+
+                                // Impostare l'adattatore sulla ListView
+                                listView.setAdapter(adapter);
+
+                            }
                         }
                     }
 
@@ -338,17 +371,31 @@ public class SearchEventList extends AppCompatActivity {
                         ListViewEvent evento = document.toObject(ListViewEvent.class);
                         evento.setId(document.getId());
 
-                        if (evento.getNome().toLowerCase().contains(searchQuery.toLowerCase())) {
+                        if(searchQuery==null) {
 
-                            // Aggiungi l'evento alla lista
-                            listaEventi.add(evento);
+                                // Aggiungi l'evento alla lista
+                                listaEventi.add(evento);
 
-                            // Creazione dell'adattatore
-                            EventoAdapter adapter = new EventoAdapter(SearchEventList.this, R.layout.item_evento, listaEventi);
+                                // Creazione dell'adattatore
+                                EventoAdapter adapter = new EventoAdapter(SearchEventList.this, R.layout.item_evento, listaEventi);
 
-                            // Impostare l'adattatore sulla ListView
-                            listView.setAdapter(adapter);
+                                // Impostare l'adattatore sulla ListView
+                                listView.setAdapter(adapter);
 
+                        }
+                        else{
+                            if (evento.getNome().toLowerCase().contains(searchQuery.toLowerCase())) {
+
+                                // Aggiungi l'evento alla lista
+                                listaEventi.add(evento);
+
+                                // Creazione dell'adattatore
+                                EventoAdapter adapter = new EventoAdapter(SearchEventList.this, R.layout.item_evento, listaEventi);
+
+                                // Impostare l'adattatore sulla ListView
+                                listView.setAdapter(adapter);
+
+                            }
                         }
                     }
 
