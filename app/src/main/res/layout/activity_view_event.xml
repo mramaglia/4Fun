@@ -247,7 +247,7 @@
             </androidx.cardview.widget.CardView>
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/imageProfileOrganizzatore"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="10dp"

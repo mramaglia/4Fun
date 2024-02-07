@@ -1,11 +1,14 @@
 package com.example.fansfun.activities;
 
+import static androidx.constraintlayout.widget.ConstraintLayoutStates.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
@@ -51,7 +54,7 @@ public class ViewEvent extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private FirebaseFirestore db;
-    private ImageView imageView, iscriviti, heart, back, delete;
+    private ImageView imageView, iscriviti, heart, back, delete, imageOrganizzatore;
     private TextView nome, descrizione, luogo, data, ora;
     private ConstraintLayout tastoIscrizione;
     private Drawable drawable;
@@ -65,6 +68,7 @@ public class ViewEvent extends AppCompatActivity {
         Configuration.getInstance().load(this, getPreferences(MODE_PRIVATE));
 
         Evento evento = (Evento) getIntent().getSerializableExtra("evento");
+        String idEvento=evento.getId();
         auth = FirebaseAuth.getInstance();
 
         delete = findViewById(R.id.delete);
@@ -74,7 +78,7 @@ public class ViewEvent extends AppCompatActivity {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                delete.setVisibility(View.VISIBLE);
+                eliminaEvento(evento.getId());
             }
         });
 
@@ -88,6 +92,7 @@ public class ViewEvent extends AppCompatActivity {
         ora = findViewById(R.id.eventHour);
         iscriviti = findViewById(R.id.imageView6);
         tastoIscrizione=findViewById(R.id.layoutTastoIscrizione);
+        imageOrganizzatore=findViewById(R.id.imageProfileOrganizzatore);
 
 
         // Ottieni il drawable dalla risorsa
@@ -97,11 +102,8 @@ public class ViewEvent extends AppCompatActivity {
         DrawableCompat.setTint(drawable, Color.WHITE);
 
         db = FirebaseFirestore.getInstance();
-        CollectionReference eventiCollection = db.collection("eventi");
 
         Geocoder geocoder = new Geocoder(this);
-
-        String idEvento = getIntent().getStringExtra("idEvento");
 
         existIscritto(idEvento, auth);
 
@@ -115,6 +117,30 @@ public class ViewEvent extends AppCompatActivity {
         luogo.setText(evento.getIndirizzo() + ", " + evento.getLuogo());
         data.setText(formatData(evento.getData()));
         ora.setText(formatOra(evento.getData()));
+
+        DocumentReference docRef = db.collection("utenti").document(evento.getOrganizzatore());
+
+        // Ottieni il campo desiderato del documento
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        // Ottieni il campo desiderato
+                        String userImgUrl = document.getString("foto");
+                        Glide.with(ViewEvent.this)
+                                .load(userImgUrl)
+                                .into(imageOrganizzatore);
+                    } else {
+                        // Il documento non esiste
+                    }
+                } else {
+                    // Errore durante l'accesso al documento
+                    Log.d(TAG, "Errore: ", task.getException());
+                }
+            }
+        });
 
         // Imposta il livello di zoom iniziale
         mapView.getController().setZoom(15.0);
@@ -150,6 +176,15 @@ public class ViewEvent extends AppCompatActivity {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        imageOrganizzatore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ViewEvent.this, ProfileActivity.class);
+                intent.putExtra("user_id", evento.getOrganizzatore());
+                startActivity(intent);
+            }
+        });
 
         iscriviti.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -376,5 +411,27 @@ public class ViewEvent extends AppCompatActivity {
         else {
             return false;
         }
+    }
+
+    private void eliminaEvento(String idEvento){
+        DocumentReference documentDaEliminare = db.collection("eventi").document(idEvento);
+
+        // Elimina il documento
+        documentDaEliminare.delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // Documento eliminato con successo
+                        Intent intent = new Intent(ViewEvent.this, PrincipalActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Gestisci eventuali errori durante l'eliminazione del documento
+                    }
+                });
     }
 }
