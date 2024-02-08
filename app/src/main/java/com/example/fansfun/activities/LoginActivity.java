@@ -20,12 +20,13 @@ import com.example.fansfun.R;
 import com.example.fansfun.viewmodels.AuthViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText email, password;
+    TextInputEditText email, password;
     private FirebaseAuth auth;
     private AuthViewModel authViewModel;  // Aggiunto il ViewModel
     private SharedPreferences sharedPreferences;
@@ -51,8 +52,15 @@ public class LoginActivity extends AppCompatActivity {
         String userEmail = email.getText().toString();
         String userPassword = password.getText().toString();
 
-        if (TextUtils.isEmpty(userEmail) || TextUtils.isEmpty(userPassword)) {
-            Toast.makeText(this, "Compilare tutti i campi", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(userEmail)) {
+            email.setError("Inserisci un'email");
+
+            return;
+        }else if(TextUtils.isEmpty(userPassword)){
+            password.setError("Inserisci una password");
+            return;
+        }else if (!isValidEmail(userEmail)) {
+            email.setError("Indirizzo email non valido");
             return;
         }
 
@@ -67,12 +75,14 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(new Intent(LoginActivity.this, PrincipalActivity.class));
                     finish();
                 } else {
-                    ConstraintLayout constraintLayout = findViewById(R.id.error);
-                    constraintLayout.setVisibility(View.VISIBLE);
-
+                    Toast.makeText(LoginActivity.this, "Errore durante il login", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    private boolean isValidEmail(CharSequence target) {
+        return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 
     public void registrazione(View view) {

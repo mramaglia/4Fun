@@ -25,6 +25,7 @@ import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -42,7 +43,7 @@ public class RegistrationActivity extends AppCompatActivity {
     ImageView imageView;
     byte[] imageBytes;
     FloatingActionButton button;
-    EditText name, surname, email, password;
+    TextInputEditText name, surname, email, password;
     private FirebaseAuth auth;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -64,53 +65,41 @@ public class RegistrationActivity extends AppCompatActivity {
 
     }
 
-    public void registrazione(View view){
-
-        Intent intent=new Intent(RegistrationActivity.this, PostRegistrationActivity.class);
+    public void registrazione(View view) {
+        Intent intent = new Intent(RegistrationActivity.this, PostRegistrationActivity.class);
 
         String userEmail = email.getText().toString();
         String userPassword = password.getText().toString();
 
-        auth.fetchSignInMethodsForEmail(userEmail)
-                .addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
-                        if (task.isSuccessful()) {
-                            SignInMethodQueryResult result = task.getResult();
-                            List<String> signInMethods = result.getSignInMethods();
-                            if (signInMethods != null && !signInMethods.isEmpty()) {
-                                // L'email è già registrata con Firebase Authentication
-                                // signInMethods contiene i metodi di accesso associati a questa email
-                                Log.d(TAG, "L'email esiste già.");
+        if (TextUtils.isEmpty(userEmail) || TextUtils.isEmpty(userPassword)) {
+            Toast.makeText(this, "Compilare tutti i campi", Toast.LENGTH_SHORT).show();
+            return;
+        } else {
+            auth.fetchSignInMethodsForEmail(userEmail)
+                    .addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
+                            if (task.isSuccessful()) {
+                                SignInMethodQueryResult result = task.getResult();
+                                List<String> signInMethods = result.getSignInMethods();
+                                if (signInMethods != null && !signInMethods.isEmpty()) {
+                                    // L'email è già registrata con Firebase Authentication
+                                    Toast.makeText(RegistrationActivity.this, "Questo indirizzo email è già stato registrato", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    // Tutto a buon fine, si può procedere con la PostRegistration
+                                    intent.putExtra("email", userEmail);
+                                    intent.putExtra("password", userPassword);
+                                    startActivity(intent);
+                                }
                             } else {
-                                // L'email non è registrata con Firebase Authentication
-                                Log.d(TAG, "L'email non esiste.");
+                                // Errore durante il recupero dei metodi di accesso per l'email
+                                Exception e = task.getException();
+                                Log.e(TAG, "Errore durante il recupero dei metodi di accesso per l'email", e);
+                                Toast.makeText(RegistrationActivity.this, "Errore durante la registrazione: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
-                        } else {
-                            // Errore durante il recupero dei metodi di accesso per l'email
-                            Exception e = task.getException();
-                            Log.e(TAG, "Errore durante il recupero dei metodi di accesso per l'email", e);
                         }
-                    }
-                });
-
-        if(TextUtils.isEmpty(userEmail)){
-            Toast.makeText(this, "Compilare tutti i campi", Toast.LENGTH_SHORT).show();
-            return;
+                    });
         }
-
-        if(TextUtils.isEmpty(userPassword)){
-            Toast.makeText(this, "Compilare tutti i campi", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        intent.putExtra("email", userEmail);
-        intent.putExtra("password", userPassword);
-
-        startActivity(intent);
-
-
-
     }
 
 }
