@@ -31,6 +31,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.SignInMethodQueryResult;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -75,31 +76,34 @@ public class RegistrationActivity extends AppCompatActivity {
             Toast.makeText(this, "Compilare tutti i campi", Toast.LENGTH_SHORT).show();
             return;
         } else {
-            auth.fetchSignInMethodsForEmail(userEmail)
-                    .addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
+            // Query per verificare se l'email esiste già nel database
+            db.collection("utenti")
+                    .whereEqualTo("email", userEmail)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
-                        public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
-                                SignInMethodQueryResult result = task.getResult();
-                                List<String> signInMethods = result.getSignInMethods();
-                                if (signInMethods != null && !signInMethods.isEmpty()) {
-                                    // L'email è già registrata con Firebase Authentication
-                                    Toast.makeText(RegistrationActivity.this, "Questo indirizzo email è già stato registrato", Toast.LENGTH_SHORT).show();
+                                QuerySnapshot queryDocumentSnapshots = task.getResult();
+                                if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                                    // L'email è già presente nel database
+                                    Toast.makeText(RegistrationActivity.this, "Questo indirizzo email è già in uso", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    // Tutto a buon fine, si può procedere con la PostRegistration
+                                    // L'email non esiste nel database, si può procedere con la registrazione
                                     intent.putExtra("email", userEmail);
                                     intent.putExtra("password", userPassword);
                                     startActivity(intent);
                                 }
                             } else {
-                                // Errore durante il recupero dei metodi di accesso per l'email
+                                // Errore durante il recupero dei dati dal database
                                 Exception e = task.getException();
-                                Log.e(TAG, "Errore durante il recupero dei metodi di accesso per l'email", e);
+                                Log.e(TAG, "Errore durante la verifica dell'email nel database", e);
                                 Toast.makeText(RegistrationActivity.this, "Errore durante la registrazione: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
         }
     }
+
 
 }
