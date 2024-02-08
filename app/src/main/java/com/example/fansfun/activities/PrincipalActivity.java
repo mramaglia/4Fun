@@ -65,6 +65,7 @@ public class PrincipalActivity extends AppCompatActivity {
         // Recupera l'utente dal database e aggiorna le SharedPreferencess
         retrieveUserFromDatabase();
         retrieveVicinanzeFromDatabase();
+        retrievePartyFromDatabase();
 
         replaceFragment(new HomeFragment());
 
@@ -327,6 +328,7 @@ public class PrincipalActivity extends AppCompatActivity {
         // Effettua una query per ottenere i documenti con un certo campo uguale
         db.collection("eventi")
                 .whereEqualTo("luogo", luogo)
+                .limit(10)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -377,6 +379,7 @@ public class PrincipalActivity extends AppCompatActivity {
         db.collection("eventi")
                 .whereEqualTo("luogo", luogo)
                 .whereEqualTo("categoria", "Party")
+                .limit(10)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

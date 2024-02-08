@@ -1,5 +1,7 @@
 package com.example.fansfun.activities;
 
+import static androidx.constraintlayout.widget.ConstraintLayoutStates.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +11,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -25,12 +28,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.SignInMethodQueryResult;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Objects;
 
 public class RegistrationActivity extends AppCompatActivity {
@@ -65,6 +70,29 @@ public class RegistrationActivity extends AppCompatActivity {
 
         String userEmail = email.getText().toString();
         String userPassword = password.getText().toString();
+
+        auth.fetchSignInMethodsForEmail(userEmail)
+                .addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
+                        if (task.isSuccessful()) {
+                            SignInMethodQueryResult result = task.getResult();
+                            List<String> signInMethods = result.getSignInMethods();
+                            if (signInMethods != null && !signInMethods.isEmpty()) {
+                                // L'email è già registrata con Firebase Authentication
+                                // signInMethods contiene i metodi di accesso associati a questa email
+                                Log.d(TAG, "L'email esiste già.");
+                            } else {
+                                // L'email non è registrata con Firebase Authentication
+                                Log.d(TAG, "L'email non esiste.");
+                            }
+                        } else {
+                            // Errore durante il recupero dei metodi di accesso per l'email
+                            Exception e = task.getException();
+                            Log.e(TAG, "Errore durante il recupero dei metodi di accesso per l'email", e);
+                        }
+                    }
+                });
 
         if(TextUtils.isEmpty(userEmail)){
             Toast.makeText(this, "Compilare tutti i campi", Toast.LENGTH_SHORT).show();
