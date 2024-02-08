@@ -4,6 +4,8 @@ import static com.example.fansfun.activities.MainActivity.KEY_IS_AUTHENTICATED;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
@@ -28,6 +30,7 @@ public class LoginActivity extends AppCompatActivity {
     private AuthViewModel authViewModel;  // Aggiunto il ViewModel
     private SharedPreferences sharedPreferences;
     private static final String SHARED_PREF_NAME = "my_shared_pref";  // Sostituisci con il nome desiderato
+    ConstraintSet.Layout error;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +67,9 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(new Intent(LoginActivity.this, PrincipalActivity.class));
                     finish();
                 } else {
-                    Toast.makeText(LoginActivity.this, "Login fallito" + task.getException(), Toast.LENGTH_SHORT).show();
+                    ConstraintLayout constraintLayout = findViewById(R.id.error);
+                    constraintLayout.setVisibility(View.VISIBLE);
+
                 }
             }
         });
