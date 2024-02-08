@@ -75,7 +75,12 @@ public class RegistrationActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(userEmail) || TextUtils.isEmpty(userPassword)) {
             Toast.makeText(this, "Compilare tutti i campi", Toast.LENGTH_SHORT).show();
             return;
-        } else {
+        }
+        else if(userPassword.length()<6){
+            Toast.makeText(this, "La password deve essere almeno di 6 caratteri!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        else {
             // Query per verificare se l'email esiste già nel database
             db.collection("utenti")
                     .whereEqualTo("email", userEmail)

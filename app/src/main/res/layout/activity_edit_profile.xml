@@ -29,7 +29,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/updateEdit"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="center_vertical"
@@ -91,13 +91,13 @@
             app:layout_constraintTop_toBottomOf="@+id/profile_pic">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/name"
+                android:id="@+id/nameEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLength="15"
-                android:singleLine="true"
                 android:inputType="text"
-                android:required="true"/>
+                android:maxLength="15"
+                android:required="true"
+                android:singleLine="true" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -113,7 +113,7 @@
             app:layout_constraintTop_toBottomOf="@+id/namelayout">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/surname"
+                android:id="@+id/surnameEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLength="15"
@@ -145,7 +145,7 @@
                 app:layout_constraintTop_toTopOf="@+id/date" />
 
             <AutoCompleteTextView
-                android:id="@+id/autoCompleteTextView"
+                android:id="@+id/autoCompleteTextViewEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -156,6 +156,7 @@
                 tools:layout_editor_absoluteX="37dp" />
         </LinearLayout>
 
+        <!--
         <LinearLayout
             android:id="@+id/linear_layout2"
             android:layout_width="match_parent"
@@ -177,16 +178,17 @@
                 app:layout_constraintTop_toTopOf="@+id/date" />
 
             <Button
-                android:id="@+id/date"
+                android:id="@+id/dateEdit"
                 style="@android:style/Widget.Holo.Light.Button"
                 android:layout_width="match_parent"
-                android:layout_marginStart="10dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:layout_marginStart="10dp"
                 android:text="Add Birthday"
                 android:textColor="@color/white"
                 app:layout_constraintTop_toBottomOf="@+id/autoCompleteTextView" />
         </LinearLayout>
+        -->
 
 
 

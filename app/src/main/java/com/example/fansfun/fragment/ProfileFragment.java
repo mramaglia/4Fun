@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.fansfun.R;
+import com.example.fansfun.activities.EditProfile;
 import com.example.fansfun.activities.LoginActivity;
 import com.example.fansfun.activities.MainActivity;
 import com.example.fansfun.activities.MyEvents;
@@ -28,7 +29,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class ProfileFragment extends Fragment {
 
     private ImageView profileImg, eyesImg;
-    private TextView nome, luogo, textViewLogout, myEvents;
+    private TextView nome, luogo, textViewLogout, myEvents, editProfile;
     private SharedPreferences sharedPreferences;
 
     @Override
@@ -50,6 +51,7 @@ public class ProfileFragment extends Fragment {
         nome = view.findViewById(R.id.textView4);
         luogo = view.findViewById(R.id.textView3);
         myEvents=view.findViewById(R.id.myEventsTextView);
+        editProfile=view.findViewById(R.id.editProfile);
 
         textViewLogout = view.findViewById(R.id.logout);
 
@@ -83,6 +85,15 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
 
                 myEvents();
+
+            }
+        });
+
+        editProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                startActivity(new Intent(getContext(), EditProfile.class));
 
             }
         });
