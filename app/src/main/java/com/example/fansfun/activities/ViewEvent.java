@@ -37,6 +37,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.osmdroid.config.Configuration;
 import org.osmdroid.util.GeoPoint;
@@ -414,6 +416,76 @@ public class ViewEvent extends AppCompatActivity {
     }
 
     private void eliminaEvento(String idEvento){
+
+        // Effettua una query per trovare il documento con un campo uguale a un certo valore
+        db.collection("partecipaEvento")
+                .whereEqualTo("idEvento", idEvento)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                // Per ogni documento trovato, eliminare il documento
+                                db.collection("partecipaEvento").document(document.getId())
+                                        .delete()
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.d(TAG, "Documento eliminato con successo da partecipaevento");
+                                                eliminaDaPreferiti(idEvento);
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.e(TAG, "Errore durante l'eliminazione del documento", e);
+                                            }
+                                        });
+                            }
+                        } else {
+                            Log.e(TAG, "Errore durante il recupero dei documenti", task.getException());
+                        }
+                    }
+                });
+
+    }
+
+    private void eliminaDaPreferiti(String idEvento){
+
+        db.collection("preferiti")
+                .whereEqualTo("idEvento", idEvento)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                // Per ogni documento trovato, eliminare il documento
+                                db.collection("preferiti").document(document.getId())
+                                        .delete()
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.d(TAG, "Documento eliminato con successo");
+                                                eliminaDaEvento(idEvento);
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.e(TAG, "Errore durante l'eliminazione del documento", e);
+                                            }
+                                        });
+                            }
+                        } else {
+                            Log.e(TAG, "Errore durante il recupero dei documenti", task.getException());
+                        }
+                    }
+                });
+    }
+
+    private void eliminaDaEvento(String idEvento){
         DocumentReference documentDaEliminare = db.collection("eventi").document(idEvento);
 
         // Elimina il documento
@@ -434,4 +506,5 @@ public class ViewEvent extends AppCompatActivity {
                     }
                 });
     }
+
 }

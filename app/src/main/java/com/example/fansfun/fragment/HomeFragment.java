@@ -20,9 +20,12 @@ import com.example.fansfun.R;
 import com.example.fansfun.activities.ListaEventi;
 import com.example.fansfun.activities.MainActivity;
 import com.example.fansfun.activities.SearchEventList;
+import com.example.fansfun.entities.Evento;
 import com.example.fansfun.entities.Utente;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
+
+import java.util.List;
 
 
 public class HomeFragment extends Fragment {
@@ -42,6 +45,13 @@ public class HomeFragment extends Fragment {
 
         textView=view.findViewById(R.id.location);
         textView.setText(userLocation());
+
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         cardConcerti=view.findViewById(R.id.cardConcerti);
         cardParty=view.findViewById(R.id.cardParty);
@@ -142,4 +152,13 @@ public class HomeFragment extends Fragment {
 
         return utente.getLuogo();
     }
+
+    public void updateNelleVicinanze(List<Evento> nelleVicinanze){
+
+    }
+
+    public void updateParty(List<Evento> nelleVicinanze){
+
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.example.fansfun.activities;
 
+import static androidx.constraintlayout.widget.ConstraintLayoutStates.TAG;
 import static androidx.databinding.DataBindingUtil.setContentView;
 
 import static com.example.fansfun.activities.MainActivity.SHARED_PREF_NAME;
@@ -39,6 +40,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class PrincipalActivity extends AppCompatActivity {
 
@@ -50,6 +52,8 @@ public class PrincipalActivity extends AppCompatActivity {
     ProfileFragment profile = new ProfileFragment();
     SharedPreferences sharedPreferences;
 
+    private String luogo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +64,7 @@ public class PrincipalActivity extends AppCompatActivity {
 
         // Recupera l'utente dal database e aggiorna le SharedPreferencess
         retrieveUserFromDatabase();
+        retrieveVicinanzeFromDatabase();
 
         replaceFragment(new HomeFragment());
 
@@ -157,6 +162,8 @@ public class PrincipalActivity extends AppCompatActivity {
             if (documentSnapshot.exists()) {
                 // Il documento esiste, quindi l'utente è stato trovato
                 Utente utente = documentSnapshot.toObject(Utente.class);
+
+                luogo=utente.getLuogo();
 
                 // Aggiorna le SharedPreferences con i nuovi dati dell'utente
                 saveUserToSharedPreferences(utente);
@@ -311,6 +318,105 @@ public class PrincipalActivity extends AppCompatActivity {
                 }
             }
         });
+
+    }
+
+    private void retrieveVicinanzeFromDatabase(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Effettua una query per ottenere i documenti con un certo campo uguale
+        db.collection("eventi")
+                .whereEqualTo("luogo", luogo)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<Evento> nelleVicinanze = new ArrayList<>();
+                        if (task.isSuccessful()) {
+                            List<DocumentSnapshot> documents = task.getResult().getDocuments();
+
+                            // Se ci sono meno di 10 documenti, considera solo quelli
+                            int numDocumentsToConsider = Math.min(10, documents.size());
+
+                            // Seleziona casualmente 10 documenti da quelli restituiti
+                            List<DocumentSnapshot> randomDocuments = new ArrayList<>();
+                            Random random = new Random();
+                            for (int i = 0; i < numDocumentsToConsider; i++) {
+                                int randomIndex = random.nextInt(documents.size());
+                                randomDocuments.add(documents.get(randomIndex));
+                                documents.remove(randomIndex);
+                            }
+
+                            // Ora puoi utilizzare i documenti selezionati casualmente
+                            for (DocumentSnapshot document : randomDocuments) {
+                                // Fai qualcosa con il documento
+                                // Il documento esiste, puoi accedere ai suoi dati
+                                Evento evento = document.toObject(Evento.class);
+                                evento.setId(document.getId());
+                                nelleVicinanze.add(evento);
+
+                                //ordino gli eventi per data
+                                Collections.sort(nelleVicinanze, new DateComparator());
+
+                                home.updateNelleVicinanze(nelleVicinanze);
+                            }
+                        } else {
+                            // Gestisci eventuali errori durante il recupero dei documenti
+                            Exception e = task.getException();
+                            Log.e(TAG, "Errore durante il recupero dei documenti", e);
+                        }
+                    }
+                });
+
+    }
+
+    private void retrievePartyFromDatabase(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Effettua una query per ottenere i documenti con un certo campo uguale
+        db.collection("eventi")
+                .whereEqualTo("luogo", luogo)
+                .whereEqualTo("categoria", "Party")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<Evento> partyList = new ArrayList<>();
+                        if (task.isSuccessful()) {
+                            List<DocumentSnapshot> documents = task.getResult().getDocuments();
+
+                            // Se ci sono meno di 10 documenti, considera solo quelli
+                            int numDocumentsToConsider = Math.min(10, documents.size());
+
+                            // Seleziona casualmente 10 documenti da quelli restituiti
+                            List<DocumentSnapshot> randomDocuments = new ArrayList<>();
+                            Random random = new Random();
+                            for (int i = 0; i < numDocumentsToConsider; i++) {
+                                int randomIndex = random.nextInt(documents.size());
+                                randomDocuments.add(documents.get(randomIndex));
+                                documents.remove(randomIndex);
+                            }
+
+                            // Ora puoi utilizzare i documenti selezionati casualmente
+                            for (DocumentSnapshot document : randomDocuments) {
+                                // Fai qualcosa con il documento
+                                // Il documento esiste, puoi accedere ai suoi dati
+                                Evento evento = document.toObject(Evento.class);
+                                evento.setId(document.getId());
+                                partyList.add(evento);
+
+                                //ordino gli eventi per data
+                                Collections.sort(partyList, new DateComparator());
+
+                                home.updateParty(partyList);
+                            }
+                        } else {
+                            // Gestisci eventuali errori durante il recupero dei documenti
+                            Exception e = task.getException();
+                            Log.e(TAG, "Errore durante il recupero dei documenti", e);
+                        }
+                    }
+                });
 
     }
 
