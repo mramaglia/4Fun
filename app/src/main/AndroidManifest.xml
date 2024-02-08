@@ -19,7 +19,9 @@
         android:theme="@style/Theme.FansFun"
         tools:ignore="HardcodedDebugMode"
         tools:targetApi="31">
-
+        <activity
+            android:name=".activities.EditProfile"
+            android:exported="false" />
         <activity
             android:name=".activities.MyEvents"
             android:exported="false" />
