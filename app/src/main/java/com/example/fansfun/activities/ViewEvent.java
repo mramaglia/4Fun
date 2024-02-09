@@ -416,6 +416,12 @@ public class ViewEvent extends AppCompatActivity {
     }
 
     private void eliminaEvento(String idEvento){
+        eliminaDaPartecipa(idEvento);
+        eliminaDaPreferiti(idEvento);
+        eliminaDaEvento(idEvento);
+    }
+
+    private void eliminaDaPartecipa(String idEvento){
 
         // Effettua una query per trovare il documento con un campo uguale a un certo valore
         db.collection("partecipaEvento")
@@ -433,7 +439,6 @@ public class ViewEvent extends AppCompatActivity {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 Log.d(TAG, "Documento eliminato con successo da partecipaevento");
-                                                eliminaDaPreferiti(idEvento);
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
@@ -468,7 +473,6 @@ public class ViewEvent extends AppCompatActivity {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 Log.d(TAG, "Documento eliminato con successo");
-                                                eliminaDaEvento(idEvento);
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
