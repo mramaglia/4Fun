@@ -83,6 +83,7 @@ public class SearchEventList extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Intent intent = new Intent(SearchEventList.this, SearchEventList.class);
+                intent.putExtra("type", "text");
                 intent.putExtra("search_query", query);
                 startActivity(intent);
 
