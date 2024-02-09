@@ -101,7 +101,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:maxLength="40"
-                android:required="true" />
+                android:required="true"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -119,14 +119,14 @@
         <TextView
             android:id="@+id/textView5"
             android:layout_width="89dp"
-            android:layout_height="35dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
             android:layout_marginTop="16dp"
+            android:gravity="center"
             android:onClick="registrazione"
             android:text="@string/registrati"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_gravity="center"
-            android:gravity="center"/>
+            app:layout_constraintStart_toStartOf="parent" />
 
     </LinearLayout>
 

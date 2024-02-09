@@ -41,10 +41,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class RegistrationActivity extends AppCompatActivity {
-    ImageView imageView;
-    byte[] imageBytes;
-    FloatingActionButton button;
-    TextInputEditText name, surname, email, password;
+    TextInputEditText email, password;
     private FirebaseAuth auth;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 

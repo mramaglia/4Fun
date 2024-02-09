@@ -59,21 +59,22 @@ public class PrincipalActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
 
+
+
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         addEventButton = findViewById(R.id.addEventButton);
 
         // Recupera l'utente dal database e aggiorna le SharedPreferencess
         retrieveUserFromDatabase();
-        retrieveVicinanzeFromDatabase();
-        retrievePartyFromDatabase();
 
-        replaceFragment(new HomeFragment());
+        replaceFragment(home);
 
 
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             int itemId = item.getItemId();
 
             if (itemId == R.id.home) {
+
                 replaceFragment(home);
             } else if (itemId == R.id.favourite) {
                 retrieveFavouritesFromDatabase();
@@ -173,6 +174,8 @@ public class PrincipalActivity extends AppCompatActivity {
                 if (profile != null && profile.isAdded()) {
                     profile.updateUserProfile(utente);
                 }
+                //QUERY RIEMPIMENTO HOME
+                retrieveEventsFromDatabase();
             } else {
                 // Il documento non esiste, potrebbe essere necessario gestire questo caso a seconda delle esigenze
                 Log.d("PrincipalActivity", "Il documento utente non esiste");
@@ -322,7 +325,17 @@ public class PrincipalActivity extends AppCompatActivity {
 
     }
 
-    private void retrieveVicinanzeFromDatabase(){
+    private void retrieveEventsFromDatabase() {
+        Log.d(TAG, "retrieveEventsFromDatabase() chiamata"+ luogo.toString());
+        String[] parts = luogo.split(", ");
+        String provincia;
+        if (parts.length > 1) {
+            provincia = parts[1];
+        } else {
+            // Se il formato non è corretto o non contiene la provincia, restituisci una stringa vuota o null
+            provincia = parts[1];
+        }
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         // Effettua una query per ottenere i documenti con un certo campo uguale
@@ -333,35 +346,17 @@ public class PrincipalActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        List<Evento> nelleVicinanze = new ArrayList<>();
+                        List<Evento> eventList = new ArrayList<>();
                         if (task.isSuccessful()) {
-                            List<DocumentSnapshot> documents = task.getResult().getDocuments();
-
-                            // Se ci sono meno di 10 documenti, considera solo quelli
-                            int numDocumentsToConsider = Math.min(10, documents.size());
-
-                            // Seleziona casualmente 10 documenti da quelli restituiti
-                            List<DocumentSnapshot> randomDocuments = new ArrayList<>();
-                            Random random = new Random();
-                            for (int i = 0; i < numDocumentsToConsider; i++) {
-                                int randomIndex = random.nextInt(documents.size());
-                                randomDocuments.add(documents.get(randomIndex));
-                                documents.remove(randomIndex);
-                            }
-
-                            // Ora puoi utilizzare i documenti selezionati casualmente
-                            for (DocumentSnapshot document : randomDocuments) {
-                                // Fai qualcosa con il documento
+                            for (QueryDocumentSnapshot document : task.getResult()) {
                                 // Il documento esiste, puoi accedere ai suoi dati
                                 Evento evento = document.toObject(Evento.class);
                                 evento.setId(document.getId());
-                                nelleVicinanze.add(evento);
-
-                                //ordino gli eventi per data
-                                Collections.sort(nelleVicinanze, new DateComparator());
-
-                                home.updateNelleVicinanze(nelleVicinanze);
+                                eventList.add(evento);
                             }
+                            // Aggiorna l'interfaccia utente con la lista degli eventi Party
+                            home.updateNelleVicinanze(eventList);
+
                         } else {
                             // Gestisci eventuali errori durante il recupero dei documenti
                             Exception e = task.getException();
@@ -370,58 +365,60 @@ public class PrincipalActivity extends AppCompatActivity {
                     }
                 });
 
-    }
 
-    private void retrievePartyFromDatabase(){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        // Effettua una query per ottenere i documenti con un certo campo uguale
+        // Effettua un'altra query per gli eventi nelle vicinanze
         db.collection("eventi")
-                .whereEqualTo("luogo", luogo)
                 .whereEqualTo("categoria", "Party")
                 .limit(10)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        List<Evento> partyList = new ArrayList<>();
+                        List<Evento> eventoList = new ArrayList<>();
                         if (task.isSuccessful()) {
-                            List<DocumentSnapshot> documents = task.getResult().getDocuments();
-
-                            // Se ci sono meno di 10 documenti, considera solo quelli
-                            int numDocumentsToConsider = Math.min(10, documents.size());
-
-                            // Seleziona casualmente 10 documenti da quelli restituiti
-                            List<DocumentSnapshot> randomDocuments = new ArrayList<>();
-                            Random random = new Random();
-                            for (int i = 0; i < numDocumentsToConsider; i++) {
-                                int randomIndex = random.nextInt(documents.size());
-                                randomDocuments.add(documents.get(randomIndex));
-                                documents.remove(randomIndex);
-                            }
-
-                            // Ora puoi utilizzare i documenti selezionati casualmente
-                            for (DocumentSnapshot document : randomDocuments) {
-                                // Fai qualcosa con il documento
+                            for (QueryDocumentSnapshot document : task.getResult()) {
                                 // Il documento esiste, puoi accedere ai suoi dati
                                 Evento evento = document.toObject(Evento.class);
                                 evento.setId(document.getId());
-                                partyList.add(evento);
-
-                                //ordino gli eventi per data
-                                Collections.sort(partyList, new DateComparator());
-
-                                home.updateParty(partyList);
+                                eventoList.add(evento);
                             }
+                            // Ordina gli eventi nelle vicinanze per data
+                            Collections.sort(eventoList, new DateComparator());
+                            // Aggiorna l'interfaccia utente con la lista degli eventi nelle vicinanze
+                            home.updateParty(eventoList);
                         } else {
                             // Gestisci eventuali errori durante il recupero dei documenti
                             Exception e = task.getException();
-                            Log.e(TAG, "Errore durante il recupero dei documenti", e);
+                            Log.e(TAG, "Errore durante il recupero dei documenti PARTY", e);
                         }
                     }
                 });
-
+        db.collection("eventi")
+                .whereEqualTo("categoria", "Concerti")
+                .limit(10)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<Evento> eventoList = new ArrayList<>();
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                // Il documento esiste, puoi accedere ai suoi dati
+                                Evento evento = document.toObject(Evento.class);
+                                evento.setId(document.getId());
+                                eventoList.add(evento);
+                            }
+                            // Ordina gli eventi nelle vicinanze per data
+                            Collections.sort(eventoList, new DateComparator());
+                            // Aggiorna l'interfaccia utente con la lista degli eventi nelle vicinanze
+                            home.updateNewEvent(eventoList);
+                        } else {
+                            // Gestisci eventuali errori durante il recupero dei documenti
+                            Exception e = task.getException();
+                            Log.e(TAG, "Errore durante il recupero dei documenti PARTY", e);
+                        }
+                    }
+                });
     }
-
-
+    
 }

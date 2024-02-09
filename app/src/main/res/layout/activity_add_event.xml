@@ -97,11 +97,10 @@
 
         <Spinner
             android:id="@+id/cateogry"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="131dp"
+            android:layout_height="44dp"
             android:layout_marginTop="60dp"
             android:minHeight="48dp"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/EventPhoto" />
 
@@ -178,29 +177,6 @@
             app:layout_constraintTop_toBottomOf="@+id/EventDescriptionLayout"
             tools:layout_editor_absoluteX="20dp">
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_weight=".5"
-                android:layout_height="50dp"
-                android:layout_gravity="center_vertical"
-                android:padding="5dp"
-                android:src="@drawable/location_event"
-                app:layout_constraintBottom_toBottomOf="@+id/date"
-                app:layout_constraintEnd_toStartOf="@+id/date"
-                app:layout_constraintTop_toTopOf="@+id/date" />
-
-            <AutoCompleteTextView
-                android:id="@+id/autoCompleteTextView"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_marginEnd="10dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:completionThreshold="1"
-                android:hint="Comune"
-                android:minHeight="48dp"
-                android:required="true" />
-
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_marginStart="10dp"
                 android:id="@+id/EventAddressLayout"
@@ -272,6 +248,31 @@
             android:textColor="@color/principal"
             app:layout_constraintBottom_toTopOf="@+id/cateogry"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteTextView"
+            android:layout_width="142dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:completionThreshold="1"
+            android:hint="Comune"
+            android:minHeight="48dp"
+            android:required="true"
+            app:layout_constraintBottom_toBottomOf="@+id/cateogry"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/cateogry" />
+
+        <ImageView
+            android:layout_width="54dp"
+            android:layout_height="51dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight=".5"
+            android:padding="5dp"
+            android:src="@drawable/location_event"
+            app:layout_constraintBottom_toBottomOf="@+id/autoCompleteTextView"
+            app:layout_constraintEnd_toStartOf="@+id/autoCompleteTextView"
+            app:layout_constraintTop_toTopOf="@+id/autoCompleteTextView" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
