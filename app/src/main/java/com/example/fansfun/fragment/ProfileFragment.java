@@ -14,12 +14,14 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.fansfun.R;
+import com.example.fansfun.activities.ConfirmationDialog;
 import com.example.fansfun.activities.EditProfile;
 import com.example.fansfun.activities.LoginActivity;
 import com.example.fansfun.activities.MainActivity;
 import com.example.fansfun.activities.MyEvents;
 import com.example.fansfun.activities.PrincipalActivity;
 import com.example.fansfun.activities.ProfileActivity;
+import com.example.fansfun.activities.ViewEvent;
 import com.example.fansfun.entities.Utente;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
@@ -74,8 +76,20 @@ public class ProfileFragment extends Fragment {
         textViewLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sharedPreferences.edit().remove("is_authenticated").apply();
-                startActivity(new Intent(getContext(), MainActivity.class));
+
+                ConfirmationDialog.show(getContext(), "Vuoi procedere al logout?", new ConfirmationDialog.ConfirmationListener() {
+                    @Override
+                    public void onConfirm() {
+                        sharedPreferences.edit().remove("is_authenticated").apply();
+                        startActivity(new Intent(getContext(), MainActivity.class));
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        return;
+                    }
+                });
+
 
             }
         });

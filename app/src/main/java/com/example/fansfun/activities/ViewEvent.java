@@ -80,7 +80,17 @@ public class ViewEvent extends AppCompatActivity {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                eliminaEvento(evento.getId());
+                ConfirmationDialog.show(ViewEvent.this, "Vuoi eliminare l'evento?", new ConfirmationDialog.ConfirmationListener() {
+                    @Override
+                    public void onConfirm() {
+                        eliminaEvento(evento.getId());
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        return;
+                    }
+                });
             }
         });
 
