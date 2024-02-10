@@ -219,18 +219,6 @@
                 android:textSize="25sp"
                 app:layout_constraintBottom_toTopOf="@+id/constraintLayout9"
                 app:layout_constraintStart_toStartOf="parent" />
-            <TextView
-                android:id="@+id/location_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:text="location"
-                android:textColor="@color/principal"
-                android:textSize="10sp"
-                android:fontFamily="@font/arial_bold"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/searchCard"
-                app:layout_constraintTop_toBottomOf="@+id/searchCard" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_vicinanze"
