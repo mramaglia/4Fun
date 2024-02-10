@@ -56,9 +56,9 @@ public class ViewEvent extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private FirebaseFirestore db;
-    private ImageView imageView, iscriviti, heart, back, delete, imageOrganizzatore;
+    private ImageView imageView, iscriviti,iscrivitiExpired, heart, back, delete, imageOrganizzatore;
     private TextView nome, descrizione, luogo, data, ora;
-    private ConstraintLayout tastoIscrizione;
+    private ConstraintLayout tastoIscrizione, tastoIscrizioneExpired;
     private Drawable drawable;
     private boolean isExpired;
 
@@ -72,6 +72,34 @@ public class ViewEvent extends AppCompatActivity {
         Evento evento = (Evento) getIntent().getSerializableExtra("evento");
         String idEvento=evento.getId();
         auth = FirebaseAuth.getInstance();
+
+        Date data1 = new Date(); // Data corrente
+
+        // Confronto delle due date
+        if (data1.before(evento.getData())) {
+            Log.e("DATA CONFRONTO", "l'evento NON è scaduto");
+            // data1 è precedente a data2
+            iscriviti = findViewById(R.id.imageView6);
+            tastoIscrizione=findViewById(R.id.layoutTastoIscrizione);
+
+            iscriviti.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    iscriviti(idEvento, auth);
+                }
+            });
+
+            existIscritto(idEvento, auth);
+
+
+        }else{
+            Log.e("DATA CONFRONTO", "l'evento è scaduto");
+            iscrivitiExpired= findViewById(R.id.imageView6);
+            iscrivitiExpired.setImageResource(R.drawable.expired);
+            tastoIscrizioneExpired=findViewById(R.id.layoutTastoIscrizione);
+            tastoIscrizioneExpired.setBackgroundColor(Color.WHITE);
+        }
+
 
         delete = findViewById(R.id.delete);
 
@@ -102,8 +130,6 @@ public class ViewEvent extends AppCompatActivity {
         luogo = findViewById(R.id.textView14);
         data = findViewById(R.id.eventDate);
         ora = findViewById(R.id.eventHour);
-        iscriviti = findViewById(R.id.imageView6);
-        tastoIscrizione=findViewById(R.id.layoutTastoIscrizione);
         imageOrganizzatore=findViewById(R.id.imageProfileOrganizzatore);
 
 
@@ -116,8 +142,6 @@ public class ViewEvent extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
         Geocoder geocoder = new Geocoder(this);
-
-        existIscritto(idEvento, auth);
 
         String imageUrl = evento.getFoto();
         Glide.with(ViewEvent.this)
@@ -195,13 +219,6 @@ public class ViewEvent extends AppCompatActivity {
                 Intent intent = new Intent(ViewEvent.this, ProfileActivity.class);
                 intent.putExtra("user_id", evento.getOrganizzatore());
                 startActivity(intent);
-            }
-        });
-
-        iscriviti.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                iscriviti(idEvento, auth);
             }
         });
 

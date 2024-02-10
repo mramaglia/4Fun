@@ -58,6 +58,7 @@ public class EditProfile extends AppCompatActivity {
     private String newNome, newCognome, newLuogo;
     private byte[] imageBytes;
     private Uri imageUri;
+    private Utente utente;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +72,7 @@ public class EditProfile extends AppCompatActivity {
 
         // Utilizza Gson per convertire la stringa JSON in un oggetto Utente
         Gson gson = new Gson();
-        Utente utente = gson.fromJson(utenteJson, Utente.class);
+        utente = gson.fromJson(utenteJson, Utente.class);
 
         String json = loadJSONFromAsset("comuni.json");
         // Ottieni la lista di opzioni dal JSON
@@ -157,70 +158,75 @@ public class EditProfile extends AppCompatActivity {
         updates.put("cognome", newCognome);
         updates.put("luogo", newLuogo);
 
-        //operazione d aggiunta dell'immagine
-        StorageReference imageRef = FirebaseStorage.getInstance().getReference().child("userImages/"+ idUtente);
-        UploadTask uploadTask = imageRef.putFile(imageUri);
+        if (imageUri == null)
+            updateSenzaImmagine(updates, idUtente);
 
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                //gestisci l'errore
-                Toast.makeText(EditProfile.this, "Errore nell'aggiunta dell'immagine profilo", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // Il caricamento è stato completato con successo, ora ottieni l'URL
+        else {
 
-                imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri downloadUrl) {
-                        updates.put("foto", downloadUrl.toString());
+            //operazione d aggiunta dell'immagine
+            StorageReference imageRef = FirebaseStorage.getInstance().getReference().child("userImages/" + idUtente);
+            UploadTask uploadTask = imageRef.putFile(imageUri);
 
-                        // Esegui l'aggiornamento del documento
-                        docRef.update(updates)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        startActivity(new Intent(EditProfile.this, PrincipalActivity.class));
-                                        Log.d(TAG, "Documento aggiornato con successo!");
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.w(TAG, "Errore durante l'aggiornamento del documento", e);
-                                    }
-                                });
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    //gestisci l'errore
+                    Toast.makeText(EditProfile.this, "Errore nell'aggiunta dell'immagine profilo", Toast.LENGTH_SHORT).show();
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    // Il caricamento è stato completato con successo, ora ottieni l'URL
 
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Gestisci eventuali errori
-                    }
-                });
+                    imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri downloadUrl) {
+                            updates.put("foto", downloadUrl.toString());
 
-            }
-        });
+                            // Esegui l'aggiornamento del documento
+                            docRef.update(updates)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            startActivity(new Intent(EditProfile.this, PrincipalActivity.class));
+                                            Log.d(TAG, "Documento aggiornato con successo!");
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w(TAG, "Errore durante l'aggiornamento del documento", e);
+                                        }
+                                    });
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Gestisci eventuali errori
+                        }
+                    });
+
+                }
+            });
 
 
-        // Esegui l'aggiornamento del documento
-        docRef.update(updates)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        startActivity(new Intent(EditProfile.this, PrincipalActivity.class));
-                        Log.d(TAG, "Documento aggiornato con successo!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Errore durante l'aggiornamento del documento", e);
-                    }
-                });
-
+            // Esegui l'aggiornamento del documento
+            docRef.update(updates)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            startActivity(new Intent(EditProfile.this, PrincipalActivity.class));
+                            Log.d(TAG, "Documento aggiornato con successo!");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Errore durante l'aggiornamento del documento", e);
+                        }
+                    });
+        }
 
     }
     private String loadJSONFromAsset(String filename) {
@@ -254,5 +260,28 @@ public class EditProfile extends AppCompatActivity {
         }
         return options;
     }
+
+
+    private void updateSenzaImmagine(Map<String, Object> updates, String idUtente){
+
+        DocumentReference docRef = FirebaseFirestore.getInstance().collection("utenti").document(idUtente);
+
+        // Esegui l'aggiornamento del documento
+        docRef.update(updates)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        startActivity(new Intent(EditProfile.this, PrincipalActivity.class));
+                        Log.d(TAG, "Documento aggiornato con successo!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Errore durante l'aggiornamento del documento", e);
+                    }
+                });
+    }
+
 
 }

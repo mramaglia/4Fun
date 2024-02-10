@@ -68,8 +68,8 @@ public class HomeFragment extends Fragment {
 
         textView=view.findViewById(R.id.location);
         textView.setText(userLocation());
-        textView=view.findViewById(R.id.location_2);
-        textView.setText(userLocation());
+        //textView=view.findViewById(R.id.location_2);
+        //textView.setText(userLocation());
 
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
