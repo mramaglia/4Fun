@@ -50,7 +50,7 @@ import java.util.List;
 public class HomeFragment extends Fragment {
 
     private SearchView searchView;
-    private TextView textView, location_2;
+    private TextView textView;
     private CardView cardConcerti, cardParty, cardFood, cardRaduni, cardNature, cardCultura, shuffle;
 
     private RecyclerView rv_vicinanze,rv_party, rv_newEvent;

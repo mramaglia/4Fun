@@ -4,5 +4,6 @@
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:statusBarColor">@color/principal</item>
         <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+        <item name="android:fontFamily">@font/arial</item>
     </style>
 </resources>

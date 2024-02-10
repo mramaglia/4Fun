@@ -107,7 +107,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/EventNameLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="172dp"
+            android:layout_width="match_parent"
             android:layout_height="59dp"
             android:layout_marginTop="10dp"
             android:hint="Name"
@@ -123,26 +123,6 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/EventNumberLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="110dp"
-            android:layout_height="59dp"
-            android:layout_marginTop="10dp"
-            android:hint="num"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cateogry">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/EventNumber"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="numberSigned"
-                android:maxLength="20"
-                android:required="false" />
-
-        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/EventDescriptionLayout"
@@ -165,25 +145,24 @@
         </com.google.android.material.textfield.TextInputLayout>
 
 
-
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:backgroundTint="@color/grey"
-            android:padding="5dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:backgroundTint="@color/grey"
             android:hint="Location"
-            app:layout_constraintTop_toBottomOf="@+id/EventDescriptionLayout"
-            tools:layout_editor_absoluteX="20dp">
+            android:padding="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/EventDescriptionLayout">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:layout_marginStart="10dp"
                 android:id="@+id/EventAddressLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
-                android:layout_weight="2"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="2"
                 android:hint="Address"
                 app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
                 app:layout_constraintEnd_toEndOf="parent"
