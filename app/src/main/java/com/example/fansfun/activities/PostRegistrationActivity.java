@@ -76,7 +76,21 @@ public class PostRegistrationActivity extends AppCompatActivity {
 
 
     boolean isData=false, isFoto=false;
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // Salva i dati dell'utente nello stato dell'attività
+        outState.putString("email", userEmail);
+        outState.putString("password", userPassword);
+    }
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        // Ripristina i dati dell'utente dallo stato dell'attività
+        userEmail = savedInstanceState.getString("email");
+        userPassword = savedInstanceState.getString("password");
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

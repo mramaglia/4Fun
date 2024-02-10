@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -33,10 +34,17 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class EditProfile extends AppCompatActivity {
@@ -65,6 +73,10 @@ public class EditProfile extends AppCompatActivity {
         Gson gson = new Gson();
         Utente utente = gson.fromJson(utenteJson, Utente.class);
 
+        String json = loadJSONFromAsset("comuni.json");
+        // Ottieni la lista di opzioni dal JSON
+        List<String> options = parseJSON(json);
+
         nome=findViewById(R.id.nameEdit);
         cognome=findViewById(R.id.surnameEdit);
         luogo=findViewById(R.id.autoCompleteTextViewEdit);
@@ -80,6 +92,9 @@ public class EditProfile extends AppCompatActivity {
                 .load(imageUrl)
                 .transform()
                 .into(profileImg);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, options);
+        luogo.setAdapter(adapter);
 
         buttonImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -207,6 +222,37 @@ public class EditProfile extends AppCompatActivity {
                 });
 
 
+    }
+    private String loadJSONFromAsset(String filename) {
+        String json;
+        try {
+            InputStream is = getAssets().open(filename);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return json;
+    }
+    private List<String> parseJSON(String json) {
+        List<String> options = new ArrayList<>();
+        try {
+            JSONArray jsonArray = new JSONArray(json);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonElement = jsonArray.getJSONObject(i);
+                String nome = jsonElement.getString("nome");
+                String provinciaNome = jsonElement.getJSONObject("provincia").getString("nome");
+                String formattedData = nome + ", " + provinciaNome;
+                options.add(formattedData);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return options;
     }
 
 }

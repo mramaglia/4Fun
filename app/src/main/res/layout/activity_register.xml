@@ -84,7 +84,8 @@
                 android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:required="true" />
+                android:required="true"
+                android:maxLines="1"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 

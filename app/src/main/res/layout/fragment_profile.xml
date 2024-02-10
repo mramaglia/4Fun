@@ -179,35 +179,7 @@
                 android:src="@drawable/baseline_arrow_forward_ios_24"
                 android:layout_gravity="center_vertical"/>
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="20dp">
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/settings_5666"
-                app:tint="@color/principal"
-                android:layout_gravity="center"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Impostazioni"
-                android:layout_gravity="center_vertical"
-                android:textSize="15sp"
-                android:layout_marginStart="10dp"/>
-
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="wrap_content"
-                android:src="@drawable/baseline_arrow_forward_ios_24"
-                android:layout_gravity="center_vertical"/>
-        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -221,7 +193,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="10dp"
                 android:text="Log Out"
                 android:textColor="#FF0000"
                 android:textSize="15sp"/>
