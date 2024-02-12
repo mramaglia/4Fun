@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -80,7 +79,6 @@ public class AddEvent extends AppCompatActivity {
 
 
         arrow = findViewById(R.id.arrow2);
-
 
 
         date = findViewById(R.id.date);

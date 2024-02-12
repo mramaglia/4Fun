@@ -45,6 +45,7 @@ public class SearchEventList extends AppCompatActivity {
     private AutoCompleteTextView filtroLuogo;
     private TextView textQuery;
     private String categoria, luogo="", searchQuery;
+    private int indiceSelezionato = 0;
     private Button button;
     private AutoCompleteTextView autoCompleteTextView;
 
@@ -69,6 +70,7 @@ public class SearchEventList extends AppCompatActivity {
         if(searchQuery != null) {
             textQuery.setText("Ricerca per:" + searchQuery);
             searchView.setQuery(searchQuery, false);
+            spinnerCategoria.setSelection(indiceSelezionato);
         }
 
 
@@ -106,7 +108,7 @@ public class SearchEventList extends AppCompatActivity {
             }
         });
 
-        updateListFilter(searchQuery, "", "");
+        updateListFilter(searchQuery, "", "", 0);
 
         //GESTIONE CATEGORIA
         ArrayAdapter<String> adapter_category = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categorie);
@@ -117,6 +119,7 @@ public class SearchEventList extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 categoria = (String) parent.getItemAtPosition(position);
+                indiceSelezionato = spinnerCategoria.getSelectedItemPosition();
             }
 
             @Override
@@ -131,7 +134,7 @@ public class SearchEventList extends AppCompatActivity {
 
                 luogo=autoCompleteTextView.getText().toString();
 
-                updateListFilter(searchQuery, luogo, categoria);
+                updateListFilter(searchQuery, luogo, categoria,indiceSelezionato);
 
             }
         });
@@ -191,7 +194,7 @@ public class SearchEventList extends AppCompatActivity {
     }
 
 
-    private void updateListFilter( String filtroTitolo, String filtroLuogo, String filtroCategoria) {
+    private void updateListFilter( String filtroTitolo, String filtroLuogo, String filtroCategoria, int i) {
         List<Evento> listaFiltrata = new ArrayList<>();
 
         CollectionReference eventiRef = db.collection("eventi");
