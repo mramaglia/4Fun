@@ -14,6 +14,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.fansfun.R;
 import com.example.fansfun.adapters.EventoAdapter;
@@ -42,6 +43,7 @@ public class SearchEventList extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Spinner spinnerCategoria;
     private AutoCompleteTextView filtroLuogo;
+    private TextView textQuery;
     private String categoria, luogo="", searchQuery;
     private Button button;
     private AutoCompleteTextView autoCompleteTextView;
@@ -51,6 +53,7 @@ public class SearchEventList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_event_list);
 
+
         filtroLuogo=findViewById(R.id.filtro_luogo);
         spinnerCategoria = findViewById(R.id.filtro_categoria);
         String[] categorie = {"Categoria", "Concerti", "Party", "Food&Beverage", "Raduni", "Natura", "Cultura", "Altro"};
@@ -59,6 +62,14 @@ public class SearchEventList extends AppCompatActivity {
         listView=findViewById(R.id.searchList);
         searchView=findViewById(R.id.searchView2);
         autoCompleteTextView = findViewById(R.id.filtro_luogo);
+        textQuery = findViewById(R.id.textView11);
+
+
+        searchQuery= getIntent().getStringExtra("search_query");
+        if(searchQuery != null) {
+            textQuery.setText("Ricerca per:" + searchQuery);
+            searchView.setQuery(searchQuery, false);
+        }
 
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

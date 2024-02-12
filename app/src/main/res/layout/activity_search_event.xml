@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    tools:context=".activities.SearchEvent">
+    tools:context=".activities.SearchEventList">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -13,8 +13,9 @@
 
         <ImageView
             android:id="@+id/imageView8"
-            android:layout_width="414dp"
-            android:layout_height="197dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.2"
             android:backgroundTint="@color/white"
             android:scaleType="fitXY"
             android:src="@drawable/header"
@@ -61,8 +62,8 @@
 
                 <TextView
                     android:id="@+id/location"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="65dp"
+                    android:layout_height="14dp"
                     android:layout_marginStart="5dp"
                     android:text="Eboli , Salerno"
                     android:textColor="@color/principal"

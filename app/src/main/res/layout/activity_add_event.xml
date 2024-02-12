@@ -8,8 +8,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout3"
-        android:layout_width="421dp"
-        android:layout_height="76dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.1"
         android:background="@color/principal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,14 +61,16 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout4"
-        android:layout_width="342dp"
-        android:layout_height="816dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3"
+        app:layout_constraintVertical_bias="0.19">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/EventPhoto"
@@ -90,10 +93,12 @@
             android:clickable="true"
             app:layout_constraintBottom_toBottomOf="@+id/EventPhoto"
             app:layout_constraintEnd_toEndOf="@+id/EventPhoto"
+            app:layout_constraintHorizontal_bias="0.33"
             app:layout_constraintStart_toEndOf="@+id/EventPhoto"
             app:layout_constraintTop_toTopOf="@+id/EventPhoto"
             app:layout_constraintVertical_bias="1.0"
-            app:srcCompat="@drawable/baseline_photo_camera_24" />
+            app:srcCompat="@drawable/baseline_photo_camera_24"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <Spinner
             android:id="@+id/cateogry"
@@ -102,7 +107,8 @@
             android:layout_marginTop="60dp"
             android:minHeight="48dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/EventPhoto" />
+            app:layout_constraintTop_toBottomOf="@+id/EventPhoto"
+            tools:ignore="TouchTargetSizeCheck" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/EventNameLayout"
@@ -230,8 +236,8 @@
 
         <AutoCompleteTextView
             android:id="@+id/autoCompleteTextView"
-            android:layout_width="142dp"
-            android:layout_height="50dp"
+            android:layout_width="188dp"
+            android:layout_height="48dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:completionThreshold="1"
