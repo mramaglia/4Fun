@@ -250,6 +250,9 @@ public class AddEvent extends AppCompatActivity {
         return options;
     }
     private void aggiungiEvento(){
+
+        Toast.makeText(AddEvent.this, "Creazione dell'evento...", Toast.LENGTH_SHORT).show();
+
         eventName = name.getText().toString();
         eventDescription = description.getText().toString();
         indirizzo=address.getText().toString();
@@ -280,72 +283,93 @@ public class AddEvent extends AppCompatActivity {
         //aggiungo id utente
         evento.setOrganizzatore(userId);
 
-        //operazione d aggiunta dell'immagine
-        StorageReference imageRef = storageReference.child("eventImages/"+ userId);
-        UploadTask uploadTask = imageRef.putFile(imageUri);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                //gestisci l'errore
-                Toast.makeText(AddEvent.this, "Errore nell'aggiunta dell'immagine profilo", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // Il caricamento è stato completato con successo, ora ottieni l'URL
-                imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+        db.collection("eventi")
+                .add(evento)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
-                    public void onSuccess(Uri downloadUrl) {
-                        evento.setFoto(downloadUrl.toString());
-                        // Aggiungi un nuovo documento con un ID generato automaticamente
-                        db.collection("eventi")
-                                .add(evento)
-                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                    @Override
-                                    public void onSuccess(DocumentReference documentReference) {
-                                        // Documento aggiunto con successo
-                                        Log.d("Firestore", "Documento aggiunto con ID: " + documentReference.getId());
+                    public void onSuccess(DocumentReference documentReference) {
+                        // Documento aggiunto con successo
+                        Log.d("Firestore", "Documento aggiunto con ID: " + documentReference.getId());
 
-                                        documentReference.update("id", documentReference.getId())
+                        documentReference.update("id", documentReference.getId())
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        // ID aggiunto con successo al documento
+                                        Log.d("Firestore", "ID aggiunto con successo al documento " + documentReference.getId());
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        // Gestisci eventuali errori
+                                    }
+                                });
+
+                        //operazione d aggiunta dell'immagine
+                        StorageReference imageRef = storageReference.child("eventImages/"+ documentReference.getId());
+                        UploadTask uploadTask = imageRef.putFile(imageUri);
+                        uploadTask.addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                //gestisci l'errore
+                                Toast.makeText(AddEvent.this, "Errore nell'aggiunta dell'immagine profilo", Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                // Il caricamento è stato completato con successo, ora ottieni l'URL
+                                imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri downloadUrl) {
+                                        evento.setFoto(downloadUrl.toString());
+                                        // Aggiungi un nuovo documento con un ID generato automaticamente
+
+                                        documentReference.update("foto", downloadUrl.toString())
                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
                                                     public void onSuccess(Void aVoid) {
                                                         // ID aggiunto con successo al documento
-                                                        Log.d("Firestore", "ID aggiunto con successo al documento " + documentReference.getId());
+                                                        Log.e("Storage", "Foto aggiunta con successo al documento " + "eventImages/"+ documentReference.getId());
+                                                        Intent intent = new Intent(AddEvent.this, PrincipalActivity.class);
+                                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                        startActivity(intent);
                                                     }
                                                 })
                                                 .addOnFailureListener(new OnFailureListener() {
                                                     @Override
                                                     public void onFailure(@NonNull Exception e) {
                                                         // Gestisci eventuali errori
+                                                        Intent intent = new Intent(AddEvent.this, PrincipalActivity.class);
+                                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                        startActivity(intent);
                                                     }
                                                 });
 
                                     }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
+                                }).addOnFailureListener(new OnFailureListener() {
                                     @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        // Gestisci l'errore
-                                        Log.w("Firestore", "Errore nell'aggiungere il documento", e);
+                                    public void onFailure(@NonNull Exception exception) {
+                                        // Gestisci eventuali errori
                                     }
                                 });
+                            }
+                        });
+
+
                     }
-                }).addOnFailureListener(new OnFailureListener() {
+                })
+                .addOnFailureListener(new OnFailureListener() {
                     @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Gestisci eventuali errori
+                    public void onFailure(@NonNull Exception e) {
+                        // Gestisci l'errore
+                        Log.w("Firestore", "Errore nell'aggiungere il documento", e);
                     }
                 });
-            }
-        });
 
-
-
-
-        Intent intent = new Intent(AddEvent.this, PrincipalActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        //Intent intent = new Intent(AddEvent.this, PrincipalActivity.class);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        //startActivity(intent);
 
     }
 
