@@ -68,8 +68,6 @@ public class HomeFragment extends Fragment {
 
         textView=view.findViewById(R.id.location);
         textView.setText(userLocation());
-        //textView=view.findViewById(R.id.location_2);
-        //textView.setText(userLocation());
 
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,19 +182,20 @@ public class HomeFragment extends Fragment {
     }
 
 
+    @SuppressLint("RestrictedApi")
     private String userLocation(){
         // Ottieni un riferimento alle SharedPreferences
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("my_shared_pref", MODE_PRIVATE);
 
-        String utenteJson = sharedPreferences.getString(MainActivity.KEY_USER, null);
-
-        // Utilizza Gson per convertire la stringa JSON in un oggetto Utente
-        Gson gson = new Gson();
-        Utente utente = gson.fromJson(utenteJson, Utente.class);
-
-        return utente.getLuogo();
+        String utenteJsonx = sharedPreferences.getString(MainActivity.KEY_USER, null);
+        Gson gsonx = new Gson();
+        Utente utentex = gsonx.fromJson(utenteJsonx, Utente.class);
+        if(utentex == null){
+           return "";
+        }
+        else
+            return utentex.getLuogo();
     }
-
     public void updateNelleVicinanze(List<Evento> nelleVicinanze){
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);

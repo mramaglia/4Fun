@@ -64,21 +64,17 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     public void registrazione(View view) {
-        Intent intent = new Intent(RegistrationActivity.this, PostRegistrationActivity.class);
-
         String userEmail = email.getText().toString();
         String userPassword = password.getText().toString();
 
         if (TextUtils.isEmpty(userEmail) || TextUtils.isEmpty(userPassword)) {
             Toast.makeText(this, "Compilare tutti i campi", Toast.LENGTH_SHORT).show();
             return;
-        }
-        else if(userPassword.length()<6){
+        } else if (userPassword.length() < 6) {
             Toast.makeText(this, "La password deve essere almeno di 6 caratteri!", Toast.LENGTH_SHORT).show();
             password.setError("Caratteri minimi: 6");
             return;
-        }
-        else {
+        } else {
             // Query per verificare se l'email esiste già nel database
             db.collection("utenti")
                     .whereEqualTo("email", userEmail)
@@ -86,33 +82,29 @@ public class RegistrationActivity extends AppCompatActivity {
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (TextUtils.isEmpty(userEmail) || TextUtils.isEmpty(userPassword)) {
-                                if (userPassword.length() < 6) {
-                                    if (task.isSuccessful()) {
-                                        QuerySnapshot queryDocumentSnapshots = task.getResult();
-                                        if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
-                                            // L'email è già presente nel database
-                                            Toast.makeText(RegistrationActivity.this, "Questo indirizzo email è già in uso", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            // L'email non esiste nel database, si può procedere con la registrazione
-                                            intent.putExtra("email", userEmail);
-                                            intent.putExtra("password", userPassword);
-                                            startActivity(intent);
-                                        }
-                                    } else {
-                                        // Errore durante il recupero dei dati dal database
-                                        Exception e = task.getException();
-                                        Log.e(TAG, "Errore durante la verifica dell'email nel database", e);
-                                        Toast.makeText(RegistrationActivity.this, "Errore durante la registrazione: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
+                            if (task.isSuccessful()) {
+                                QuerySnapshot queryDocumentSnapshots = task.getResult();
+                                if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                                    // L'email è già presente nel database
+                                    Toast.makeText(RegistrationActivity.this, "Questo indirizzo email è già in uso", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    password.setError("Caratteri minimi: 6");
+                                    // L'email non esiste nel database, si può procedere con la registrazione
+                                    Intent intent = new Intent(RegistrationActivity.this, PostRegistrationActivity.class);
+                                    intent.putExtra("email", userEmail);
+                                    intent.putExtra("password", userPassword);
+                                    startActivity(intent);
                                 }
+                            } else {
+                                // Errore durante il recupero dei dati dal database
+                                Exception e = task.getException();
+                                Log.e(TAG, "Errore durante la verifica dell'email nel database", e);
+                                Toast.makeText(RegistrationActivity.this, "Errore durante la registrazione: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
         }
     }
+
 
 
 }

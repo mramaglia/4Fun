@@ -134,7 +134,7 @@ public class PostRegistrationActivity extends AppCompatActivity {
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isData=true;
+
                 openDialog_date();
             }
         });
@@ -210,6 +210,7 @@ public class PostRegistrationActivity extends AppCompatActivity {
 
                 // Utilizza la data selezionata
                 date.setText(String.valueOf(dayOfMonth_x) + "/" + String.valueOf(month_x) + "/" + String.valueOf(year_x));
+                isData=true;
             }
         }, currentDate.getYear(), currentDate.getMonthValue() -1, currentDate.getDayOfMonth());
         dialog.show();
@@ -225,6 +226,7 @@ public class PostRegistrationActivity extends AppCompatActivity {
             try {
                 imageBytes = getBytes(getContentResolver().openInputStream(imageUri)); //Immagine da salvare nel DB
                 imageView.setImageURI(imageUri);
+                isFoto = true;
             } catch (IOException e) {
                 e.printStackTrace();
             }

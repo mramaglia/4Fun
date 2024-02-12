@@ -2,6 +2,8 @@ package com.example.fansfun.activities;
 
 import static androidx.constraintlayout.widget.ConstraintLayoutStates.TAG;
 
+import static com.example.fansfun.activities.MainActivity.KEY_USER;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -68,7 +70,7 @@ public class EditProfile extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("my_shared_pref", MODE_PRIVATE);
 
         // Recupera la stringa JSON dell'Utente
-        String utenteJson = sharedPreferences.getString(MainActivity.KEY_USER, null);
+        String utenteJson = sharedPreferences.getString(KEY_USER, null);
 
         // Utilizza Gson per convertire la stringa JSON in un oggetto Utente
         Gson gson = new Gson();
@@ -282,6 +284,4 @@ public class EditProfile extends AppCompatActivity {
                     }
                 });
     }
-
-
 }
