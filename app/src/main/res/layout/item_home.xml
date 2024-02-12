@@ -22,7 +22,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 app:cardCornerRadius="10dp"
-                app:cardElevation="10dp">
+                app:cardElevation="5dp">
                 <ImageView
                     android:id="@+id/fotoImageView"
                     android:layout_width="match_parent"

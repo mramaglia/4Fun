@@ -35,6 +35,7 @@ import com.example.fansfun.activities.SearchEventList;
 
 import com.example.fansfun.activities.ViewEvent;
 import com.example.fansfun.adapters.HomeAdapter;
+import com.example.fansfun.adapters.HomeAdapter2;
 import com.example.fansfun.entities.Evento;
 import com.example.fansfun.entities.Utente;
 import com.google.firebase.auth.FirebaseAuth;
@@ -55,6 +56,7 @@ public class HomeFragment extends Fragment {
 
     private RecyclerView rv_vicinanze,rv_party, rv_newEvent;
     private HomeAdapter homeAdapter;
+    private HomeAdapter2 homeAdapter2;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -200,12 +202,11 @@ public class HomeFragment extends Fragment {
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
             rv_vicinanze.setLayoutManager(layoutManager);
-            homeAdapter = new HomeAdapter(getContext(), nelleVicinanze);
-            rv_vicinanze.setAdapter(homeAdapter);
-        homeAdapter.setOnItemClickListener(new HomeAdapter.OnItemClickListener() {
+            homeAdapter2 = new HomeAdapter2(getContext(), nelleVicinanze);
+            rv_vicinanze.setAdapter(homeAdapter2);
+        homeAdapter2.setOnItemClickListener(new HomeAdapter2.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                // Gestisci il click sull'elemento della RecyclerView
                 Evento selectedEvent = nelleVicinanze.get(position);
                 // Esegui le azioni desiderate, ad esempio aprire una nuova Activity con i dettagli dell'evento
                 openEventDetails(selectedEvent);
