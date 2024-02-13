@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SearchEventList extends AppCompatActivity {
@@ -106,12 +107,20 @@ public class SearchEventList extends AppCompatActivity {
             }
         });
 
-        updateListFilter(searchQuery, "", "");
-
         //GESTIONE CATEGORIA
         ArrayAdapter<String> adapter_category = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categorie);
         adapter_category.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategoria.setAdapter(adapter_category);
+
+        //chiamata del metodo di ricerca
+        if(isCategoria(searchQuery)){
+            updateListFilter("", "", searchQuery);
+            searchQuery="";
+            searchView.setQuery("", false);
+        }
+        else {
+            updateListFilter(searchQuery, "", "");
+        }
 
         spinnerCategoria.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -213,19 +222,44 @@ public class SearchEventList extends AppCompatActivity {
                                 }
                             }
                         }
+                        // Ordina gli eventi nelle vicinanze per data
+                        Collections.sort(listaFiltrata, new DateComparator());
                         // Aggiorna l'adapter del ListView con la lista filtrata
                         EventoAdapter adapter = new EventoAdapter(SearchEventList.this, R.layout.item_evento, listaFiltrata);
                         listView.setAdapter(adapter);
                     }
-
-
-
 
                 } else {
 
                 }
             }
         });
+    }
+
+    private boolean isCategoria(String searchQuery){
+
+        switch (searchQuery.toLowerCase()) {
+            case "concerti":
+                spinnerCategoria.setSelection(1);
+                return true;
+            case "party":
+                spinnerCategoria.setSelection(2);
+                return true;
+            case "food&beverage":
+                spinnerCategoria.setSelection(3);
+                return true;
+            case "raduni":
+                spinnerCategoria.setSelection(4);
+                return true;
+            case "natura":
+                spinnerCategoria.setSelection(5);
+                return true;
+            case "cultura":
+                spinnerCategoria.setSelection(6);
+                return true;
+            default:
+               return false;
+        }
     }
 
 }

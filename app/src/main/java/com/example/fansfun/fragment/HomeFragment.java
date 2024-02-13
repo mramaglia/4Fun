@@ -107,8 +107,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), SearchEventList.class);
-                intent.putExtra("type", "category");
-                intent.putExtra("category", "Concerti");
+                intent.putExtra("search_query", "Concerti");
                 startActivity(intent);
             }
         });
@@ -116,8 +115,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), SearchEventList.class);
-                intent.putExtra("type", "category");
-                intent.putExtra("category", "Party");
+                intent.putExtra("search_query", "Party");
                 startActivity(intent);
             }
         });
@@ -125,8 +123,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), SearchEventList.class);
-                intent.putExtra("type", "category");
-                intent.putExtra("category", "Food&Beverage");
+                intent.putExtra("search_query", "Food&Beverage");
                 startActivity(intent);
             }
         });
@@ -134,8 +131,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), SearchEventList.class);
-                intent.putExtra("type", "category");
-                intent.putExtra("category", "Raduni");
+                intent.putExtra("search_query", "Raduni");
                 startActivity(intent);
             }
         });
@@ -143,8 +139,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), SearchEventList.class);
-                intent.putExtra("type", "category");
-                intent.putExtra("category", "Natura");
+                intent.putExtra("search_query", "Natura");
                 startActivity(intent);
             }
         });
@@ -152,8 +147,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), SearchEventList.class);
-                intent.putExtra("type", "category");
-                intent.putExtra("category", "Cultura");
+                intent.putExtra("search_query", "Cultura");
                 startActivity(intent);
             }
         });
@@ -166,7 +160,6 @@ public class HomeFragment extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Intent intent = new Intent(getContext(), SearchEventList.class);
-                intent.putExtra("type", "text");
                 intent.putExtra("search_query", query);
                 startActivity(intent);
 
