@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.FansFun" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Base.Theme.FansFun" parent="Theme.MaterialComponents.Light.NoActionBar">
     </style>
 
     <style name="Theme.FansFun" parent="Base.Theme.FansFun" />
