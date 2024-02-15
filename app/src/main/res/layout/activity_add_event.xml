@@ -15,8 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-
+        
         <ImageView
             android:id="@+id/arrow2"
             android:layout_width="40dp"
@@ -124,7 +123,7 @@
                 android:id="@+id/EventName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLength="20"
+                android:maxLength="30"
                 android:required="true" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -165,22 +164,19 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/EventAddressLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_weight="2"
                 android:hint="Address"
                 app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-                app:layout_constraintVertical_bias="0.0">
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/EventAddress"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLength="40"
+                    android:maxLength="50"
                     android:required="true" />
 
             </com.google.android.material.textfield.TextInputLayout>

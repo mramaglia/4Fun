@@ -213,7 +213,6 @@ public class SearchEventList extends AppCompatActivity {
                     // Elabora i documenti restituiti
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Evento evento = document.toObject(Evento.class);
-
                         // Applica i filtri
                         if (filtroTitolo.isEmpty() || evento.getNome().toLowerCase().contains(filtroTitolo.toLowerCase())) {
                             if (filtroLuogo.isEmpty() || evento.getLuogo().toLowerCase().contains(filtroLuogo.toLowerCase())) {
