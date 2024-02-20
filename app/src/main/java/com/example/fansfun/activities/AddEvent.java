@@ -135,7 +135,6 @@ public class AddEvent extends AppCompatActivity {
                         .start();
             }
         });
-
         //GESTIONE CATEGORIA
         ArrayAdapter<String> adapter_category = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categorie);
         adapter_category.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -172,7 +171,6 @@ public class AddEvent extends AppCompatActivity {
             }
         }
     }
-
     private byte[] getBytes(InputStream inputStream) throws IOException {  //serve per prelevare i byte
         ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024];
@@ -197,7 +195,7 @@ public class AddEvent extends AppCompatActivity {
                 mese=month_x;
                 anno=year_x;
                 // Utilizza la data selezionata
-                date.setText(String.valueOf(dayOfMonth_x) + "/" + String.valueOf(month_x+1) + "/" + String.valueOf(year_x));
+                date.setText(String.valueOf(dayOfMonth_x) + "/" + String.valueOf(month_x+1) +"/" + String.valueOf(year_x));
             }
         }, currentDate.getYear(), currentDate.getMonthValue() -1, currentDate.getDayOfMonth());
         dialog.getDatePicker().setMinDate(currentDate.toEpochDay() * 24 * 60 * 60 * 1000);
@@ -233,7 +231,6 @@ public class AddEvent extends AppCompatActivity {
         }
         return json;
     }
-
     private List<String> parseJSON(String json) {
         List<String> options = new ArrayList<>();
         try {

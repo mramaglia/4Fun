@@ -29,6 +29,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -101,6 +102,8 @@ public class ProfileActivity extends AppCompatActivity {
 
                         EventoAdapter adapter = new EventoAdapter(ProfileActivity.this, R.layout.item_evento, listaEventi);
 
+                        // Ordina gli eventi nelle vicinanze per data
+                        Collections.sort(listaEventi, new DateComparator());
                         // Impostare l'adattatore sulla ListView
                         listView.setAdapter(adapter);
 

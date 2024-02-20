@@ -221,7 +221,7 @@ public class SearchEventList extends AppCompatActivity {
                                 }
                             }
                         }
-                        // Ordina gli eventi nelle vicinanze per data
+                        // Ordina gli eventi per data
                         Collections.sort(listaFiltrata, new DateComparator());
                         // Aggiorna l'adapter del ListView con la lista filtrata
                         EventoAdapter adapter = new EventoAdapter(SearchEventList.this, R.layout.item_evento, listaFiltrata);
