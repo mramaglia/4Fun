@@ -59,6 +59,7 @@ public class AddEvent extends AppCompatActivity {
     Uri imageUri;
     Spinner categoryView;
     int giorno, mese, anno, ora, minuto;
+    Boolean isAddEventClicked = false;
     Spinner category;
 
     @Override
@@ -116,7 +117,10 @@ public class AddEvent extends AppCompatActivity {
         addEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                aggiungiEvento();
+                if(isAddEventClicked)
+                    return;
+                else
+                    aggiungiEvento();
             }
         });
         //Sistema per poter inserire immagine profilo ed avere anteprima
@@ -248,7 +252,7 @@ public class AddEvent extends AppCompatActivity {
         return options;
     }
     private void aggiungiEvento(){
-
+        isAddEventClicked = true;
         Toast.makeText(AddEvent.this, "Creazione dell'evento...", Toast.LENGTH_SHORT).show();
 
         eventName = name.getText().toString();
